@@ -1,6 +1,7 @@
 ---
 import type { ArticleItem } from '../presentation';
 import BadgeGroup from './BadgeGroup.astro';
+import styles from '../styles/PostRow.module.css';
 interface Props { item: ArticleItem; }
 const { item } = Astro.props;
 ---
@@ -11,6 +12,6 @@ const { item } = Astro.props;
     {item.prefix && <span class="ms-1">{item.prefix}</span>}
     {(item.badges?.length || Astro.slots.has('badges')) && <BadgeGroup badges={item.badges}><slot name="badges" /></BadgeGroup>}
   </h3>
-  {item.summary && <p class="mt-[.1rem] ml-32 text-[.9rem] text-[#6a737d] max-[768px]:ml-0">{item.summary}</p>}
+  {item.summary && <p class:list={["mt-[.1rem] ml-32 text-[.9rem] text-[#6a737d]", styles.summary]}>{item.summary}</p>}
   <slot />
 </div>

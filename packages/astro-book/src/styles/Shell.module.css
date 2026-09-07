@@ -36,6 +36,8 @@
 .rawTOC :global(a[href]:hover) { opacity: .5; }
 .rawTOC :global(a[aria-current="location"]) { color: #8250df; }
 @media screen and (min-width: 110rem) {
+  /* Keep responsive overrides above another consumer Tailwind build's p-4. */
+  .menuContent, .tocContent, .container > :global(.book-page) { padding-block: 2rem; }
   .menuContent {
     inset-inline-start: 0; inset-inline-end: auto;
     inline-size: max-content; min-inline-size: var(--book-menu-width);
