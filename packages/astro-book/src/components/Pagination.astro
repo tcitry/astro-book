@@ -1,11 +1,47 @@
 ---
-interface Props { current: number; urls: string[]; label?: string; previousLabel?: string; nextLabel?: string; }
-const { current, urls, label = 'Pagination', previousLabel = 'Previous page', nextLabel = 'Next page' } = Astro.props;
+interface Props {
+  current: number;
+  urls: string[];
+  label?: string;
+  firstLabel?: string;
+  previousLabel?: string;
+  nextLabel?: string;
+  lastLabel?: string;
+}
+const {
+  current,
+  urls,
+  label = 'Pagination',
+  firstLabel = 'First page',
+  previousLabel = 'Previous page',
+  nextLabel = 'Next page',
+  lastLabel = 'Last page',
+} = Astro.props;
 const total = urls.length;
-const visible = urls.map((url, index) => ({ url, number: index + 1 })).filter(({ number }) => number === 1 || number === total || Math.abs(number - current) <= 2);
+// Keep a continuous five-page window, including at the beginning and end.
+const first = Math.max(1, Math.min(current - 2, total - 4));
+const last = Math.min(total, first + 4);
+const visible = urls.map((url, index) => ({url, number: index + 1}))
+  .filter(({number}) => number >= first && number <= last);
+const previousControls = [
+  {text: '««', label: firstLabel, url: current > 1 ? urls[0] : undefined, rel: undefined},
+  {text: '«', label: previousLabel, url: current > 1 ? urls[current - 2] : undefined, rel: 'prev'},
+];
+const nextControls = [
+  {text: '»', label: nextLabel, url: current < total ? urls[current] : undefined, rel: 'next'},
+  {text: '»»', label: lastLabel, url: current < total ? urls[total - 1] : undefined, rel: undefined},
+];
 ---
-{total > 1 && <nav aria-label={label}><ul class="pagination m-0 flex list-none justify-center p-0">
-  {current > 1 && <li class="page-item relative"><a class="flex p-4 transition-opacity duration-100 hover:opacity-50" href={urls[current - 2]} rel="prev" aria-label={previousLabel}>«</a></li>}
-  {visible.map(({ url, number }, index) => <>{index > 0 && number - visible[index - 1].number > 1 && <li class="page-item relative"><span aria-hidden="true">…</span></li>}<li class:list={{ 'page-item': true, active: number === current }}><a href={url} aria-current={number === current ? 'page' : undefined} class:list={["flex p-4 transition-opacity duration-100 hover:opacity-50", { "font-bold underline": number === current }]}>{number}</a></li></>)}
-  {current < total && <li class="page-item relative"><a class="flex p-4 transition-opacity duration-100 hover:opacity-50" href={urls[current]} rel="next" aria-label={nextLabel}>»</a></li>}
-</ul></nav>}
+{total > 1 && <nav aria-label={label}>
+  <ul class="pagination pagination-default my-[1em] flex list-none justify-center ps-0">
+    {previousControls.map((control) => <li class:list={['page-item', {disabled: !control.url}]}>
+      <a class="page-link inline p-4" href={control.url} rel={control.url ? control.rel : undefined} role="button" aria-label={control.label} aria-disabled={!control.url || undefined} tabindex={!control.url ? -1 : undefined}><span aria-hidden="true">{control.text}</span></a>
+    </li>)}
+    {visible.map(({url, number}) => <li class:list={['page-item', {active: number === current}]}>
+      <a class="page-link inline p-4" href={number === current ? undefined : url} role="button" aria-label={`Page ${number}`} aria-current={number === current ? 'page' : undefined}>{number}</a>
+    </li>)}
+    {nextControls.map((control) => <li class:list={['page-item', {disabled: !control.url}]}>
+      <a class="page-link inline p-4" href={control.url} rel={control.url ? control.rel : undefined} role="button" aria-label={control.label} aria-disabled={!control.url || undefined} tabindex={!control.url ? -1 : undefined}><span aria-hidden="true">{control.text}</span></a>
+    </li>)}
+  </ul>
+</nav>}

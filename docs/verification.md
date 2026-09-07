@@ -41,3 +41,9 @@ A second Tailwind build in the real consumer exposed equal-specificity media uti
 ## Document scrollbar parity
 
 The inherited Hugo Book layout uses `scrollbar-gutter: stable` together with thin scrollbars and transparent tracks/thumbs while idle. Scrolling reveals the thumb for 650 ms after the last scroll event. The theme now explicitly includes `html` in the scrollbar defaults, active state, WebKit pseudo-elements, forced-colors reset and border-box normalization. Scoped universal selectors already covered descendants but omitted the document root, which owns the viewport scrollbar. The gutter remains `stable`; this correction does not introduce an overlay scrollbar or change sidebar positioning.
+
+The same parity review restored list-only TOC link padding, the first desktop TOC item’s zero top margin, unpadded term counts, and inherited link-tab line height with the original active gray. Consumer-supplied non-list TOC rows keep their own spacing.
+
+TOC activation uses the viewport’s top edge, matching the original Gumshoe configuration’s zero offset rather than activating headings 100px early.
+
+Pagination also retains the original continuous five-page window, first/last controls, disabled end controls, inline links and inherited text styling.

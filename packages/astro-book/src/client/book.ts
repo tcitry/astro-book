@@ -67,7 +67,7 @@ function initializeBook() {
   const headingLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.book-toc a[href^="#"], .book-header aside a[href^="#"]'));
   const observed = headingLinks.map((link) => { try { return { link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) }; } catch { return { link, heading: null }; } }).filter((item) => item.heading);
   const updateTOC = () => {
-    const active = [...observed].sort((a, b) => a.heading!.getBoundingClientRect().top - b.heading!.getBoundingClientRect().top).reverse().find(({ heading }) => heading!.getBoundingClientRect().top <= 100) ?? observed[0];
+    const active = [...observed].sort((a, b) => a.heading!.getBoundingClientRect().top - b.heading!.getBoundingClientRect().top).reverse().find(({ heading }) => heading!.getBoundingClientRect().top <= 0) ?? observed[0];
     for (const { link, heading } of observed) {
       const selected = Boolean(active && heading === active.heading);
       link.closest('li')?.classList.toggle('active', selected);
