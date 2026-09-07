@@ -37,7 +37,7 @@ for (const filename of files) {
     assert.ok(!forbidden.test(source), `Package contains site-specific or commercial material: ${filename}`);
   }
 }
-for (const filename of ['dist/styles.css', 'src/components/BookLayout.astro', 'src/markdown/index.ts', 'LICENSE', 'THIRD_PARTY_NOTICES.md']) assert.ok(files.includes(filename), `Missing packed file: ${filename}`);
+for (const filename of ['dist/styles.css', 'src/components/BookLayout.astro', 'src/markdown/index.ts', 'dist/code-styles.css', 'dist/code-copy.js', 'dist/code-copy-template.html', 'dist/EXPRESSIVE-CODE-LICENSE', 'LICENSE', 'THIRD_PARTY_NOTICES.md']) assert.ok(files.includes(filename), `Missing packed file: ${filename}`);
 assert.ok(files.some((file) => /\.woff2?$/.test(file)), 'Packed package must contain font assets');
 const packedCSS = await readFile(path.join(packageRoot, 'dist/styles.css'), 'utf8');
 assert.ok(!packedCSS.includes('\uFEFF'), 'Compiled CSS must not contain a BOM that can invalidate a later selector');
@@ -80,7 +80,7 @@ const diagramPages = documents.filter(({ html }) => hasDiagram(html));
 assert.ok(mathPages.length >= 2, 'Markdown and MDX both need build-time math');
 assert.ok(diagramPages.length >= 2, 'Markdown and MDX both need the shared Mermaid contract');
 assert.ok(documents.some(({ html }) => !hasDiagram(html)), 'Include a page without diagrams to check conditional runtime loading');
-assert.ok(documents.some(({ html }) => /astro-code/.test(html)), 'Example must contain highlighted code');
+assert.ok(documents.some(({ html }) => /data-book-code/.test(html)), 'Example must contain highlighted code');
 for (const { filename, html } of documents) {
   assert.ok(!/<astro-island\b/.test(html), `Ordinary reading page must not hydrate a frontend framework: ${path.relative(output, filename)}`);
   assert.ok(!/react(?:-dom)?(?:\.client|[.\/-])/.test(html), 'Ordinary reading pages must not reference React');

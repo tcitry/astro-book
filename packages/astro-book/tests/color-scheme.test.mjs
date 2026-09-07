@@ -12,7 +12,7 @@ const inColorMedia = (node) => {
 };
 
 test('manual light rejects system-dark gradients and manual dark receives them without a media condition', () => {
-  const output = postcss.parse(expandColorSchemes('\uFEFF@media (prefers-color-scheme: dark) { :where(html[data-astro-book]) .tag-0 { background: linear-gradient(black, gray); } }'));
+  const output = postcss.parse(expandColorSchemes('\uFEFF@media (prefers-color-scheme: dark) { :where(html[data-astro-book]) .example-gradient { background: linear-gradient(black, gray); } }'));
   const rules = [];
   output.walkRules((rule) => rules.push(rule));
   assert.equal(rules.length, 2);
@@ -25,7 +25,7 @@ test('manual light rejects system-dark gradients and manual dark receives them w
 });
 
 test('light-theme rules preserve surrounding and nested viewport constraints', () => {
-  const output = postcss.parse(expandColorSchemes('@media (min-width: 50rem) { @media (prefers-color-scheme: light) { @media (orientation: landscape) { :where([data-astro-book]) .weekly-title { color: teal; } } } }'));
+  const output = postcss.parse(expandColorSchemes('@media (min-width: 50rem) { @media (prefers-color-scheme: light) { @media (orientation: landscape) { :where([data-astro-book]) .example-accent { color: teal; } } } }'));
   const rules = [];
   output.walkRules((rule) => rules.push(rule));
   assert.equal(rules.length, 2);
@@ -35,25 +35,39 @@ test('light-theme rules preserve surrounding and nested viewport constraints', (
   assert.equal(rules[1].parent.parent.params, '(min-width: 50rem)');
 });
 
-test('published CSS has no BOM selector corruption and guards every compatibility dark gradient', async () => {
+test('published CSS has no BOM corruption and guards compatibility search surfaces and dark gradients', async () => {
   const css = await readFile(new URL('../dist/styles.css', import.meta.url), 'utf8');
   assert.doesNotMatch(css, /\uFEFF/);
   assert.match(css, /--font-size-smaller:/);
   const tree = postcss.parse(css);
-  const gradients = [];
+  const searchSurfaces = [];
   tree.walkRules((rule) => {
-    if (rule.selector.includes('.tag-0')) {
-      rule.walkDecls('background', (declaration) => {
-        if (declaration.value.includes('#4a5759')) gradients.push(rule);
+    if (rule.selector.includes('#search-dialog')) {
+      rule.walkDecls('background-color', (declaration) => {
+        if (declaration.value === '#303030') searchSurfaces.push(rule);
       });
     }
   });
-  assert.ok(gradients.length >= 2);
-  const automatic = gradients.filter(inColorMedia);
-  const manual = gradients.filter((rule) => !inColorMedia(rule));
-  assert.equal(automatic.length, manual.length);
+  // Search is a remaining generic Book feature; business-page gradients are gone.
+  assert.equal(searchSurfaces.length, 2);
+  const automatic = searchSurfaces.filter(inColorMedia);
+  const manual = searchSurfaces.filter((rule) => !inColorMedia(rule));
+  assert.equal(automatic.length, 1);
+  assert.equal(manual.length, 1);
   for (const rule of automatic) assert.match(rule.selector, /:not\(\[data-book-theme="light"\]\)/);
   for (const rule of manual) assert.match(rule.selector, /\[data-book-theme="dark"\]/);
+
+  // Keep checking any future compatibility gradient placed in a dark media rule,
+  // without requiring the theme to ship a timeline or portfolio gradient.
+  tree.walkDecls((declaration) => {
+    if (!declaration.value.includes('gradient(')) return;
+    const rule = declaration.parent;
+    for (let parent = rule.parent; parent; parent = parent.parent) {
+      if (parent.type === 'atrule' && parent.name === 'media' && /prefers-color-scheme:\s*dark/.test(parent.params)) {
+        assert.match(rule.selector, /:not\(\[data-book-theme="light"\]\)/);
+      }
+    }
+  });
 });
 
 test('every rule in a media group receives an explicit override', () => {

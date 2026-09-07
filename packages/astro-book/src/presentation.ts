@@ -16,12 +16,3 @@ export interface ArticleItem extends Link {
 }
 export interface ArticleGroup { label: string; id: string; items: ArticleItem[]; }
 export interface TermItem extends Link { count?: number; active?: boolean; size?: number; }
-export interface TimelineItem { id?: string; label: string; /** Trusted, authored HTML. */ html: string; }
-export interface PortfolioItem extends Link {
-  period: string;
-  /** Trusted, authored HTML. */ imageHTML?: string;
-  tags?: string[];
-  /** Trusted, authored HTML paragraphs. */ detailsHTML?: string[];
-}
-export interface CardItem extends Link { description?: string; image: { src: string; alt: string }; dateLabel?: string; }
-export interface SidebarRow extends Link { dateLabel?: string; active?: boolean; }

@@ -8,6 +8,8 @@ import SEO from './SEO.astro';
 import menuIcon from '../assets/menu.svg?url';
 import tocIcon from '../assets/toc.svg?url';
 import '@tcitry/astro-book/styles.css';
+import '../../dist/code-styles.css';
+import codeFrame from '../../dist/code-copy-template.html?raw';
 interface Props extends BookLayoutProps {}
 const { site, page, navigation = [], search = {}, seo = {}, previous, next, theme = 'auto', mermaid = {}, labels: overrides = {}, components = {} } = Astro.props;
 const labels: BookLabels = {
@@ -80,6 +82,7 @@ const showTOC = page.toc !== false;
     {showTOC && <aside class="book-toc" data-pagefind-ignore><div class="book-toc-content">{tocHTML ? <Fragment set:html={tocHTML} /> : <nav id="TableOfContents" aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</div></aside>}
   </main>
   {search !== false && <Search config={search} part="dialog" label={labels.search} closeLabel={labels.closeSearch} />}
+  <template data-book-code-frame set:html={codeFrame} />
   <slot name="overlays" />
   <script>import '../client/book';</script>
 </body>

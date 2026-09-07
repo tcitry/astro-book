@@ -7,6 +7,9 @@ import {
 } from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import rehypeRaw from 'rehype-raw';
+import { rehypeBookCode, codeOptionsFromShiki, isCodeIsland, type BookCodeOptions } from './code.ts';
+export type { BookCodeOptions } from './code.ts';
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 export type MermaidOptions = Record<string, JsonValue>;
@@ -20,6 +23,8 @@ export interface BookMarkdownOptions extends UnifiedProcessorOptions {
   math?: MathOptions | false;
   mermaid?: MermaidOptions | false;
   shikiConfig?: AstroMarkdownOptions['shikiConfig'];
+  /** Static Expressive Code frames, themes and styling. No React runtime is used. */
+  code?: BookCodeOptions;
 }
 
 type TreeNode = {
@@ -38,7 +43,7 @@ const text = (node: TreeNode): string => node.value ?? (node.children?.map(text)
 export const rehypeBookContent: RehypePlugin<[{ mermaid?: MermaidOptions | false }?]> = (options = {}) => {
   return (tree) => {
     function walk(parent: TreeNode) {
-      if (!parent.children) return;
+      if (!parent.children || isCodeIsland(parent)) return;
       parent.children = parent.children.map((node) => {
         walk(node);
         if (node.type !== 'element') return node;
@@ -74,6 +79,16 @@ export const rehypeBookContent: RehypePlugin<[{ mermaid?: MermaidOptions | false
       });
     }
     walk(tree);
+  };
+};
+
+// Astro reparses trusted HTML after user plugins. Parse it before code selection as
+// well so raw HTML fences get the same renderer; preserve MDX's explicit JSX nodes.
+const rehypeBookRaw: RehypePlugin = () => {
+  const parse = rehypeRaw({ passThrough: ['mdxjsEsm', 'mdxFlowExpression', 'mdxTextExpression', 'mdxJsxFlowElement', 'mdxJsxTextElement'] });
+  return (tree, file) => {
+    const containsRaw = (node: TreeNode): boolean => node.type === 'raw' || Boolean(node.children?.some(containsRaw));
+    if (containsRaw(tree)) return parse(tree, file);
   };
 };
 
@@ -138,7 +153,7 @@ function sharedOptions(options: BookMarkdownOptions, shared: AstroMarkdownOption
 
 /** Set `markdown.processor` to this preset, or let the `astroBook()` integration configure it. */
 export function createBookProcessor(options: BookMarkdownOptions = {}) {
-  const { math = {}, mermaid = {}, shikiConfig: _shiki, ...extra } = options;
+  const { math = {}, mermaid = {}, shikiConfig: _shiki, code, ...extra } = options;
   if ([...(extra.remarkPlugins ?? []), ...(extra.rehypePlugins ?? [])].some((plugin) => typeof pluginKey(plugin) === 'string')) {
     throw new TypeError('Import plugin functions instead of string names so Markdown and MDX run the same plugins.');
   }
@@ -150,15 +165,36 @@ export function createBookProcessor(options: BookMarkdownOptions = {}) {
       ...(extra.remarkPlugins ?? []).filter((plugin) => !isManagedMath(plugin)),
     ]),
     rehypePlugins: uniquePlugins([
+      rehypeBookRaw,
       ...(math === false ? [] : [[rehypeBookMath, math] as [typeof rehypeBookMath, MathOptions]]),
       [rehypeBookContent, { mermaid }],
-      ...(extra.rehypePlugins ?? []).filter((plugin) => !isManagedMath(plugin) && pluginKey(plugin) !== rehypeBookContent),
+      ...(extra.rehypePlugins ?? []).filter((plugin) => !isManagedMath(plugin) && ![rehypeBookContent, rehypeBookCode, rehypeBookRaw].includes(pluginKey(plugin) as typeof rehypeBookContent)),
+      [rehypeBookCode, code],
     ]),
   });
-  const createRenderer = processor.createRenderer.bind(processor);
-  const createMdxRenderer = processor.createMdxRenderer!.bind(processor);
-  processor.createRenderer = (shared) => createRenderer(sharedOptions(options, shared));
-  processor.createMdxRenderer = (shared, mdx) => createMdxRenderer(sharedOptions(options, shared), mdx);
+  function configured(shared: AstroMarkdownOptions) {
+    const resolved = sharedOptions(options, shared);
+    // Existing custom Shiki options, language exclusions and Prism use Astro
+    // highlighting. EC keeps its highlighter off so excluded fences stay plain,
+    // while providing the same frame/clipboard for every selected block.
+    const preserve = Boolean(resolved.shikiConfig?.transformers?.length)
+      || resolved.shikiConfig?.wrap === true
+      || resolved.shikiConfig?.defaultColor !== undefined
+      || (typeof shared.syntaxHighlight === 'object' && Boolean(shared.syntaxHighlight.excludeLangs?.length))
+      || (typeof resolved.syntaxHighlight === 'string' ? resolved.syntaxHighlight : (resolved.syntaxHighlight && resolved.syntaxHighlight.type)) === 'prism';
+    const codeOptions = codeOptionsFromShiki(code, resolved.shikiConfig, shared.syntaxHighlight !== false && !preserve);
+    const current = unified({ ...processor.options, rehypePlugins: processor.options.rehypePlugins.map((entry) =>
+      pluginKey(entry) === rehypeBookCode ? [rehypeBookCode, codeOptions] : entry) });
+    return { current, shared: { ...resolved, syntaxHighlight: preserve ? resolved.syntaxHighlight : false as const } };
+  }
+  processor.createRenderer = (shared) => {
+    const value = configured(shared);
+    return value.current.createRenderer(value.shared);
+  };
+  processor.createMdxRenderer = (shared, mdx) => {
+    const value = configured(shared);
+    return value.current.createMdxRenderer!(value.shared, mdx);
+  };
   return processor;
 }
 

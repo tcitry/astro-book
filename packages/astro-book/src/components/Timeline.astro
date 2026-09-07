@@ -1,6 +1,0 @@
----
-import type { TimelineItem } from '../presentation';
-interface Props { items: TimelineItem[]; }
-const { items } = Astro.props;
----
-<div class="timeline-container"><div class="timeline">{items.map((item) => <div class="timeline-item" id={item.id}><div class="timeline-date">{item.label}</div><div class="timeline-content" set:html={item.html} /></div>)}</div></div>

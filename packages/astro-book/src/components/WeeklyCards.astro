@@ -1,6 +1,0 @@
----
-import type { CardItem } from '../presentation';
-interface Props { items: CardItem[]; }
-const { items } = Astro.props;
----
-<div class="card-list" data-pagefind-body>{items.map((item) => <a href={item.href} class="card"><img src={item.image.src} alt={item.image.alt} loading="lazy" /><div class="flex justify-between card-title"><div>{item.label}</div><div><time class="text-[darkgrey]">{item.dateLabel}</time></div></div><div class="card-content"><p>{item.description}</p></div></a>)}</div>

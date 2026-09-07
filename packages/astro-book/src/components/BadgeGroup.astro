@@ -1,0 +1,12 @@
+---
+import type { BadgeData } from '../presentation';
+import Badge from './Badge.astro';
+interface Props { badges?: BadgeData[]; }
+const { badges = [] } = Astro.props;
+---
+{(badges.length > 0 || Astro.slots.has('default')) && (
+  <span class="book-badges inline-flex max-w-full flex-wrap items-baseline gap-x-1 gap-y-0.5 ps-1 align-baseline leading-none">
+    {badges.map((badge) => <Badge {...badge} leadingSpace={false} trailingSpace={false} />)}
+    <slot />
+  </span>
+)}

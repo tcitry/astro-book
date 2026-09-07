@@ -13,12 +13,12 @@ A customizable, static reading theme for Astro, inspired by [Hugo Book](https://
 - Responsive navigation, table of contents, previous/next links and light/dark/system themes.
 - One Markdown and MDX pipeline: build-time KaTeX, lazy Mermaid diagrams with source fallback, Shiki highlighting, code copying and wide-content scrolling.
 - Search UI for Pagefind, image zoom, explicit SEO metadata and an optional Giscus component.
-- Reusable article lists, tags, cards, timeline, portfolio and pagination components.
+- Reusable article metadata, lists, tags, hints and pagination components.
 - Typed inputs, named slots and component replacements for customization.
 - Complete, precompiled Tailwind CSS v4 styles and bundled fonts. Consumers do not need Tailwind to display the theme.
 - Static reading pages require no React renderer, backend, account or private registry. Add framework islands in your own site when needed.
 
-The theme handles presentation. Your site controls content loading, URLs, tags/categories, sorting, search indexes, RSS/sitemaps, identity and deployment. No Starlight dependency or prescribed content directory is required.
+The theme focuses on Hugo Book reading features and framework-neutral customization. Your site controls content loading, URLs, tags/categories, sorting, search indexes, RSS/sitemaps, identity and deployment. Custom weekly, timeline, portfolio, links and demo pages belong to the consuming site, including their UI, data models and styles. No Starlight dependency or prescribed content directory is required.
 
 ## Try the example
 

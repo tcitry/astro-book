@@ -1,16 +1,15 @@
 ---
 import type { ArticleItem } from '../presentation';
-import Badge from './Badge.astro';
+import BadgeGroup from './BadgeGroup.astro';
 interface Props { item: ArticleItem; }
 const { item } = Astro.props;
 ---
 <div class="post">
-  <h3><time class="text-[darkgrey]" datetime={item.date?.value}>{item.date?.label}</time>&nbsp;»&nbsp;
+  <h3><time class="whitespace-nowrap text-[darkgrey]" datetime={item.date?.value}>{item.date?.label}</time>&nbsp;»&nbsp;
     {item.breadcrumb && <span class="text-[gray]">{item.breadcrumb} » </span>}
-    <a href={item.href} target={item.target} rel={item.target === '_blank' ? 'noopener' : undefined}>{item.label}</a>{' '}
-    {item.prefix && <>{item.prefix}{' '}</>}
-    {(item.badges || []).map((badge) => <Badge {...badge} />)}
-    <slot name="badges" />
+    <a href={item.href} target={item.target} rel={item.target === '_blank' ? 'noopener' : undefined}>{item.label}</a>
+    {item.prefix && <span class="ms-1">{item.prefix}</span>}
+    {(item.badges?.length || Astro.slots.has('badges')) && <BadgeGroup badges={item.badges}><slot name="badges" /></BadgeGroup>}
   </h3>
   {item.summary && <p class="mt-[.1rem] ml-32 text-[.9rem] text-[#6a737d] max-[768px]:ml-0">{item.summary}</p>}
   <slot />

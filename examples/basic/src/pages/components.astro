@@ -2,24 +2,18 @@
 import Article from '../layouts/Article.astro';
 import ArticleList from '@tcitry/astro-book/components/ArticleList';
 import GroupedArticleList from '@tcitry/astro-book/components/GroupedArticleList';
-import WeeklyCards from '@tcitry/astro-book/components/WeeklyCards';
 import TagCloud from '@tcitry/astro-book/components/TagCloud';
 import TermList from '@tcitry/astro-book/components/TermList';
-import LinkRows from '@tcitry/astro-book/components/LinkRows';
 import Tabs from '@tcitry/astro-book/components/Tabs';
-import Timeline from '@tcitry/astro-book/components/Timeline';
-import YearSelect from '@tcitry/astro-book/components/YearSelect';
-import Portfolio from '@tcitry/astro-book/components/Portfolio';
 import Pagination from '@tcitry/astro-book/components/Pagination';
 import Notice from '@tcitry/astro-book/components/Notice';
 import type { ArticleItem } from '@tcitry/astro-book/presentation';
-const image = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="192" viewBox="0 0 320 192"><rect width="320" height="192" fill="#dcebe4"/><path d="M80 140V52h70c16 0 28 12 28 28v60H80Zm160 0V52h-34c-16 0-28 12-28 28" fill="none" stroke="#317052" stroke-width="8"/></svg>');
 const items: ArticleItem[] = [{
   label: 'An independent article', href: '/markdown/',
   date: { value: '2026-01-15', label: '2026-01-15' },
   metadata: { date: { value: '2026-01-15', label: 'January 15, 2026' }, tags: [{ label: 'Examples', href: '/components/' }] },
   summary: 'Prepared display data works without any content collection or legacy frontmatter.',
-  badges: [{ label: 'Example', class: 'docs-title' }],
+  badges: [{ label: 'Example' }],
 }];
 const terms = [{ label: 'Markdown', href: '/markdown/', count: 2, size: 24 }, { label: 'Components', href: '/components/', count: 1, size: 16, active: true }];
 ---
@@ -28,18 +22,10 @@ const terms = [{ label: 'Markdown', href: '/markdown/', count: 2, size: 24 }, { 
   <h2 id="lists">Article lists</h2>
   <ArticleList items={items} />
   <GroupedArticleList groups={[{ id: 'year-2026', label: '2026', items }]} />
-  <h2 id="cards">Cards</h2>
-  <WeeklyCards items={[{ label: 'A reading digest', href: '/markdown/', description: 'A compact card built from explicit title, image and description values.', image: { src: image, alt: 'An open book illustration' }, dateLabel: '2026.01.15' }]} />
   <h2 id="terms">Terms and navigation</h2>
-  <Tabs items={[{ label: 'Overview', href: '/' }, { label: 'Components', href: '/components/', badge: { label: 'C', class: 'docs-title' } }]} current="/components/" />
+  <Tabs items={[{ label: 'Overview', href: '/' }, { label: 'Components', href: '/components/', badge: { label: 'C' } }]} current="/components/" />
   <TagCloud items={terms} />
   <TermList items={terms} title="Topics" total={2} />
-  <LinkRows items={[{ label: 'The current example', href: '/components/', dateLabel: 'Jan 2026', active: true }]} />
-  <h2 id="timeline">Timeline</h2>
-  <YearSelect items={[{ label: '2026', value: '/components/' }, { label: '2025', value: '/markdown/' }]} selected="/components/" />
-  <Timeline items={[{ id: 'first-milestone', label: 'January 2026', html: '<p>An independently authored public milestone.</p>' }]} />
-  <h2 id="portfolio">Portfolio</h2>
-  <Portfolio items={[{ period: '2026', label: 'Reading example', href: '/markdown/', tags: ['Open source', 'Static'], detailsHTML: ['<p>A reusable project display with no site-specific source data.</p>'] }]} />
   <h2 id="annotations">Annotations and pagination</h2>
   <Notice variant="info">The site chooses these labels, URLs and content. The theme provides their presentation.</Notice>
   <Pagination current={2} urls={['/', '/components/', '/markdown/', '/mdx/']} />

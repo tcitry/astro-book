@@ -15,9 +15,23 @@ body.book-page-wide > main.container {
   --book-container-max-width: calc(var(--book-menu-width) + var(--book-wide-content-max-width) + var(--book-toc-width));
 }
 .book-menu { flex-basis: var(--book-menu-width); }
-.book-menu .book-menu-content { width: var(--book-menu-width); }
+.book-menu .book-menu-content { inline-size: var(--book-menu-width); }
 .book-toc { flex-basis: var(--book-toc-width); }
-.book-toc .book-toc-content { width: var(--book-toc-width); }
+.book-toc .book-toc-content { inline-size: var(--book-toc-width); }
+/* Preserve the legacy 110rem breakpoint and viewport-margin clamp after variables
+   override base widths. Wide pages use their own 120rem container variable. */
+@media screen and (min-width: 110rem) {
+  .book-menu .book-menu-content {
+    inline-size: max-content;
+    min-inline-size: var(--book-menu-width);
+    max-inline-size: clamp(var(--book-menu-width), calc(var(--book-menu-width) + (100% - var(--book-container-max-width)) / 2), 100%);
+  }
+  .book-toc .book-toc-content {
+    inline-size: max-content;
+    min-inline-size: var(--book-toc-width);
+    max-inline-size: clamp(var(--book-toc-width), calc(var(--book-toc-width) + (100% - var(--book-container-max-width)) / 2), 100%);
+  }
+}
 main.container:not(:has(> .book-toc)) > .book-page { max-width: var(--book-content-without-toc-max-width); }
 body.book-page-wide > main.container:not(:has(> .book-toc)) > .book-page { max-width: var(--book-wide-content-without-toc-max-width); }
 .markdown .katex-display { max-inline-size: 100%; overflow-x: auto; overflow-y: hidden; padding-block: .25rem; }

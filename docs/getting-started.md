@@ -174,6 +174,13 @@ KaTeX renders during the build and uses packaged fonts. Invalid math keeps reada
 
 Mermaid loads on pages containing diagrams. Wide diagrams scroll locally, and errors preserve the diagram source. Set integration options such as `mermaid: { flowchart: { useMaxWidth: false } }`; a layout's `mermaid` prop can override runtime options. `mermaid: false` disables diagrams at the relevant integration/layout level. Do not add a second Mermaid initializer or KaTeX stylesheet.
 
+Code fences use **Expressive Code 0.44.2**: static Shiki colors, optional titles/line markers and the upstream copy button. `BookLayout` includes the shared CSS and clipboard module; no React island or browser highlighter is added to an ordinary article. The same pipeline covers this guide's Markdown/MDX pages and `createBookMarkdownRenderer()` for a custom importer. Do not install a second `astro-expressive-code` integration on top of `astroBook()`.
+
+The default is a plain frame matching the reading layout. Opt into a file tab with a fence such as `` ```ts title="example.ts" frame="code" ``, or set `markdown.code.defaultProps` and `markdown.code.styleOverrides` through the integration. Light/dark themes follow the Book theme selector. Existing `markdown.shikiConfig` themes, language registrations and aliases remain supported; custom Shiki transformers retain Astro's existing highlighting and use the same official copy frame.
+
+File-name comments and terminal comments are retained. Copy values preserve tabs, leading blank lines and trailing spaces; the library's default comment extraction and terminal-copy filtering are disabled. Mermaid copies its original source even after a diagram renders. Trusted raw HTML `<pre>` elements also receive the upstream frame; elements inside `[data-book-island]` or `[data-demo]` remain owned by their framework.
+
+
 ## Navigation and previous/next links
 
 `site.menu` holds an optional top-level menu. `navigation` holds the main tree. The site supplies the ordering and active state; the theme does not infer your content hierarchy or URL policy.
@@ -319,7 +326,7 @@ This illustrative React component must exist in the consumer, with its React int
 
 `data-book-island` keeps the theme's reading selectors and DOM enhancement scripts out of the widget. Inherited fonts/colors and your framework's own CSS still need integration testing; a marker is not full CSS isolation. WebGL/Three.js demos can also live in client components or separate pages. Keep keys and privileged service calls out of browser bundles.
 
-If you build an entirely custom shell from lower-level components, import `@tcitry/astro-book/styles.css`, add `data-astro-book` and `data-book-theme="auto"` to `<html>`, and import `@tcitry/astro-book/client` in an Astro `<script>` for the browser features. Reusing `BookLayout` with slots is the simpler starting point.
+For a customized shell with the complete reading behavior, reuse `BookLayout` and replace its slots or component props. The public `styles.css` and `client` imports alone do not supply every layout resource: `BookLayout` also includes the shared Expressive Code stylesheet and raw-HTML frame template. Those resources currently have no separate public subpath; do not depend on internal package paths to recreate the shell.
 
 ## Upgrade and deploy
 

@@ -4,7 +4,7 @@ import { isUnifiedProcessor, type UnifiedProcessorOptions } from '@astrojs/markd
 import { createBookProcessor, uniquePlugins, type BookMarkdownOptions, type MermaidOptions } from './markdown/index.ts';
 
 export interface AstroBookOptions {
-  /** KaTeX, Mermaid, Shiki and consumer remark/rehype/recma plugins share one pipeline. */
+  /** KaTeX, Mermaid, Expressive Code and consumer remark/rehype/recma plugins share one pipeline. */
   markdown?: BookMarkdownOptions;
   /** Runtime-safe Mermaid options; a layout can override them per page. */
   mermaid?: MermaidOptions | false;
