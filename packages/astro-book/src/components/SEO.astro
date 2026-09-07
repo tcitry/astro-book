@@ -1,0 +1,20 @@
+---
+import type { SEOData } from '../types';
+interface Props extends SEOData {}
+const { title, openGraphTitle = title, description, canonical, robots, siteName, locale, type = 'website', image, twitterSite, feeds = [], structuredData } = Astro.props;
+---
+{title && <title>{title}</title>}
+{description && <meta name="description" content={description} />}
+{canonical && <link rel="canonical" href={canonical} />}
+{robots && <meta name="robots" content={robots} />}
+{openGraphTitle && <meta property="og:title" content={openGraphTitle} />}
+{description && <meta property="og:description" content={description} />}
+<meta property="og:type" content={type} />
+{canonical && <meta property="og:url" content={canonical} />}
+{siteName && <meta property="og:site_name" content={siteName} />}
+{locale && <meta property="og:locale" content={locale} />}
+{image && <meta property="og:image" content={image} />}
+<meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+{twitterSite && <meta name="twitter:site" content={twitterSite} />}
+{feeds.map((feed) => <link rel="alternate" type={feed.type ?? 'application/rss+xml'} title={feed.title} href={feed.href} />)}
+{structuredData && <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData).replaceAll('<', '\\u003c')} />}

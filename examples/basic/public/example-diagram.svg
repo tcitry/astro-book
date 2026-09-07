@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480">
+  <title>Synthetic image zoom example</title>
+  <rect width="1200" height="480" fill="#f4f6f8"/>
+  <path d="M280 240H920" stroke="#54708a" stroke-width="8"/>
+  <g fill="#dae8f4" stroke="#476681" stroke-width="4">
+    <rect x="80" y="150" width="280" height="180" rx="20"/>
+    <rect x="460" y="150" width="280" height="180" rx="20"/>
+    <rect x="840" y="150" width="280" height="180" rx="20"/>
+  </g>
+  <g font-family="sans-serif" font-size="42" text-anchor="middle" fill="#24394b">
+    <text x="220" y="254">Source</text>
+    <text x="600" y="254">Build</text>
+    <text x="980" y="254">Read</text>
+  </g>
+</svg>

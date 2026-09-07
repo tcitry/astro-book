@@ -1,0 +1,86 @@
+---
+import type { BookLayoutProps, BookLabels } from '../types';
+import NavigationTree from './NavigationTree.astro';
+import HeadingTree from './HeadingTree.astro';
+import DefaultSearch from './Search.astro';
+import PageNavigation from './PageNavigation.astro';
+import SEO from './SEO.astro';
+import menuIcon from '../assets/menu.svg?url';
+import tocIcon from '../assets/toc.svg?url';
+import '@tcitry/astro-book/styles.css';
+interface Props extends BookLayoutProps {}
+const { site, page, navigation = [], search = {}, seo = {}, previous, next, theme = 'auto', mermaid = {}, labels: overrides = {}, components = {} } = Astro.props;
+const labels: BookLabels = {
+  skipToContent: 'Skip to content', navigation: 'Main navigation', openNavigation: 'Open navigation', closeNavigation: 'Close navigation',
+  tableOfContents: 'Table of contents', openTableOfContents: 'Open table of contents', expandSection: 'Expand section',
+  previousPage: 'Previous page', nextPage: 'Next page', search: 'Search', closeSearch: 'Close Esc', ...overrides,
+};
+const Navigation = components.Navigation ?? NavigationTree;
+const TOC = components.TOC ?? HeadingTree;
+const Search = components.Search ?? DefaultSearch;
+const Footer = components.Footer ?? PageNavigation;
+const tocHTML = Astro.slots.has('toc') ? await Astro.slots.render('toc') : '';
+const showTOC = page.toc !== false;
+---
+<!doctype html>
+<html lang={site.lang ?? 'en'} dir={site.dir ?? 'ltr'} data-astro-book data-book-theme={theme}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <SEO title={page.title} description={page.description} siteName={site.title} {...seo} />
+  {site.favicon && <link rel="icon" href={site.favicon} />}
+  <script is:inline>
+    (() => {
+      try {
+        const saved = localStorage.getItem('astro-book-theme');
+        if (saved === 'auto' || saved === 'light' || saved === 'dark') document.documentElement.dataset.bookTheme = saved;
+      } catch {}
+      const mode = document.documentElement.dataset.bookTheme;
+      document.documentElement.classList.toggle('dark', mode === 'dark' || (mode === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches));
+    })();
+  </script>
+  <slot name="head" />
+</head>
+<body dir={site.dir ?? 'ltr'} class={page.bodyClass} data-book-mermaid-options={JSON.stringify(mermaid)}>
+  <a href="#main-content" class="fixed top-2 left-2 z-[10000] -translate-y-[200%] bg-[var(--body-background)] p-3 focus:translate-y-0">{labels.skipToContent}</a>
+  <input type="checkbox" class="hidden toggle" id="menu-control" aria-label={labels.openNavigation} />
+  <input type="checkbox" class="hidden toggle" id="toc-control" aria-label={labels.openTableOfContents} />
+  <main class="container flex">
+    <aside class="book-menu" data-pagefind-ignore>
+      <div class="book-menu-content">
+        <nav aria-label={labels.navigation}>
+          <h2 class="book-brand"><a class="flex align-center" href={site.home ?? '/'}>{site.logo && <img src={site.logo} alt="" />}<span>{site.title}</span></a></h2>
+          <slot name="navigation-before" />
+          {search !== false && <Search config={search} label={labels.search} />}
+          {Boolean(site.menu?.length) && <><Navigation items={site.menu!} expandLabel={labels.expandSection} idPrefix="book-menu" /><hr class="hr-edge-weak" /></>}
+          <slot name="navigation"><Navigation items={navigation} expandLabel={labels.expandSection} /></slot>
+          <slot name="navigation-after" />
+        </nav>
+      </div>
+    </aside>
+    <div class="book-page">
+      <header class="book-header hidden" data-pagefind-ignore>
+        <div class="flex align-center justify-between">
+          <label for="menu-control" aria-label={labels.openNavigation}><img src={menuIcon} class="book-icon" alt={labels.navigation} /></label>
+          <strong>{seo.title ?? page.title}</strong>
+          <label for="toc-control" aria-label={labels.openTableOfContents}>{showTOC && <img src={tocIcon} class="book-icon" alt={labels.tableOfContents} />}</label>
+        </div>
+        {showTOC && <aside class="hidden">{tocHTML ? <Fragment set:html={tocHTML} /> : <nav aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</aside>}
+      </header>
+      <slot name="content-before" />
+      <div id="main-content" tabindex="-1"><slot /></div>
+      <slot name="content-after" />
+      <footer class="book-footer" data-pagefind-ignore>
+        <slot name="footer"><Footer previous={previous} next={next} previousLabel={labels.previousPage} nextLabel={labels.nextPage} /></slot>
+        <slot name="comments" />
+      </footer>
+      <label for="menu-control" class="hidden book-menu-overlay" aria-label={labels.closeNavigation}></label>
+    </div>
+    {showTOC && <aside class="book-toc" data-pagefind-ignore><div class="book-toc-content">{tocHTML ? <Fragment set:html={tocHTML} /> : <nav id="TableOfContents" aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</div></aside>}
+  </main>
+  {search !== false && <Search config={search} part="dialog" label={labels.search} closeLabel={labels.closeSearch} />}
+  <slot name="overlays" />
+  <script>import '../client/book';</script>
+</body>
+</html>

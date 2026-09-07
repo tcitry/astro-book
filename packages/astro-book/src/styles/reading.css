@@ -1,0 +1,62 @@
+/* Structural reading rules that cannot be attached to build-time Markdown nodes. */
+:root {
+  --book-menu-width: 20rem;
+  --book-toc-width: 20rem;
+  --book-content-max-width: 70rem;
+  --book-wide-content-max-width: 80rem;
+  --book-content-without-toc-max-width: 90rem;
+  --book-wide-content-without-toc-max-width: 100rem;
+}
+main.container {
+  --book-container-max-width: calc(var(--book-menu-width) + var(--book-content-max-width) + var(--book-toc-width));
+  max-width: var(--book-container-max-width);
+}
+body.book-page-wide > main.container {
+  --book-container-max-width: calc(var(--book-menu-width) + var(--book-wide-content-max-width) + var(--book-toc-width));
+}
+.book-menu { flex-basis: var(--book-menu-width); }
+.book-menu .book-menu-content { width: var(--book-menu-width); }
+.book-toc { flex-basis: var(--book-toc-width); }
+.book-toc .book-toc-content { width: var(--book-toc-width); }
+main.container:not(:has(> .book-toc)) > .book-page { max-width: var(--book-content-without-toc-max-width); }
+body.book-page-wide > main.container:not(:has(> .book-toc)) > .book-page { max-width: var(--book-wide-content-without-toc-max-width); }
+.markdown .katex-display { max-inline-size: 100%; overflow-x: auto; overflow-y: hidden; padding-block: .25rem; }
+.markdown .katex-display > .katex { white-space: nowrap; }
+.markdown pre.mermaid { max-inline-size: 100%; overflow-x: auto; white-space: pre; }
+.markdown pre.mermaid svg { display: block; height: auto; }
+.markdown [data-book-mermaid-error] { white-space: normal; color: var(--body-font-color); opacity: .8; }
+.markdown [data-book-mermaid-error] pre { white-space: pre; overflow-x: auto; }
+:root[data-book-theme="dark"] .astro-code,
+:root[data-book-theme="dark"] .astro-code span {
+  color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important; font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-book-theme="light"]) .astro-code,
+  :root:not([data-book-theme="light"]) .astro-code span {
+    color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important; font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}
+@media screen and (max-width: 64rem) {
+  .book-menu { margin-inline-start: calc(-1 * var(--book-menu-width)); }
+  #menu-control:checked ~ main .book-menu .book-menu-content { transform: translateX(var(--book-menu-width)); }
+  body[dir="rtl"] #menu-control:checked ~ main .book-menu .book-menu-content { transform: translateX(calc(-1 * var(--book-menu-width))); }
+}
+
+.book-search input:focus + .book-search-shortcut { display: none; }
+.book-search-shortcut:hover { background: #d0d0d0; }
+.book-toc a[aria-current="location"] { color: #8250df; }
+:root[data-book-theme="dark"] .book-search-shortcut { background: #3a3a3a; color: #c0c0c0; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-book-theme="light"]) .book-search-shortcut { background: #3a3a3a; color: #c0c0c0; }
+}
+
+:root[data-book-theme="dark"] .markdown pre.mermaid { background: var(--body-background); }
+:root[data-book-theme="dark"] .markdown .katex-error { color: var(--book-math-error-color, #fda4af) !important; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-book-theme="light"]) .markdown pre.mermaid { background: var(--body-background); }
+  :root:not([data-book-theme="light"]) .markdown .katex-error { color: var(--book-math-error-color, #fda4af) !important; }
+}

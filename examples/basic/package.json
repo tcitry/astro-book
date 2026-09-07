@@ -1,0 +1,6 @@
+{
+ "name":"@astro-book/basic","private":true,"type":"module",
+ "scripts":{"dev":"astro dev --host 127.0.0.1 --port 4322","build":"astro build","check":"astro check","preview":"astro preview --host 127.0.0.1 --port 4322"},
+ "dependencies":{"@tcitry/astro-book":"0.1.0","astro":"7.3.1"},
+ "devDependencies":{"@astrojs/check":"0.9.10","typescript":"6.0.3","@types/node":"26.4.1"}
+}

@@ -1,0 +1,21 @@
+---
+import type { BookHeading, HeadingNode } from '../types';
+interface Props { headings?: BookHeading[]; nodes?: HeadingNode[]; maxDepth?: number }
+const { headings = [], nodes, maxDepth = 4 } = Astro.props;
+function tree(values: BookHeading[]): HeadingNode[] {
+  const root: HeadingNode = { depth: 0, slug: '', text: '', children: [] };
+  const stack = [root];
+  for (const heading of values.filter((item) => item.depth <= maxDepth)) {
+    while (stack.length > 1 && stack[stack.length - 1].depth >= heading.depth) stack.pop();
+    while (stack[stack.length - 1].depth < heading.depth - 1) {
+      const placeholder: HeadingNode = { depth: stack[stack.length - 1].depth + 1, slug: '', text: '', children: [] };
+      stack[stack.length - 1].children.push(placeholder); stack.push(placeholder);
+    }
+    const node: HeadingNode = { ...heading, children: [] };
+    stack[stack.length - 1].children.push(node); stack.push(node);
+  }
+  return root.children;
+}
+const items = nodes ?? tree(headings);
+---
+<ul>{items.map((node) => <li>{node.slug && <a href={`#${node.slug}`}>{node.text}</a>}{node.children.length > 0 && <Astro.self nodes={node.children} maxDepth={maxDepth} />}</li>)}</ul>

@@ -1,0 +1,7 @@
+---
+import type { Link, BadgeData } from '../presentation';
+import Badge from './Badge.astro';
+interface Props { items: (Link & { badge?: BadgeData })[]; current?: string; }
+const { items, current } = Astro.props;
+---
+<div class="leading-[1.8]">{items.map((item, index) => <>{index > 0 && ' / '}{item.badge && <><Badge {...item.badge} />{' '}</>}{item.href === current ? <span class="text-[dimgray]" aria-current="page">{item.label}</span> : <a href={item.href}>{item.label}</a>}</>)}</div>

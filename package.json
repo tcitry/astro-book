@@ -1,0 +1,20 @@
+{
+  "name": "astro-book-workspace",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @tcitry/astro-book && npm run build -w @astro-book/basic",
+    "check": "astro check --root packages/astro-book --tsconfig tsconfig.check.json && npm run check -w @astro-book/basic",
+    "test": "npm test -w @tcitry/astro-book",
+    "dev": "npm run build -w @tcitry/astro-book && npm run dev -w @astro-book/basic",
+    "pack:theme": "npm pack --workspace @tcitry/astro-book",
+    "verify:package": "node scripts/verify-package.mjs"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.29.8"
+  }
+}

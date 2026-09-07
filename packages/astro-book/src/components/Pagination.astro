@@ -1,0 +1,11 @@
+---
+interface Props { current: number; urls: string[]; label?: string; previousLabel?: string; nextLabel?: string; }
+const { current, urls, label = 'Pagination', previousLabel = 'Previous page', nextLabel = 'Next page' } = Astro.props;
+const total = urls.length;
+const visible = urls.map((url, index) => ({ url, number: index + 1 })).filter(({ number }) => number === 1 || number === total || Math.abs(number - current) <= 2);
+---
+{total > 1 && <nav aria-label={label}><ul class="pagination">
+  {current > 1 && <li class="page-item"><a href={urls[current - 2]} rel="prev" aria-label={previousLabel}>«</a></li>}
+  {visible.map(({ url, number }, index) => <>{index > 0 && number - visible[index - 1].number > 1 && <li class="page-item"><span aria-hidden="true">…</span></li>}<li class:list={{ 'page-item': true, active: number === current }}><a href={url} aria-current={number === current ? 'page' : undefined} class:list={{ 'font-bold underline': number === current }}>{number}</a></li></>)}
+  {current < total && <li class="page-item"><a href={urls[current]} rel="next" aria-label={nextLabel}>»</a></li>}
+</ul></nav>}

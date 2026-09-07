@@ -1,0 +1,61 @@
+{
+  "name": "@tcitry/astro-book",
+  "version": "0.1.0",
+  "description": "A customizable static reading theme for Astro, inspired by Hugo Book.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tcitry/astro-book.git",
+    "directory": "packages/astro-book"
+  },
+  "files": [
+    "src",
+    "dist",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/integration.d.ts",
+      "default": "./dist/integration.js"
+    },
+    "./types": "./src/types.ts",
+    "./components/*": "./src/components/*.astro",
+    "./markdown": {
+      "types": "./dist/markdown/index.d.ts",
+      "default": "./dist/markdown/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./client": "./src/client/book.ts",
+    "./presentation": "./src/presentation.ts",
+    "./assets/*": "./src/assets/*"
+  },
+  "scripts": {
+    "build": "node scripts/build-styles.mjs && tsc -p tsconfig.build.json",
+    "test": "node --test tests/*.test.mjs",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "astro": "^7.3.1"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "7.3.0",
+    "@astrojs/mdx": "8.0.0",
+    "katex": "0.16.47",
+    "mermaid": "11.17.2",
+    "remark-math": "6.0.0",
+    "rehype-katex": "7.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/node": "4.3.3",
+    "tailwindcss": "4.3.3",
+    "sass": "1.104.0",
+    "postcss": "8.5.28",
+    "postcss-selector-parser": "7.1.6",
+    "@tailwindcss/oxide": "4.3.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

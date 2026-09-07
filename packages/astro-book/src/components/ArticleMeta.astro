@@ -1,0 +1,9 @@
+---
+import type { ArticleMetadata } from '../presentation';
+interface Props extends ArticleMetadata {}
+const { date, tags = [], image } = Astro.props;
+---
+{date && <h5><time datetime={date.value}>{date.label}</time></h5>}
+{tags.length > 0 && <div>{tags.map((tag, index) => <>{index > 0 && ', '}<a href={tag.href}>{tag.label}</a></>)}</div>}
+{image && <p><img src={image.src} alt={image.alt} loading="lazy" /></p>}
+<slot />

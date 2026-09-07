@@ -1,0 +1,14 @@
+---
+import Article from '../layouts/Article.astro';
+---
+<Article frontmatter={{ title: 'A place to read and experiment', description: 'A small public Astro Book example with no private data or commercial dependencies.' }}>
+  <p>Astro Book provides a framework-neutral reading shell, reusable content components, and one Markdown pipeline. This example contains synthetic content and builds as static HTML.</p>
+  <h2>Start reading</h2>
+  <ul>
+    <li><a href="/markdown/">Markdown: formulas, diagrams, highlighted code, tables and raw HTML</a></li>
+    <li><a href="/mdx/">MDX: the same rendering features plus an Astro component</a></li>
+  </ul>
+  <h2>Make it yours</h2>
+  <p>The navigation, title, heading list, comments and metadata come from the site. The banner, navigation note, extra head element and footer on this page use layout slots. Switch between light and dark using the theme control.</p>
+  <p>Ordinary articles do not load React. Consumers can add their preferred island renderer for interactive demonstrations.</p>
+</Article>

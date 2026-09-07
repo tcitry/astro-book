@@ -1,0 +1,11 @@
+---
+import type { PortfolioItem } from '../presentation';
+interface Props { items: PortfolioItem[]; }
+const { items } = Astro.props;
+---
+<div class="timeline-container" data-pagefind-body><div class="timeline">{items.map((item) => <div class="timeline-item"><div class="timeline-date">{item.period}</div><div class="timeline-content">
+  {item.imageHTML && <div class="timeline-image" set:html={item.imageHTML} />}
+  <h3 class="timeline-title"><a href={item.href} target={item.target} rel={item.target === '_blank' ? 'noopener' : undefined}>{item.label}</a></h3>
+  {item.tags && <div class="timeline-tags">{item.tags.map((tag, index) => <span class={`timeline-tag tag-${index % 3}`}>{tag}</span>)}</div>}
+  {(item.detailsHTML || []).map((html) => <div class="timeline-text" set:html={html} />)}
+</div></div>)}</div></div>

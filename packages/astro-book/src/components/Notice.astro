@@ -1,0 +1,5 @@
+---
+interface Props { variant?: 'info' | 'warning' | 'danger' | 'success'; class?: string; }
+const { variant = 'info', class: className } = Astro.props;
+---
+<blockquote class:list={['book-hint', variant, className]}><slot /></blockquote>

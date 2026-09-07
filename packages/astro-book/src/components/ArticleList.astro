@@ -1,0 +1,11 @@
+---
+import type { ArticleItem } from '../presentation';
+import ArticleMeta from './ArticleMeta.astro';
+import Badge from './Badge.astro';
+interface Props { items: ArticleItem[]; }
+const { items } = Astro.props;
+---
+<article class="markdown book-post" data-pagefind-body>
+  {items.map((item) => <><h2><a href={item.href}>{item.label}</a>{' '}{(item.badges || []).map((badge) => <Badge {...badge} />)}</h2><ArticleMeta {...item.metadata} /><p>{item.summary}</p></>)}
+  <slot />
+</article>

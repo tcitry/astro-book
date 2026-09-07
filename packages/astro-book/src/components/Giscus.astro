@@ -1,0 +1,6 @@
+---
+import type { GiscusConfig } from '../types';
+interface Props extends GiscusConfig {}
+const { repo, repoId, category, categoryId, mapping = 'pathname', term, strict = false, reactionsEnabled = true, emitMetadata = false, inputPosition = 'bottom', theme = 'preferred_color_scheme', lang = 'en', loading = 'lazy' } = Astro.props;
+---
+<script is:inline src="https://giscus.app/client.js" data-repo={repo} data-repo-id={repoId} data-category={category} data-category-id={categoryId} data-mapping={mapping} data-term={term} data-strict={strict ? '1' : '0'} data-reactions-enabled={reactionsEnabled ? '1' : '0'} data-emit-metadata={emitMetadata ? '1' : '0'} data-input-position={inputPosition} data-theme={theme} data-lang={lang} data-loading={loading} crossorigin="anonymous" async></script>

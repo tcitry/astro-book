@@ -1,0 +1,39 @@
+---
+import BookLayout from '@tcitry/astro-book/components/BookLayout';
+import type { Heading } from '@tcitry/astro-book/types';
+interface Props {
+  frontmatter?: { title?: string; description?: string };
+  headings?: Heading[];
+}
+const { frontmatter = {}, headings = [] } = Astro.props;
+const title = frontmatter.title ?? 'Astro Book';
+const menu = [
+  { id: 'overview', label: 'Overview', href: '/' },
+  { id: 'markdown', label: 'Markdown', href: '/markdown/' },
+  { id: 'mdx', label: 'MDX', href: '/mdx/' },
+  { id: 'components', label: 'Components', href: '/components/' },
+];
+---
+<BookLayout
+  site={{ title: 'Astro Book', home: '/', lang: 'en', menu }}
+  page={{ title, url: Astro.url.pathname, headings, description: frontmatter.description }}
+  navigation={menu}
+  search={false}
+>
+  <meta slot="head" name="example-custom-head" content="Public layout slot" />
+  <Fragment slot="navigation-after">
+    <p>An independent, open source reading theme.</p>
+    <label for="example-theme">Theme</label>
+    <select id="example-theme" data-book-theme-select>
+      <option value="auto">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </Fragment>
+  <p slot="content-before" class="book-hint info">This banner uses the public content-before slot.</p>
+  <article class="markdown">
+    <h1>{title}</h1>
+    <slot />
+  </article>
+  <p slot="footer">Example content · MIT licensed · <a href="https://github.com/tcitry/astro-book">Source</a></p>
+</BookLayout>

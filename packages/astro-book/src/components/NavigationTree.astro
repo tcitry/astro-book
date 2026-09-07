@@ -1,0 +1,26 @@
+---
+import type { NavigationItem } from '../types';
+import chevronIcon from '../assets/chevron-right.svg?url';
+interface Props { items: NavigationItem[]; expandLabel?: string; idPrefix?: string }
+const { items, expandLabel = 'Expand section', idPrefix = 'book-section' } = Astro.props;
+const expanded = (item: NavigationItem): boolean => item.expanded ?? Boolean(item.active || item.children?.some(expanded));
+---
+<ul>
+  {items.map((item, index) => {
+    const sectionId = `${idPrefix}-${index}`;
+    return <li class:list={{ 'book-section-flat': item.flat }}>
+      {item.collapsible ? <>
+        <input type="checkbox" id={sectionId} class="toggle" checked={expanded(item)} />
+        <label for={sectionId} class="flex">
+          {item.href ? <a href={item.href} class:list={{ active: item.active }} aria-current={item.active ? 'page' : undefined} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined}>
+            {item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}
+          </a> : <a role="button" class:list={{ active: item.active }}>{item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}</a>}
+          <img src={chevronIcon} class="book-icon" alt={expandLabel} />
+        </label>
+      </> : item.href ? <a href={item.href} class:list={{ active: item.active }} aria-current={item.active ? 'page' : undefined} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined}>
+        {item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}
+      </a> : <span>{item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}</span>}
+      {Boolean(item.children?.length) && <Astro.self items={item.children!} expandLabel={expandLabel} idPrefix={sectionId} />}
+    </li>;
+  })}
+</ul>

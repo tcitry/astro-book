@@ -1,0 +1,6 @@
+---
+import type { TermItem } from '../presentation';
+interface Props { items: TermItem[]; }
+const { items } = Astro.props;
+---
+<article class="markdown" data-pagefind-body>{items.map((item) => <><a href={item.href} class="inline-block max-w-full text-[length:var(--tag-size)] break-words align-baseline" style={`--tag-size:${item.size || 16}px`}>{item.label}&#8205;{item.count !== undefined && <sup>{item.count}</sup>}</a>&nbsp;</>)}</article>

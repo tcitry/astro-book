@@ -1,0 +1,7 @@
+---
+import type { ArticleGroup } from '../presentation';
+import PostRow from './PostRow.astro';
+interface Props { groups: ArticleGroup[]; }
+const { groups } = Astro.props;
+---
+{groups.map((group) => <section><h1 class="text-[dimgray]" id={group.id}>{group.label}</h1><div class="posts" data-pagefind-body>{group.items.map((item) => <PostRow item={item} />)}</div></section>)}
