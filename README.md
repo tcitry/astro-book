@@ -6,7 +6,7 @@ A customizable, static reading theme for Astro, inspired by [Hugo Book](https://
 
 **Documentation demo — deployment pending:** [tcitry.github.io/astro-book](https://tcitry.github.io/astro-book/). The self-contained [example](examples/basic) covers navigation, Markdown/MDX, code, math, diagrams, components and working search. Its Pages workflow deploys only when GitHub reports this native origin; an inherited user-site domain leaves a downloadable build artifact and an explanation in the workflow summary.
 
-**Site examples:** [yindongliang.com](https://yindongliang.com) · [Astro migration preview](https://preview.yindongliang.com). These consumer sites are maintained separately from the theme documentation.
+**Consumer site example:** [yindongliang.com](https://yindongliang.com). This site is maintained separately from the theme documentation.
 
 ## Features
 
