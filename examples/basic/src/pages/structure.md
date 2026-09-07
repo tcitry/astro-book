@@ -8,7 +8,9 @@ description: Understand the theme package, the independent example, and how navi
 
 The repository contains a theme package and a small site that consumes it. The example does not load another blog, shared content folder or external content service.
 
-```text title="Repository"
+`Repository`
+
+```text
 astro-book/
 ├── packages/astro-book/       # Public theme and packaged assets
 ├── examples/basic/
@@ -39,7 +41,9 @@ This separation means you can use content collections, a local importer or anoth
 
 Every Markdown page selects the wrapper in frontmatter:
 
-```yaml title="Page frontmatter"
+`Page frontmatter`
+
+```yaml
 ---
 layout: ../layouts/Article.astro
 title: My chapter

@@ -13,6 +13,9 @@ const source = path.join(root, 'src');
 const destination = path.join(root, 'dist');
 const require = createRequire(import.meta.url);
 await mkdir(destination, { recursive: true });
+for (const file of ['code-styles.css', 'code-copy.js', 'code-copy-template.html', 'EXPRESSIVE-CODE-LICENSE']) {
+  await rm(path.join(destination, file), { force: true });
+}
 
 // Zero-specificity scoping keeps the baseline out of independently styled islands.
 // Component CSS Modules are bundled by Astro; package-owned utilities are prebuilt.

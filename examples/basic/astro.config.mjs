@@ -7,7 +7,10 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   integrations: [astroBook({
-    markdown: { math: { macros: { '\\RR': '\\mathbb{R}' } } },
+    markdown: {
+      math: { macros: { '\\RR': '\\mathbb{R}' } },
+      shikiConfig: { themes: { light: 'github-light', dark: 'github-dark' } },
+    },
     mermaid: { flowchart: { useMaxWidth: false } },
   })],
 });

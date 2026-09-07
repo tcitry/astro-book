@@ -173,12 +173,15 @@ KaTeX renders during the build and uses packaged fonts. Invalid math keeps reada
 
 Mermaid loads on pages containing diagrams. Wide diagrams scroll locally, and errors preserve the diagram source. Set integration options such as `mermaid: { flowchart: { useMaxWidth: false } }`; a layout's `mermaid` prop can override runtime options. `mermaid: false` disables diagrams at the relevant integration/layout level. Do not add a second Mermaid initializer or KaTeX stylesheet.
 
-Code fences use **Expressive Code 0.44.2**: static Shiki colors, optional titles/line markers and the upstream copy button. `BookLayout` includes the shared CSS and clipboard module; no React island or browser highlighter is added to an ordinary article. The same pipeline covers this guide's Markdown/MDX pages and `createBookMarkdownRenderer()` for a custom importer. Do not install a second `astro-expressive-code` integration on top of `astroBook()`.
+Code fences use **Astro's native Shiki highlighting** during the build. `BookLayout` adds packaged code styles and a small copy control, with no React island or browser highlighter. Markdown, MDX and `createBookMarkdownRenderer()` use the same configured pipeline.
 
-The default is a plain frame matching the reading layout. Opt into a file tab with a fence such as `` ```ts title="example.ts" frame="code" ``, or set `markdown.code.defaultProps` and `markdown.code.styleOverrides` through the integration. Light/dark themes follow the Book theme selector. Existing `markdown.shikiConfig` themes, language registrations and aliases remain supported; custom Shiki transformers retain Astro's existing highlighting and use the same official copy frame.
+Configure `markdown.shikiConfig` through `astroBook()` for themes, wrapping, language registrations, aliases and transformers. To switch code colors with the reading theme, provide `themes: { light: 'github-light', dark: 'github-dark' }`. Astro's top-level `markdown.syntaxHighlight: false` disables coloring; `syntaxHighlight: { type: 'shiki', excludeLangs: ['text'] }` excludes selected languages. Both settings retain readable code.
 
-File-name comments and terminal comments are retained. Copy values preserve tabs, leading blank lines and trailing spaces; the library's default comment extraction and terminal-copy filtering are disabled. Mermaid copies its original source even after a diagram renders. Trusted raw HTML `<pre>` elements also receive the upstream frame; elements inside `[data-book-island]` or `[data-demo]` remain owned by their framework.
+The default has no filename tabs, terminal frames or line-marker UI. Expressive Code's former `frame`, `title`, `ins`, `del` and line-number metadata are not supported by the native renderer; put useful labels in surrounding prose or configure a consumer-owned Shiki transformer. The `markdown.code` option is a boolean, not a frame configuration object.
 
+Copying uses the static `<pre>/<code>` text and retains visible comments, indentation and interior blank lines. Astro's native highlighter removes the final newline before a closing fence; copying follows the resulting visible source. Mermaid's original source remains available after SVG rendering. Trusted raw HTML `<pre>` elements also receive the small copy enhancement; elements inside `[data-book-island]` or `[data-demo]` remain owned by the embedded component.
+
+For a site-owned ordinary code UI, set `markdown: { code: false }` in `astroBook()` and pass `code={false}` to `BookLayout`. The processor marks imported blocks as disabled while the layout also covers raw HTML supplied directly by Astro pages. These options preserve syntax highlighting, math and Mermaid source copying.
 
 ## Navigation and previous/next links
 
@@ -331,7 +334,7 @@ This illustrative React component must exist in the consumer, with its React int
 
 `data-book-island` keeps the theme's reading selectors and DOM enhancement scripts out of the widget. Inherited fonts/colors and your framework's own CSS still need integration testing; a marker is not full CSS isolation. WebGL/Three.js demos can also live in client components or separate pages. Keep keys and privileged service calls out of browser bundles.
 
-For a customized shell with the complete reading behavior, reuse `BookLayout` and replace its slots or component props. The public `styles.css` and `client` imports alone do not supply every layout resource: `BookLayout` also includes the shared Expressive Code stylesheet and raw-HTML frame template. Those resources currently have no separate public subpath; do not depend on internal package paths to recreate the shell.
+For a customized shell with the complete reading behavior, reuse `BookLayout` and replace its slots or component props. `BookLayout` includes the packaged styles, browser behavior and code-copy enhancement. These are coordinated by the layout; do not depend on internal package paths to recreate the shell.
 
 ## Upgrade and deploy
 

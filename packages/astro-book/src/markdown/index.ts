@@ -8,8 +8,7 @@ import {
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
-import { rehypeBookCode, codeOptionsFromShiki, isCodeIsland, type BookCodeOptions } from './code.ts';
-export type { BookCodeOptions } from './code.ts';
+import { isCodeIsland } from './code.ts';
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 export type MermaidOptions = Record<string, JsonValue>;
@@ -23,8 +22,8 @@ export interface BookMarkdownOptions extends UnifiedProcessorOptions {
   math?: MathOptions | false;
   mermaid?: MermaidOptions | false;
   shikiConfig?: AstroMarkdownOptions['shikiConfig'];
-  /** Static Expressive Code frames. Set false to keep Astro code output for a consumer renderer. */
-  code?: BookCodeOptions | false;
+  /** Enable the small code-copy enhancement. Set false for a consumer code renderer. */
+  code?: boolean;
 }
 
 type TreeNode = {
@@ -40,11 +39,12 @@ const classes = (node: TreeNode) => Array.isArray(node.properties?.className)
 const text = (node: TreeNode): string => node.value ?? (node.children?.map(text).join('') ?? '');
 
 /** One HAST transform works in Markdown and MDX without injecting raw HTML or JSX. */
-export const rehypeBookContent: RehypePlugin<[{ mermaid?: MermaidOptions | false }?]> = (options = {}) => {
+export const rehypeBookContent: RehypePlugin<[{ mermaid?: MermaidOptions | false; code?: boolean }?]> = (options = {}) => {
   return (tree) => {
     function walk(parent: TreeNode) {
       if (!parent.children || isCodeIsland(parent)) return;
       parent.children = parent.children.map((node) => {
+        if (isCodeIsland(node)) return node;
         walk(node);
         if (node.type !== 'element') return node;
         if (node.tagName === 'pre') {
@@ -52,7 +52,7 @@ export const rehypeBookContent: RehypePlugin<[{ mermaid?: MermaidOptions | false
           const isMermaid = code && (classes(code).includes('language-mermaid')
             || node.properties?.['data-language'] === 'mermaid' || node.properties?.dataLanguage === 'mermaid');
           if (isMermaid && options.mermaid === false) {
-            node.properties = { ...node.properties, 'data-book-code': '', 'data-book-mermaid-disabled': '' };
+            node.properties = { ...node.properties, 'data-book-code': '', 'data-book-mermaid-disabled': '', ...(options.code === false ? { 'data-book-code-disabled': '' } : {}) };
           } else if (isMermaid) {
             node.properties = {
               className: ['mermaid'],
@@ -64,7 +64,7 @@ export const rehypeBookContent: RehypePlugin<[{ mermaid?: MermaidOptions | false
             // Plain text remains readable before JS, after a render error, and with JS disabled.
             node.children = [{ type: 'element', tagName: 'code', properties: {}, children: [{ type: 'text', value: text(code).replace(/\n$/, '') }] }];
           } else {
-            node.properties = { ...node.properties, 'data-book-code': '' };
+            node.properties = { ...node.properties, 'data-book-code': '', ...(options.code === false ? { 'data-book-code-disabled': '' } : {}) };
           }
         }
         if (node.tagName === 'th') node.properties = { ...node.properties, scope: 'col' };
@@ -124,22 +124,9 @@ const isManagedMath = (entry: unknown) => {
 };
 
 function sharedOptions(options: BookMarkdownOptions, shared: AstroMarkdownOptions = {}): AstroMarkdownOptions {
-  const input = shared.shikiConfig ?? {};
-  const custom = options.shikiConfig ?? {};
-  const configuredThemes = custom.themes ?? input.themes;
-  const explicitTheme = custom.theme ?? (input.theme !== 'github-dark' ? input.theme : undefined);
-  const shikiConfig = { ...input, ...custom };
-  if (Object.keys(configuredThemes ?? {}).length) {
-    shikiConfig.themes = configuredThemes;
-    delete shikiConfig.theme;
-  } else if (explicitTheme) {
-    shikiConfig.theme = explicitTheme;
-    delete shikiConfig.themes;
-  } else {
-    // Astro supplies github-dark by default; Book follows the reading theme.
-    shikiConfig.themes = { light: 'github-light', dark: 'github-dark' };
-    delete shikiConfig.theme;
-  }
+  const shikiConfig = { ...shared.shikiConfig, ...options.shikiConfig };
+  if (options.shikiConfig?.themes) delete shikiConfig.theme;
+  else if (options.shikiConfig?.theme) delete shikiConfig.themes;
   const syntax = shared.syntaxHighlight;
   return {
     ...shared,
@@ -167,44 +154,14 @@ export function createBookProcessor(options: BookMarkdownOptions = {}) {
     rehypePlugins: uniquePlugins([
       rehypeBookRaw,
       ...(math === false ? [] : [[rehypeBookMath, math] as [typeof rehypeBookMath, MathOptions]]),
-      [rehypeBookContent, { mermaid }],
-      ...(extra.rehypePlugins ?? []).filter((plugin) => !isManagedMath(plugin) && ![rehypeBookContent, rehypeBookCode, rehypeBookRaw].includes(pluginKey(plugin) as typeof rehypeBookContent)),
-      ...(code === false ? [] : [[rehypeBookCode, code] as [typeof rehypeBookCode, BookCodeOptions | undefined]]),
+      [rehypeBookContent, { mermaid, code }],
+      ...(extra.rehypePlugins ?? []).filter((plugin) => !isManagedMath(plugin) && ![rehypeBookContent, rehypeBookRaw].includes(pluginKey(plugin) as typeof rehypeBookContent)),
     ]),
   });
   // Keep the original renderer factory before installing the configured wrappers.
   const processorBase = unified(processor.options);
-  function configured(shared: AstroMarkdownOptions) {
-    const resolved = sharedOptions(options, shared);
-    if (code === false) return { current: processorBase, shared: resolved };
-    // Existing custom Shiki options, language exclusions and Prism use Astro
-    // highlighting. EC keeps its highlighter off so excluded fences stay plain,
-    // while providing the same frame/clipboard for every selected block.
-    // Astro's normalized defaults already exclude math. These managed languages
-    // have been handled by Book before EC; treating them as custom exclusions
-    // would discard fence titles/markers in every normal Astro build.
-    const customExclusions = typeof shared.syntaxHighlight === 'object'
-      ? (shared.syntaxHighlight.excludeLangs ?? []).filter((language) =>
-        !(language === 'math' && math !== false) && !(language === 'mermaid' && mermaid !== false))
-      : [];
-    const preserve = Boolean(resolved.shikiConfig?.transformers?.length)
-      || resolved.shikiConfig?.wrap === true
-      || resolved.shikiConfig?.defaultColor !== undefined
-      || customExclusions.length > 0
-      || (typeof resolved.syntaxHighlight === 'string' ? resolved.syntaxHighlight : (resolved.syntaxHighlight && resolved.syntaxHighlight.type)) === 'prism';
-    const codeOptions = codeOptionsFromShiki(code, resolved.shikiConfig, shared.syntaxHighlight !== false && !preserve);
-    const current = unified({ ...processor.options, rehypePlugins: processor.options.rehypePlugins.map((entry) =>
-      pluginKey(entry) === rehypeBookCode ? [rehypeBookCode, codeOptions] : entry) });
-    return { current, shared: { ...resolved, syntaxHighlight: preserve ? resolved.syntaxHighlight : false as const } };
-  }
-  processor.createRenderer = (shared) => {
-    const value = configured(shared);
-    return value.current.createRenderer(value.shared);
-  };
-  processor.createMdxRenderer = (shared, mdx) => {
-    const value = configured(shared);
-    return value.current.createMdxRenderer!(value.shared, mdx);
-  };
+  processor.createRenderer = (shared) => processorBase.createRenderer(sharedOptions(options, shared));
+  processor.createMdxRenderer = (shared, mdx) => processorBase.createMdxRenderer!(sharedOptions(options, shared), mdx);
   return processor;
 }
 

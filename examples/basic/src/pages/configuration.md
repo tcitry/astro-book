@@ -6,9 +6,11 @@ description: Configure the integration, page layout, static search, SEO and opti
 
 ## Integration options
 
-The integration installs one Markdown processor for ordinary Markdown and MDX. It includes math, diagrams and code frames.
+The integration installs one Markdown processor for ordinary Markdown and MDX. It includes math, diagrams, native Astro/Shiki highlighting and a small code-copy enhancement.
 
-```js title="astro.config.mjs"
+`astro.config.mjs`
+
+```js
 import { defineConfig } from 'astro/config';
 import astroBook from '@tcitry/astro-book';
 
@@ -20,14 +22,14 @@ export default defineConfig({
   integrations: [astroBook({
     markdown: {
       math: { macros: { '\\RR': '\\mathbb{R}' } },
-      code: { defaultProps: { frame: 'none' } },
+      shikiConfig: { themes: { light: 'github-light', dark: 'github-dark' } },
     },
     mermaid: { flowchart: { useMaxWidth: false } },
   })],
 });
 ```
 
-Do not add another Expressive Code integration on top of this one. If your site already uses Astro's MDX integration, leave its shared Markdown configuration enabled.
+Astro handles code highlighting; no additional code-rendering integration is needed. If your site already uses Astro's MDX integration, leave its shared Markdown configuration enabled. Set `markdown.code: false` here and `code={false}` on `BookLayout` when a consuming site supplies its own ordinary code UI; Mermaid source copying remains available.
 
 ## Layout inputs
 
@@ -50,7 +52,9 @@ The theme owns the Pagefind dependency, search dialog and index generation. `ast
 
 Keep the ordinary build script:
 
-```json title="package.json"
+`package.json`
+
+```json
 {
   "scripts": {
     "build": "astro build"
@@ -73,7 +77,9 @@ In the wrapper, include only article content in the index:
 
 All generated HTML is indexed by default. Limit the scope with an output-relative glob when needed:
 
-```js title="astro.config.mjs"
+`astro.config.mjs`
+
+```js
 integrations: [astroBook({
   search: { glob: '{guides,notes}/**/*.html' },
 })],

@@ -8,7 +8,7 @@ description: Build the independent documentation demo and publish static output 
 
 This example outputs HTML, CSS, scripts, fonts, images and a search index. There is no request-time renderer, API server or backend deployment.
 
-```sh frame="terminal"
+```sh
 npm ci
 npm run build
 npm run check
@@ -23,7 +23,9 @@ The repository's `pages.yml` workflow builds this example and uploads only its s
 
 The project is configured for the native GitHub Pages address:
 
-```js title="examples/basic/astro.config.mjs"
+`examples/basic/astro.config.mjs`
+
+```js
 export default defineConfig({
   site: 'https://tcitry.github.io',
   base: '/astro-book',
@@ -40,7 +42,9 @@ The deployment job checks that Pages reports the intended native origin. If the 
 
 Astro rewrites bundled assets for the configured base. Links and files from `public` must also resolve beneath that path. This example centralizes constructed URLs in a helper:
 
-```ts title="src/data/site.ts"
+`src/data/site.ts`
+
+```ts
 export const withBase = (path = '') =>
   `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
 ```
@@ -49,7 +53,7 @@ Markdown links between sibling pages are relative. The wrapper uses the same bas
 
 ## Check the built site
 
-```sh frame="terminal"
+```sh
 npm run preview --workspace @astro-book/basic
 ```
 

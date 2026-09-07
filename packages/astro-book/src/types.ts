@@ -109,7 +109,7 @@ export interface BookLayoutProps {
   next?: PageLink;
   theme?: BookTheme;
   mermaid?: MermaidClientOptions | false;
-  /** Wrap unmanaged code with Expressive Code. Set false alongside markdown.code:false for consumer rendering. Mermaid source copying remains enabled. */
+  /** Add a small copy control to unmanaged code. Set false alongside markdown.code:false for consumer rendering. Mermaid source copying remains enabled. */
   code?: boolean;
   labels?: Partial<BookLabels>;
   components?: BookComponents;

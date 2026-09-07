@@ -23,7 +23,9 @@ This documentation site's wrapper adds a theme selector below the navigation, a 
 | `comments` | After footer navigation |
 | `overlays` | Additional page-level UI |
 
-```astro title="An announcement slot"
+`An announcement slot`
+
+```astro
 <BookLayout {...layoutProps}>
   <p slot="content-before" class="book-hint info">
     This chapter describes the current stable API.
@@ -48,7 +50,9 @@ The theme ships complete CSS. This demo needs no Tailwind compiler of its own. I
 
 For the structural reading layout, the published CSS variables provide a narrow customization surface:
 
-```css title="Your site's reading overrides"
+`Your site's reading overrides`
+
+```css
 :root {
   --book-menu-width: 20rem;
   --book-toc-width: 20rem;
@@ -63,7 +67,9 @@ Load your overrides after the theme styles. Change a small set of tokens first, 
 
 Ordinary pages need no client framework. A site can add React, Vue or Svelte through its own Astro integration when a demonstration needs one.
 
-```astro title="A consumer-owned island"
+`A consumer-owned island`
+
+```astro
 ---
 import InteractiveDemo from '../components/InteractiveDemo';
 ---

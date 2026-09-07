@@ -55,7 +55,9 @@ $$
 
 ## Macros and validation
 
-```js title="astro.config.mjs"
+`astro.config.mjs`
+
+```js
 astroBook({
   markdown: {
     math: {

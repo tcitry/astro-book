@@ -1,30 +1,45 @@
-// Clipboard behavior, icons and feedback are the upstream Expressive Code module.
-import '../../dist/code-copy.js';
-
-/** Adapt raw HTML pre elements outside the Markdown pipeline to the package's official frame. */
+/** Copy rendered source without introducing a code renderer or a UI framework. */
 export function initializeCodeCopy(root = document) {
-  const template = document.querySelector('template[data-book-code-frame]');
-  if (!(template instanceof HTMLTemplateElement)) return;
   root.querySelectorAll('main pre').forEach((pre) => {
-    if (pre.closest('.expressive-code, [data-book-island], [data-demo]')) return;
-    // A consumer may replace ordinary code while retaining the diagram's source action.
+    if (pre.closest('[data-book-code-block], [data-book-island], [data-demo]') || pre.hasAttribute('data-book-code-disabled')) return;
     if (document.body.hasAttribute('data-book-code-disabled') && !pre.matches('pre.mermaid, pre[data-book-mermaid]')) return;
-    const highlighted = pre.closest('.highlight');
     const code = pre.querySelector('code');
+    const highlighted = pre.closest('.highlight');
     if (highlighted) {
       const candidates = highlighted.querySelectorAll('pre code');
       const content = highlighted.querySelector('code[data-lang]') || candidates[candidates.length - 1];
       if (code !== content) return;
     }
-    const frame = template.content.firstElementChild?.cloneNode(true);
-    const placeholder = frame?.querySelector('pre');
-    const copy = frame?.querySelector('.copy button');
-    if (!frame || !placeholder || !copy) return;
-    const source = (code ?? pre).textContent || '';
-    copy.dataset.code = source.replace(/\n/g, '\u007f');
-    copy.type = 'button';
-    copy.setAttribute('aria-label', copy.title || 'Copy code');
-    pre.before(frame);
-    placeholder.replaceWith(pre);
+    // Capture before Mermaid replaces the source with SVG; retain indentation and comments.
+    const source = pre.dataset.bookMermaidSource ?? (code ?? pre).textContent ?? '';
+    const wrapper = document.createElement('div');
+    wrapper.dataset.bookCodeBlock = '';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.bookCodeCopy = '';
+    button.textContent = 'Copy';
+    button.setAttribute('aria-label', 'Copy code');
+    const status = document.createElement('span');
+    status.dataset.bookCodeStatus = '';
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    const controls = document.createElement('div');
+    controls.dataset.bookCodeUi = '';
+    controls.setAttribute('data-pagefind-ignore', '');
+    controls.append(status, button);
+    pre.before(wrapper);
+    wrapper.append(controls, pre);
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      status.textContent = '';
+      try {
+        await navigator.clipboard.writeText(source);
+        status.textContent = 'Copied';
+      } catch {
+        status.textContent = 'Copy failed. Select the code to copy it.';
+      } finally {
+        button.disabled = false;
+      }
+    });
   });
 }

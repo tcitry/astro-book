@@ -10,8 +10,7 @@ import SEO from './SEO.astro';
 import menuIcon from '../assets/menu.svg?url';
 import tocIcon from '../assets/toc.svg?url';
 import '@tcitry/astro-book/styles.css';
-import '../../dist/code-styles.css';
-import codeFrame from '../../dist/code-copy-template.html?raw';
+import '../styles/Code.css';
 interface Props extends BookLayoutProps {}
 const { site, page, navigation = [], search = {}, seo = {}, previous, next, theme = 'auto', mermaid = {}, code = true, labels: overrides = {}, components = {} } = Astro.props;
 const labels: BookLabels = {
@@ -84,7 +83,6 @@ const showTOC = page.toc !== false;
     {showTOC && <aside class:list={["book-toc shrink-0 grow-0 basis-[var(--book-toc-width)] text-[length:var(--font-size-smallest)]", shell.toc]} data-pagefind-ignore><div class:list={["book-toc-content fixed inset-y-0 overflow-x-hidden overflow-y-auto p-4", shell.tocContent, tocHTML && shell.rawTOC]}>{tocHTML ? <Fragment set:html={tocHTML} /> : <nav id="TableOfContents" aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</div></aside>}
   </main>
   {search !== false && <Search config={search} part="dialog" label={labels.search} closeLabel={labels.closeSearch} />}
-  <template data-book-code-frame set:html={codeFrame} />
   <slot name="overlays" />
   <script>import '../client/book';</script>
 </body>

@@ -4,6 +4,5 @@ The reading appearance and SVG navigation icons are derived from [Hugo Book](htt
 
 KaTeX CSS and fonts in `dist/` are redistributed under the KaTeX MIT license, included as `dist/KATEX-LICENSE`. Runtime dependencies retain their own licenses.
 
-Expressive Code 0.44.2 provides the generated `dist/code-styles.css`, frame template and official clipboard module. Copyright (c) 2023 Tibor Schiemann, MIT; the full license is retained in `dist/EXPRESSIVE-CODE-LICENSE`. Source: https://github.com/expressive-code/expressive-code.
 
 The browser-normalization declarations in `src/styles/base.css` are adapted from modern-normalize v3.0.1, Copyright (c) Sindre Sorhus, MIT. The full notice is retained in `src/assets/MODERN-NORMALIZE-LICENSE`.

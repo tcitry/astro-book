@@ -11,7 +11,7 @@ A customizable, static reading theme for Astro, inspired by [Hugo Book](https://
 ## Features
 
 - Responsive navigation, table of contents, previous/next links and light/dark/system themes.
-- One Markdown and MDX pipeline: build-time KaTeX, lazy Mermaid diagrams with source fallback, Shiki highlighting, code copying and wide-content scrolling.
+- One Markdown and MDX pipeline: build-time KaTeX, lazy Mermaid diagrams with source fallback, native Astro/Shiki highlighting, a small source-copy control and wide-content scrolling.
 - Built-in static search: automatic Pagefind indexing after Astro builds, a lazy search dialog and configurable search scope. Image zoom, explicit SEO metadata and an optional Giscus component.
 - Reusable article metadata, lists, tags, hints and pagination components.
 - Typed inputs, named slots and component replacements for customization.

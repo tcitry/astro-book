@@ -7,7 +7,7 @@ import { buildSearchIndex, type BookSearchOptions } from './search/index.ts';
 export type { BookSearchOptions } from './search/index.ts';
 
 export interface AstroBookOptions {
-  /** KaTeX, Mermaid, Expressive Code and consumer remark/rehype/recma plugins share one pipeline. */
+  /** KaTeX, Mermaid, Astro syntax highlighting and consumer remark/rehype/recma plugins share one pipeline. */
   markdown?: BookMarkdownOptions;
   /** Runtime-safe Mermaid options; a layout can override them per page. */
   mermaid?: MermaidOptions | false;
@@ -27,7 +27,7 @@ export default function astroBook(options: AstroBookOptions = {}): AstroIntegrat
         const count = await buildSearchIndex(dir, options.search);
         logger.info(`Pagefind indexed ${count} HTML ${count === 1 ? 'page' : 'pages'}.`);
       },
-      'astro:config:setup': ({ config, updateConfig }) => {
+      'astro:config:setup': ({ command, config, updateConfig }) => {
         if (config.integrations.filter((item) => item.name === '@tcitry/astro-book').length > 1) {
           throw new Error('Configure astroBook() once. Add Markdown plugins through its markdown option.');
         }
@@ -37,6 +37,14 @@ export default function astroBook(options: AstroBookOptions = {}): AstroIntegrat
         }
         const inherited: UnifiedProcessorOptions = previous && isUnifiedProcessor(previous) ? previous.options : {};
         const extra = options.markdown ?? {};
+        // The packaged client lazily imports Mermaid from node_modules, beyond
+        // Vite's source scan. Prebundle its CommonJS dependencies for dev, resolving
+        // from this package so consumers do not need a hoisted Mermaid install.
+        const mermaidDependency = '@tcitry/astro-book > mermaid';
+        if (command === 'dev' && (options.mermaid ?? extra.mermaid) !== false
+          && !config.vite?.optimizeDeps?.include?.includes(mermaidDependency)) {
+          updateConfig({ vite: { optimizeDeps: { include: [mermaidDependency] } } });
+        }
         const processor = createBookProcessor({
           ...inherited,
           ...extra,

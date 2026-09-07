@@ -60,7 +60,9 @@ Each diagram handles its own error; one invalid example does not prevent the oth
 
 ## Configuration
 
-```js title="astro.config.mjs"
+`astro.config.mjs`
+
+```js
 astroBook({
   mermaid: {
     flowchart: { useMaxWidth: false },
