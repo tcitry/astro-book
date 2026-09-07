@@ -61,7 +61,7 @@ import Notice from '@tcitry/astro-book/components/Notice';
 
 ## Styles and framework islands
 
-The package supplies compiled CSS. Its build scans package components only, so installing it does not require a Tailwind Vite plugin or access to the consuming site's source. New component styling uses Tailwind CSS v4. Design variables and the public stylesheet entry support site overrides. Public layout variables include `--book-menu-width`, `--book-toc-width`, `--book-content-max-width`, `--book-wide-content-max-width`, `--book-content-without-toc-max-width` and `--book-wide-content-without-toc-max-width`. Reading colors use `--body-background`, `--body-font-color`, `--color-link` and the Book gray palette. Set `page.bodyClass` to `book-page-wide` for the wide listing shape.
+The package supplies compiled CSS. Its build scans package components only, so installing it does not require a Tailwind Vite plugin or access to the consuming site's source. Component structure and sizing use Tailwind CSS v4 utilities. Astro bundles the imported CSS Modules for selector-based behavior and Markdown descendants. Design variables and the public stylesheet entry support site overrides. Public layout variables include `--book-menu-width`, `--book-toc-width`, `--book-content-max-width`, `--book-wide-content-max-width`, `--book-content-without-toc-max-width` and `--book-wide-content-without-toc-max-width`. Reading colors use `--body-background`, `--body-font-color`, `--color-link` and the Book gray palette. Set `page.bodyClass` to `book-page-wide` for the wide listing shape.
 
 ```css
 /* Load after the package stylesheet in the consuming site. */
@@ -71,7 +71,9 @@ The package supplies compiled CSS. Its build scans package components only, so i
 }
 ```
 
-Book's legacy compatibility layer retains the established visual layout; its source and scope are documented separately from new utility classes.
+The old Hugo SCSS compatibility layer is retired: no Sass dependency or SCSS build step remains. `tokens.css` holds the public color/width variables; the small, scoped `base.css` normalizes browser defaults without a global preflight. `Shell.module.css` covers responsive controls, viewport-margin clamps, raw TOC slots and printing; `Navigation.module.css` covers tree state; `Search.module.css` adapts Pagefind's generated UI; `Reading.module.css` covers Markdown descendants and supported shortcode presentation. Theme components use utilities for layout, spacing, typography and controls. KaTeX and Expressive Code retain their official styles.
+
+The module reading root has zero specificity and every reading selector excludes `data-book-island`, `data-demo` and Expressive Code descendants. The package ships its module sources so Astro can resolve hashed class names; the consumer does not need Tailwind or Sass. Keep public class hooks and CSS variables when replacing a slot, and treat module-generated class names as private. See [upstream tracking](upstream.md) for the preserved Book appearance and future feature ports.
 
 CSS is not isolated merely because it is packaged. Reading selectors and reset behavior must be tested alongside embedded widgets. Mark an island boundary with `data-book-island` explicitly and give a widget its own reset/token bridge if its framework needs one. Theme CSS must not force a renderer or global framework reset onto ordinary articles.
 

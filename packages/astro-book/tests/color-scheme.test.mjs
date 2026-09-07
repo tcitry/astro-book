@@ -35,15 +35,15 @@ test('light-theme rules preserve surrounding and nested viewport constraints', (
   assert.equal(rules[1].parent.parent.params, '(min-width: 50rem)');
 });
 
-test('published CSS has no BOM corruption and guards compatibility search surfaces and dark gradients', async () => {
+test('published CSS has no BOM corruption and guards search tokens and dark gradients', async () => {
   const css = await readFile(new URL('../dist/styles.css', import.meta.url), 'utf8');
   assert.doesNotMatch(css, /\uFEFF/);
   assert.match(css, /--font-size-smaller:/);
   const tree = postcss.parse(css);
   const searchSurfaces = [];
   tree.walkRules((rule) => {
-    if (rule.selector.includes('#search-dialog')) {
-      rule.walkDecls('background-color', (declaration) => {
+    if (rule.selector.includes('data-astro-book')) {
+      rule.walkDecls('--book-search-background', (declaration) => {
         if (declaration.value === '#303030') searchSurfaces.push(rule);
       });
     }
@@ -57,7 +57,7 @@ test('published CSS has no BOM corruption and guards compatibility search surfac
   for (const rule of automatic) assert.match(rule.selector, /:not\(\[data-book-theme="light"\]\)/);
   for (const rule of manual) assert.match(rule.selector, /\[data-book-theme="dark"\]/);
 
-  // Keep checking any future compatibility gradient placed in a dark media rule,
+  // Keep checking any future theme gradient placed in a dark media rule,
   // without requiring the theme to ship a timeline or portfolio gradient.
   tree.walkDecls((declaration) => {
     if (!declaration.value.includes('gradient(')) return;

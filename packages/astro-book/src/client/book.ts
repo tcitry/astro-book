@@ -179,7 +179,7 @@ function initializeBook() {
         } catch {
           document.getElementById(`d${id}`)?.remove();
           diagram.textContent = source; diagram.removeAttribute('data-processed');
-          const message = document.createElement('p'); message.className = 'secondary-info'; message.dataset.bookMermaidError = ''; message.setAttribute('role', 'status'); message.textContent = String(errorMessage); diagram.after(message);
+          const message = document.createElement('p'); message.className = 'secondary-info text-[length:small]'; message.dataset.bookMermaidError = ''; message.setAttribute('role', 'status'); message.textContent = String(errorMessage); diagram.after(message);
         }
       }
     }).catch(() => { /* Source remains visible if the optional runtime cannot load. */ });

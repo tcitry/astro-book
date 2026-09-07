@@ -6,6 +6,6 @@ interface Props { previous?: PageLink; next?: PageLink; previousLabel?: string; 
 const { previous, next, previousLabel = 'Previous page', nextLabel = 'Next page' } = Astro.props;
 ---
 {(previous || next) && <div class="flex flex-wrap justify-between">
-  <span>{previous && <a href={previous.url} class="flex align-center" rel="prev"><img src={backwardIcon} class="book-icon" alt={previousLabel} /><span>{previous.title}</span></a>}</span>
-  <span>{next && <a href={next.url} class="flex align-center" rel="next"><span>{next.title}</span><img src={forwardIcon} class="book-icon" alt={nextLabel} /></a>}</span>
+  <span>{previous && <a href={previous.url} class="flex items-center" rel="prev"><img src={backwardIcon} class="book-icon" alt={previousLabel} /><span>{previous.title}</span></a>}</span>
+  <span>{next && <a href={next.url} class="flex items-center" rel="next"><span>{next.title}</span><img src={forwardIcon} class="book-icon" alt={nextLabel} /></a>}</span>
 </div>}

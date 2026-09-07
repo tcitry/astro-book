@@ -5,7 +5,7 @@ import BadgeGroup from './BadgeGroup.astro';
 interface Props { items: ArticleItem[]; }
 const { items } = Astro.props;
 ---
-<article class="markdown book-post" data-pagefind-body>
+<article class="markdown book-post mb-16" data-pagefind-body>
   {items.map((item) => <><h2><a href={item.href}>{item.label}</a><BadgeGroup badges={item.badges} /></h2><ArticleMeta {...item.metadata} /><p>{item.summary}</p></>)}
   <slot />
 </article>

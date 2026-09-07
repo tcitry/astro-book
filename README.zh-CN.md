@@ -15,7 +15,7 @@
 - Pagefind 搜索界面、图片放大、显式 SEO 配置和可选 Giscus 评论组件。
 - 文章元数据、列表、标签、提示与分页等通用阅读组件。
 - 类型化参数、具名插槽和组件替换，支持持续定制。
-- 完整的预编译 Tailwind CSS v4 样式与字体。使用主题本身无需在站点安装 Tailwind 编译器。
+- Tailwind CSS v4 工具类优先，复杂规则使用 CSS Modules，字体随包提供。工具类已预编译，Modules 由 Astro 自动处理；消费端无需 Tailwind 或 Sass，旧 SCSS 兼容层已退出构建。
 - 普通阅读页面不依赖 React、后端、账号或私有包仓库；交互页面可按需接入前端框架岛屿。
 
 主题聚焦 Hugo Book 的通用阅读能力，并保留框架无关的定制入口。内容读取、URL、tag/category 关系、排序、搜索索引、RSS/sitemap、站点身份与部署由你的项目维护。Weekly、Timeline、Portfolio、Links 和 demo 等自定义页面及其组件、数据类型、专用样式属于站点项目，不进入主题。无需依赖 Starlight，也没有规定内容必须放在哪个目录。
@@ -83,6 +83,8 @@ import BookLayout from '@tcitry/astro-book/components/BookLayout';
 ```
 
 `BookLayout` 自动引入主题样式和浏览器交互。示例先关闭搜索，生成 Pagefind 索引后再开启。[完整入门指南](docs/getting-started.md) 包含可复制的 Markdown/MDX 布局，以及导航、TOC、公式、图表、SEO、Giscus、插槽覆盖和框架岛屿接入说明。
+
+定制与上游功能移植可参考[样式契约](docs/architecture.md#styles-and-framework-islands)和 [Hugo Book 跟进记录](docs/upstream.md)。
 
 ## 开发与验收
 

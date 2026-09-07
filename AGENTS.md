@@ -4,4 +4,4 @@ This is a public, MIT-licensed Astro theme. Everything needed to install, develo
 
 Use framework-neutral Astro components for the reading shell. Client frameworks are optional islands. Public inputs are generic presentation data; Hugo parsing, URL policy, taxonomies, RSS and site identity belong to consumers.
 
-New styling uses Tailwind CSS v4 first, CSS Modules second. The package publishes complete prebuilt CSS and assets. Keep the Book compatibility stylesheet bounded and documented. Test a packed package, not only workspace links.
+New styling uses Tailwind CSS v4 first, CSS Modules second. The package publishes complete prebuilt CSS and assets. Keep complex descendant, state and print rules in CSS Modules; do not reintroduce the retired Hugo Sass build layer. Test a packed package, not only workspace links.

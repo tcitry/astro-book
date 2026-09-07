@@ -3,4 +3,4 @@ import type { BadgeData } from '../presentation';
 interface Props extends BadgeData {}
 const { label, href, class: className = '', title, leadingSpace = false, trailingSpace = false, unstyled = false } = Astro.props;
 ---
-{leadingSpace && ' '}<span class:list={['inline-flex items-center whitespace-nowrap leading-[1.15]', !unstyled && 'title-label', className]} title={title}>{href ? <a href={href}>{label}</a> : label}</span>{trailingSpace && ' '}
+{leadingSpace && ' '}<span class:list={['inline-flex items-center whitespace-nowrap leading-[1.15]', !unstyled && 'title-label relative -top-px rounded-[4px] px-1 [&_a]:text-inherit! [&_a]:no-underline!', className]} title={title}>{href ? <a href={href}>{label}</a> : label}</span>{trailingSpace && ' '}

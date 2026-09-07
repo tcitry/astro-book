@@ -39,4 +39,4 @@ To roll back, restore the previous package reference and lockfile, reinstall and
 
 ## Licensing and source provenance
 
-The package is MIT-licensed. Preserve Hugo Book's original license, author attribution and pinned source revision when updating the compatibility layer. Record other vendored assets and licenses in `packages/astro-book/THIRD_PARTY_NOTICES.md`. Never copy a consuming site's credentials, generated private content or commercially licensed components into source, examples, tests, docs or release artifacts.
+The package is MIT-licensed. Preserve Hugo Book's original license, author attribution and recorded source revision when porting reading features. Follow the lightweight [upstream record](upstream.md); do not restore Hugo template or Sass build dependencies. Record other vendored assets and licenses in `packages/astro-book/THIRD_PARTY_NOTICES.md`. Never copy a consuming site's credentials, generated private content or commercially licensed components into source, examples, tests, docs or release artifacts.

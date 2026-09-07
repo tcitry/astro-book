@@ -1,5 +1,7 @@
 ---
 import type { BookLayoutProps, BookLabels } from '../types';
+import shell from '../styles/Shell.module.css';
+import reading from '../styles/Reading.module.css';
 import NavigationTree from './NavigationTree.astro';
 import HeadingTree from './HeadingTree.astro';
 import DefaultSearch from './Search.astro';
@@ -44,42 +46,42 @@ const showTOC = page.toc !== false;
   </script>
   <slot name="head" />
 </head>
-<body dir={site.dir ?? 'ltr'} class={page.bodyClass} data-book-mermaid-options={JSON.stringify(mermaid)} data-book-code-disabled={!code || undefined}>
+<body dir={site.dir ?? 'ltr'} class:list={[shell.shell, reading.reading, page.bodyClass]} data-book-mermaid-options={JSON.stringify(mermaid)} data-book-code-disabled={!code || undefined}>
   <a href="#main-content" class="fixed top-2 left-2 z-[10000] -translate-y-[200%] bg-[var(--body-background)] p-3 focus:translate-y-0">{labels.skipToContent}</a>
   <input type="checkbox" class="hidden toggle" id="menu-control" aria-label={labels.openNavigation} />
   <input type="checkbox" class="hidden toggle" id="toc-control" aria-label={labels.openTableOfContents} />
-  <main class="container flex">
-    <aside class="book-menu" data-pagefind-ignore>
-      <div class="book-menu-content">
+  <main class:list={["container mx-auto flex", shell.container]}>
+    <aside class:list={["book-menu shrink-0 grow-0 basis-[var(--book-menu-width)] text-[length:var(--font-size-smaller)]", shell.menu]} data-pagefind-ignore>
+      <div class:list={["book-menu-content fixed inset-y-0 overflow-x-hidden overflow-y-auto p-4 min-[110rem]:py-8", shell.menuContent]}>
         <nav aria-label={labels.navigation}>
-          <h2 class="book-brand"><a class="flex align-center" href={site.home ?? '/'}>{site.logo && <img src={site.logo} alt="" />}<span>{site.title}</span></a></h2>
-          <slot name="navigation-before" />
+          <h2 class="book-brand mt-0 mb-4"><a class="flex items-center text-inherit!" href={site.home ?? '/'}>{site.logo && <img src={site.logo} alt="" class="size-[1.5em]" />}<span>{site.title}</span></a></h2>
+          {Astro.slots.has('navigation-before') && <div class={shell.rawNavigation}><slot name="navigation-before" /></div>}
           {search !== false && <Search config={search} label={labels.search} />}
-          {Boolean(site.menu?.length) && <><Navigation items={site.menu!} expandLabel={labels.expandSection} idPrefix="book-menu" /><hr class="hr-edge-weak" /></>}
-          <slot name="navigation"><Navigation items={navigation} expandLabel={labels.expandSection} /></slot>
-          <slot name="navigation-after" />
+          {Boolean(site.menu?.length) && <><Navigation items={site.menu!} expandLabel={labels.expandSection} idPrefix="book-menu" /><hr class="border-0 pt-px [background:linear-gradient(to_right,transparent,dimgray,transparent)]" /></>}
+          {Astro.slots.has('navigation') ? <div class={shell.rawNavigation}><slot name="navigation" /></div> : <Navigation items={navigation} expandLabel={labels.expandSection} />}
+          {Astro.slots.has('navigation-after') && <div class={shell.rawNavigation}><slot name="navigation-after" /></div>}
         </nav>
       </div>
     </aside>
-    <div class="book-page">
-      <header class="book-header hidden" data-pagefind-ignore>
-        <div class="flex align-center justify-between">
+    <div class="book-page min-w-80 grow p-4 min-[110rem]:py-8">
+      <header class:list={["book-header mb-4", shell.header]} data-pagefind-ignore>
+        <div class="flex items-center justify-between">
           <label for="menu-control" aria-label={labels.openNavigation}><img src={menuIcon} class="book-icon" alt={labels.navigation} /></label>
           <strong>{seo.title ?? page.title}</strong>
           <label for="toc-control" aria-label={labels.openTableOfContents}>{showTOC && <img src={tocIcon} class="book-icon" alt={labels.tableOfContents} />}</label>
         </div>
-        {showTOC && <aside class="hidden">{tocHTML ? <Fragment set:html={tocHTML} /> : <nav aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</aside>}
+        {showTOC && <aside class:list={["hidden", tocHTML && shell.rawTOC]}>{tocHTML ? <Fragment set:html={tocHTML} /> : <nav aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</aside>}
       </header>
       <slot name="content-before" />
       <div id="main-content" tabindex="-1"><slot /></div>
       <slot name="content-after" />
-      <footer class="book-footer" data-pagefind-ignore>
+      <footer class:list={["book-footer pt-4 text-[length:var(--font-size-smaller)]", shell.footer]} data-pagefind-ignore>
         <slot name="footer"><Footer previous={previous} next={next} previousLabel={labels.previousPage} nextLabel={labels.nextPage} /></slot>
         <slot name="comments" />
       </footer>
       <label for="menu-control" class="hidden book-menu-overlay" aria-label={labels.closeNavigation}></label>
     </div>
-    {showTOC && <aside class="book-toc" data-pagefind-ignore><div class="book-toc-content">{tocHTML ? <Fragment set:html={tocHTML} /> : <nav id="TableOfContents" aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</div></aside>}
+    {showTOC && <aside class:list={["book-toc shrink-0 grow-0 basis-[var(--book-toc-width)] text-[length:var(--font-size-smallest)]", shell.toc]} data-pagefind-ignore><div class:list={["book-toc-content fixed inset-y-0 overflow-x-hidden overflow-y-auto p-4 min-[110rem]:py-8", shell.tocContent, tocHTML && shell.rawTOC]}>{tocHTML ? <Fragment set:html={tocHTML} /> : <nav id="TableOfContents" aria-label={labels.tableOfContents}><TOC headings={page.headings ?? []} /></nav>}</div></aside>}
   </main>
   {search !== false && <Search config={search} part="dialog" label={labels.search} closeLabel={labels.closeSearch} />}
   <template data-book-code-frame set:html={codeFrame} />

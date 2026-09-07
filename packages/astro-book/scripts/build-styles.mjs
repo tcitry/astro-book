@@ -2,7 +2,6 @@ import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import * as sass from 'sass';
 import postcss from 'postcss';
 import selectorParser from 'postcss-selector-parser';
 import { compile } from '@tailwindcss/node';
@@ -15,8 +14,8 @@ const destination = path.join(root, 'dist');
 const require = createRequire(import.meta.url);
 await mkdir(destination, { recursive: true });
 
-// Zero-specificity scoping preserves the legacy cascade while keeping the theme
-// and its Markdown rules out of independently styled framework islands.
+// Zero-specificity scoping keeps the baseline out of independently styled islands.
+// Component CSS Modules are bundled by Astro; package-owned utilities are prebuilt.
 const visited = new WeakSet();
 const scope = (css, excludeIslands = true) => postcss([{
   postcssPlugin: 'astro-book-boundary',
@@ -44,21 +43,19 @@ const scope = (css, excludeIslands = true) => postcss([{
   },
 }]).process(css.replace(/^\uFEFF/, ''), { from: undefined }).css;
 
-const legacy = sass.compile(path.join(source, 'styles/compat/book.scss'), {
-  style: 'compressed', charset: false, silenceDeprecations: ['import', 'global-builtin', 'color-functions', 'if-function'],
-}).css;
 const compiler = await compile(await readFile(path.join(source, 'styles/tailwind.css'), 'utf8'), {
   base: path.join(source, 'styles'), onDependency() {},
 });
 const scanner = new Scanner({ sources: [{ base: source, pattern: '**/*.{astro,ts,css}', negated: false }] });
 const utilities = compiler.build(scanner.scan());
-const reading = await readFile(path.join(source, 'styles/reading.css'), 'utf8');
+const tokens = await readFile(path.join(source, 'styles/tokens.css'), 'utf8');
+const baseline = await readFile(path.join(source, 'styles/base.css'), 'utf8');
 const katexRoot = path.dirname(require.resolve('katex/package.json'));
 const katex = await readFile(path.join(katexRoot, 'dist/katex.min.css'), 'utf8');
 await cp(path.join(katexRoot, 'dist/fonts'), path.join(destination, 'fonts'), { recursive: true });
 await cp(path.join(katexRoot, 'LICENSE'), path.join(destination, 'KATEX-LICENSE'));
 await writeFile(path.join(destination, 'styles.css'), [
   '/*! @tcitry/astro-book | MIT | Hugo Book attribution: THIRD_PARTY_NOTICES.md */',
-  scope(utilities, false), expandColorSchemes(scope(legacy)), scope(reading), scope(katex, false),
+  scope(utilities, false), expandColorSchemes(scope(tokens, false)), scope(baseline), scope(katex, false),
 ].join('\n'));
-console.log('Built complete Book CSS, package-owned Tailwind utilities, and KaTeX fonts.');
+console.log('Built scoped tokens/baseline, package-owned Tailwind utilities, and KaTeX fonts.');

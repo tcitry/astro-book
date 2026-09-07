@@ -310,7 +310,7 @@ html[data-astro-book][data-book-theme] {
 }
 ```
 
-See [the styling contract](architecture.md#styles-and-framework-islands) for width and color variables. The Book compatibility styles preserve the established reading layout; you do not need to copy or rebuild their Sass in your site.
+See [the styling contract](architecture.md#styles-and-framework-islands) for width and color variables. Tailwind utilities and CSS Modules preserve the established reading layout. The package ships precompiled utilities; Astro bundles its CSS Modules automatically, with no Tailwind or Sass setup in your site.
 
 Interactive components are optional. Install the corresponding Astro renderer in the consumer, then import the component into an MDX page or a standalone Astro page:
 

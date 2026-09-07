@@ -1,0 +1,8 @@
+.tree :global(ul) { padding-inline-start: 1.5em; }
+.flat > :is(a, span, label) { font-weight: bolder; }
+.flat > ul { padding-inline-start: 0; }
+.toggle + label + ul { display: none; }
+.toggle:checked + label + ul { display: block; }
+.toggle:checked + label > img:last-child { transform: rotate(90deg); }
+:global(body[dir="rtl"]) .toggle + label > img:last-child { transform: rotate(180deg); }
+:global(body[dir="rtl"]) .toggle:checked + label > img:last-child { transform: rotate(90deg); }

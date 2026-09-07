@@ -1,0 +1,646 @@
+/* Build-time Markdown descendants and published shortcode markup.
+   Module-local reading root; framework islands and third-party code frames own their styles. */
+:where(.reading) :global(.markdown:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  line-height: 1.6;
+}
+:where(.reading) :global(.markdown > :first-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-top: 0;
+}
+:where(.reading) :global(.markdown h1:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h2:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h3:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h4:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h5:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h6:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-weight: inherit;
+  line-height: 1;
+  margin-top: 1.5em;
+  margin-bottom: 1rem;
+}
+:where(.reading) :global(.markdown h1 a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h2 a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h3 a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h4 a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h5 a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h6 a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  opacity: 0;
+  font-size: 0.75em;
+  margin-inline-start: 0.25em;
+}
+:where(.reading) :global(.markdown h1:hover a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown h1 a.anchor:focus-visible:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h2:hover a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h2 a.anchor:focus-visible:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h3:hover a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h3 a.anchor:focus-visible:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h4:hover a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h4 a.anchor:focus-visible:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h5:hover a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h5 a.anchor:focus-visible:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h6:hover a.anchor:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown h6 a.anchor:focus-visible:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  opacity: initial;
+  text-decoration: none;
+}
+:where(.reading) :global(.markdown h1:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-size: 2rem;
+}
+:where(.reading) :global(.markdown h2:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-size: 1.5rem;
+}
+:where(.reading) :global(.markdown h3:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-size: 1.25rem;
+}
+:where(.reading) :global(.markdown h4:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-size: 1.125rem;
+}
+:where(.reading) :global(.markdown h5:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-size: 1rem;
+}
+:where(.reading) :global(.markdown h6:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-size: 0.875rem;
+}
+:where(.reading) :global(.markdown b:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown optgroup:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown strong:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-weight: bolder;
+}
+:where(.reading) :global(.markdown a:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: none;
+}
+:where(.reading) :global(.markdown a[href]:hover:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: underline;
+}
+:where(.reading) :global(.markdown a[href]:visited:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  color: var(--color-visited-link);
+}
+:where(.reading) :global(.markdown img:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  max-width: 100%;
+  height: auto;
+}
+:where(.reading) :global(.markdown code:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  direction: ltr;
+  unicode-bidi: embed;
+  padding: 0.125em 0.25em;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  font-size: 0.875em;
+}
+:where(.reading) :global(.markdown pre:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  padding: 1rem;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+}
+:where(.reading) :global(.markdown pre:focus:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  outline-style: auto;
+  outline-color: var(--color-link);
+}
+:where(.reading) :global(.markdown pre code:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+:where(.reading) :global(.markdown p:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  word-wrap: break-word;
+}
+:where(.reading) :global(.markdown blockquote:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem 0.5rem 0.75rem;
+  border-inline-start: 0.25rem solid var(--gray-200);
+  border-radius: var(--border-radius);
+}
+:where(.reading) :global(.markdown blockquote :first-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-top: 0;
+}
+:where(.reading) :global(.markdown blockquote :last-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-bottom: 0;
+}
+:where(.reading) :global(.markdown table:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  overflow: auto;
+  display: block;
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+:where(.reading) :global(.markdown table tr th:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown table tr td:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-200);
+  text-align: start;
+}
+:where(.reading) :global(.markdown table tr:nth-child(2n):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  background: var(--gray-100);
+}
+:where(.reading) :global(.markdown hr:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  height: 1px;
+  border: none;
+  background: var(--gray-200);
+}
+:where(.reading) :global(.markdown ul:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global(
+.markdown ol:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  padding-inline-start: 2rem;
+  word-wrap: break-word;
+}
+:where(.reading) :global(.markdown dl dt:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-weight: bolder;
+  margin-top: 1rem;
+}
+:where(.reading) :global(.markdown dl dd:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-inline-start: 0;
+  margin-bottom: 1rem;
+}
+:where(.reading) :global(.markdown .highlight:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  direction: ltr;
+  unicode-bidi: embed;
+  border-radius: var(--border-radius);
+}
+:where(.reading) :global(.markdown .highlight table tbody:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border: 1px solid var(--gray-200);
+}
+:where(.reading) :global(.markdown .highlight table tr pre:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border: 0;
+}
+:where(.reading) :global(.markdown .highlight table tr td pre code > span:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: flex;
+}
+:where(.reading) :global(.markdown .highlight table tr td:nth-child(1) pre:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin: 0;
+  padding-inline-end: 0;
+}
+:where(.reading) :global(.markdown .highlight table tr td:nth-child(2) pre:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin: 0;
+  padding-inline-start: 0;
+}
+:where(.reading) :global(.markdown details:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+}
+:where(.reading) :global(.markdown details summary:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  line-height: 1;
+  padding: 1rem;
+  margin: -1rem;
+  cursor: pointer;
+  list-style: none;
+}
+:where(.reading) :global(.markdown details summary:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::before) {
+  content: "›";
+  display: inline-block;
+  margin-inline-end: 0.5rem;
+  transition: transform 0.1s ease-in-out;
+}
+:where(.reading) :global(.markdown details[open] summary:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-bottom: 0;
+}
+:where(.reading) :global(.markdown details[open] summary:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::before) {
+  transform: rotate(90deg);
+}
+:where(.reading) :global(.markdown figure:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin: 1rem 0;
+}
+:where(.reading) :global(.markdown figure figcaption:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-top: 1rem;
+}
+:where(.reading) :global(.markdown-inner > :first-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown .book-steps > ol > li > :first-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown figure figcaption > :first-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-top: 0;
+}
+:where(.reading) :global(.markdown-inner > :last-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown .book-steps > ol > li > :last-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown figure figcaption > :last-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-bottom: 0;
+}
+:where(.reading) :global(.markdown .book-tabs:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-wrap: wrap;
+}
+:where(.reading) :global(.markdown .book-tabs label:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px transparent;
+  cursor: pointer;
+}
+:where(.reading) :global(.markdown .book-tabs .book-tabs-content:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  order: 999;
+  width: 100%;
+  border-top: 1px solid var(--gray-100);
+  padding: 1rem;
+  display: none;
+}
+:where(.reading) :global(.markdown .book-tabs input[type=radio]:checked + label:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-bottom: 1px solid var(--color-link);
+}
+:where(.reading) :global(.markdown .book-tabs input[type=radio]:checked + label + .book-tabs-content:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: block;
+}
+:where(.reading) :global(.markdown .book-columns:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  gap: 1rem;
+}
+:where(.reading) :global(.markdown .book-columns > div:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin: 1rem 0;
+  min-width: 13.2rem;
+}
+:where(.reading) :global(.markdown .book-columns > ul:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+:where(.reading) :global(.markdown .book-columns > ul > li:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  flex: 1 1;
+  min-width: 13.2rem;
+}
+:where(.reading) :global(.markdown a.book-btn[href]:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: inline-block;
+  font-size: var(--font-size-smaller);
+  color: var(--color-link);
+  line-height: 2rem;
+  padding: 0 1rem;
+  border: 1px solid var(--color-link);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+:where(.reading) :global(.markdown a.book-btn[href]:hover:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: none;
+}
+:where(.reading) :global(.markdown .book-hint.note:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-note);
+  background-color: var(--color-accent-note-tint);
+}
+:where(.reading) :global(.markdown .book-hint.tip:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-tip);
+  background-color: var(--color-accent-tip-tint);
+}
+:where(.reading) :global(.markdown .book-hint.important:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-important);
+  background-color: var(--color-accent-important-tint);
+}
+:where(.reading) :global(.markdown .book-hint.warning:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-warning);
+  background-color: var(--color-accent-warning-tint);
+}
+:where(.reading) :global(.markdown .book-hint.caution:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-caution);
+  background-color: var(--color-accent-caution-tint);
+}
+:where(.reading) :global(.markdown .book-hint.default:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-default);
+  background-color: var(--color-accent-default-tint);
+}
+:where(.reading) :global(.markdown .book-hint.info:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-info);
+  background-color: var(--color-accent-info-tint);
+}
+:where(.reading) :global(.markdown .book-hint.success:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-success);
+  background-color: var(--color-accent-success-tint);
+}
+:where(.reading) :global(.markdown .book-hint.danger:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-color: var(--color-accent-danger);
+  background-color: var(--color-accent-danger-tint);
+}
+:where(.reading) :global(.markdown .book-badge.note:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-note);
+}
+:where(.reading) :global(.markdown .book-badge.tip:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-tip);
+}
+:where(.reading) :global(.markdown .book-badge.important:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-important);
+}
+:where(.reading) :global(.markdown .book-badge.warning:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-warning);
+}
+:where(.reading) :global(.markdown .book-badge.caution:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-caution);
+}
+:where(.reading) :global(.markdown .book-badge.default:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-default);
+}
+:where(.reading) :global(.markdown .book-badge.info:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-info);
+}
+:where(.reading) :global(.markdown .book-badge.success:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-success);
+}
+:where(.reading) :global(.markdown .book-badge.danger:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  --accent-color: var(--color-accent-danger);
+}
+:where(.reading) :global(.markdown .book-badge:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: inline-block;
+  font-size: var(--font-size-smaller);
+  font-weight: var(--body-font-weight);
+  vertical-align: middle;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--accent-color);
+  overflow: hidden;
+  text-wrap: nowrap;
+  color: var(--body-font-color);
+}
+:where(.reading) :global(.markdown .book-badge span:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: inline-block;
+  padding: 0 0.5rem;
+}
+:where(.reading) :global(.markdown .book-badge span.book-badge-value:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  color: var(--body-background);
+  background-color: var(--accent-color);
+}
+:where(.reading) :global(.markdown .book-steps:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  position: relative;
+}
+:where(.reading) :global(.markdown .book-steps > ol:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  counter-reset: steps;
+  list-style: none;
+  padding-inline-start: 1.25rem;
+  margin-top: 2rem;
+}
+:where(.reading) :global(.markdown .book-steps > ol > li:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::before) {
+  content: counter(steps);
+  counter-increment: steps;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  left: 0.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  line-height: 1rem;
+  color: var(--body-background);
+  background: var(--gray-500);
+  outline: 0.25rem solid var(--body-background);
+}
+:where(.reading) :global(.markdown .book-steps > ol > li:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-inline-start: 1px solid var(--gray-500);
+  padding-inline-start: 3rem;
+  padding-bottom: 2rem;
+}
+:where(.reading) :global(.markdown .book-steps > ol > li:last-child:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border: 0;
+}
+:where(.reading) :global(.markdown .book-card:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: block;
+  overflow: hidden;
+  height: 100%;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--gray-200);
+}
+:where(.reading) :global(.markdown .book-card > a:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: block;
+  height: 100%;
+}
+:where(.reading) :global(.markdown .book-card > a[href]:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown .book-card > a[href]:visited:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  color: var(--body-font-color);
+}
+:where(.reading) :global(.markdown .book-card > a[href]:hover:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: none;
+  background: var(--gray-100);
+}
+:where(.reading) :global(.markdown .book-card > a > img:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown .book-card > img:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  width: 100%;
+  display: block;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+:where(.reading) :global(.markdown .book-card .markdown-inner:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown .book-card figure figcaption:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown figure .book-card figcaption:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:where(.reading) :global( .markdown .book-card .book-steps > ol > li:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  padding: 1rem;
+}
+:where(.reading) :global(.markdown .book-image input + img:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  cursor: zoom-in;
+  transition: transform 0.2s ease-in-out;
+}
+:where(.reading) :global(.markdown .book-image input:checked + img:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--body-background);
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: zoom-out;
+  padding: 1rem;
+}
+:where(.reading) :global(.markdown .book-asciinema:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin: 1rem 0;
+}
+:where(.reading) :global(.markdown .book-hero:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  min-height: 24rem;
+  align-content: center;
+}
+:where(.reading) :global(.markdown .book-hero h1:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-size: 3em;
+}
+:where(.reading) :global(.markdown .book-codeblock-filename:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-bottom: 0;
+  font-size: var(--font-size-smaller);
+  margin-top: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-start-start-radius: var(--border-radius);
+  border-start-end-radius: var(--border-radius);
+}
+:where(.reading) :global(.markdown .book-codeblock-filename a:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  color: var(--body-font-color);
+}
+:where(.reading) :global(.markdown .book-codeblock-filename + .highlight pre:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-top: 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+:where(.reading) :global(blockquote:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-style: italic;
+}
+:where(.reading) :global(.book-page .markdown .table-scroll:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  margin-block: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+:where(.reading) :global(.book-page .markdown .table-scroll > table:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: table;
+  inline-size: 100%;
+  min-inline-size: 64rem;
+  max-inline-size: none;
+  margin-block: 0;
+  overflow: visible;
+  table-layout: auto;
+}
+:where(.reading) :global(.book-page .markdown .table-scroll > table :where(th, td):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  min-inline-size: 12rem;
+  vertical-align: top;
+}
+:where(.reading) :global(.book-page .markdown :where(pre, .table-scroll):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  scrollbar-color: var(--scrollbar-thumb-active) transparent;
+}
+:where(.reading) :global(.book-page .markdown :where(pre, .table-scroll):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::-webkit-scrollbar) {
+  height: 0.5rem;
+}
+:where(.reading) :global(.book-page .markdown :where(pre, .table-scroll):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::-webkit-scrollbar-thumb:horizontal) {
+  background-color: var(--scrollbar-thumb-active);
+}
+@media (forced-colors: active) {
+  :where(.reading) :global(
+  .book-page .markdown :where(pre, .table-scroll):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+}
+@media (forced-colors: active) {
+  :where(.reading) :global(
+  .book-page .markdown :where(pre, .table-scroll):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::-webkit-scrollbar),
+:where(.reading) :global(
+  .book-page .markdown :where(pre, .table-scroll):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::-webkit-scrollbar-thumb:horizontal) {
+    all: revert;
+  }
+}
+:where(.reading) :global(.markdown pre.mermaid:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  background-color: var(--book-mermaid-background);
+  max-inline-size: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+:where(.reading) :global(.markdown pre.mermaid > svg:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  display: block;
+}
+:where(.reading) :global(.book-hint:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-style: normal;
+}
+:where(.reading) :global(.markdown img:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border-radius: 4px;
+}
+:where(.reading) :global(.footnotes p:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  font-style: italic;
+}
+:where(.reading) :global(article em:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  color: #0da99c;
+  font-weight: bold;
+  font-style: normal;
+  margin-right: 1px;
+}
+:where(.reading) :global(article h3:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::before) {
+  content: "#";
+  color: dimgray;
+}
+:where(.reading) :global(article h4:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::before) {
+  content: "##";
+  color: darkgray;
+}
+:where(.reading) :global(.x-responsive-container:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  position: relative;
+  margin-bottom: 1em;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+:where(.reading) :global(.x-responsive-container :is(iframe,object,embed):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+:where(.reading) :global(main a[target=_blank]:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))::after) {
+  content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);
+  margin: 0 3px 0 5px;
+}
+:where(.reading) :global(.title-label:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  border-radius: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  position: relative;
+  top: -1px;
+}
+:where(.reading) :global(.title-label a:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: none;
+  color: inherit;
+}
+:where(.reading) :global(.title-label a:hover:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: none;
+  color: inherit;
+}
+:where(.reading) :global(.title-label a[href]:hover:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: none;
+}
+:where(.reading) :global(.title-label a[href]:visited:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  text-decoration: none;
+  color: inherit;
+}
+
+:where(.reading) :global(.markdown .katex-display:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { max-inline-size:100%; overflow-x:auto; overflow-y:hidden; padding-block:.25rem; }
+:where(.reading) :global(.markdown .katex-display > .katex:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { white-space:nowrap; }
+:where(.reading) :global(.markdown pre.mermaid:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { max-inline-size:100%; overflow-x:auto; white-space:pre; }
+:where(.reading) :global(.markdown pre.mermaid svg:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { display:block; height:auto; }
+:where(.reading) :global(.markdown [data-book-mermaid-error]:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { white-space:normal; color:var(--body-font-color); opacity:.8; }
+:where(.reading) :global(.markdown [data-book-mermaid-error] pre:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { white-space:pre; overflow-x:auto; }
+:global(html[data-book-theme="dark"]) :where(.reading) :global(.astro-code:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+:global(html[data-book-theme="dark"]) :where(.reading) :global(.astro-code span:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+ color:var(--shiki-dark)!important; background-color:var(--shiki-dark-bg)!important;
+ font-style:var(--shiki-dark-font-style)!important; font-weight:var(--shiki-dark-font-weight)!important; text-decoration:var(--shiki-dark-text-decoration)!important;
+}
+:global(html[data-book-theme="dark"]) :where(.reading) :global(.markdown .katex-error:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { color:var(--book-math-error-color,#fda4af)!important; }
+@media (prefers-color-scheme:dark) {
+ :global(html:not([data-book-theme="light"])) :where(.reading) :global(.astro-code:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))),
+ :global(html:not([data-book-theme="light"])) :where(.reading) :global(.astro-code span:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) {
+  color:var(--shiki-dark)!important; background-color:var(--shiki-dark-bg)!important;
+  font-style:var(--shiki-dark-font-style)!important; font-weight:var(--shiki-dark-font-weight)!important; text-decoration:var(--shiki-dark-text-decoration)!important;
+ }
+ :global(html:not([data-book-theme="light"])) :where(.reading) :global(.markdown .katex-error:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { color:var(--book-math-error-color,#fda4af)!important; }
+}
+
+/* Markdown task lists preserve their established checkbox geometry. */
+:where(.reading) :global(.markdown li:has(> input[type="checkbox"]):where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { list-style-type:none; }
+:where(.reading) :global(.markdown li > input[type="checkbox"]:where(:not([data-book-island], [data-book-island] *, [data-demo], [data-demo] *, .expressive-code, .expressive-code *))) { margin-left:-20px; margin-right:10px; transform:scale(1.5); }

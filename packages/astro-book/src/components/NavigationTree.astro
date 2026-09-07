@@ -1,23 +1,24 @@
 ---
 import type { NavigationItem } from '../types';
+import styles from '../styles/Navigation.module.css';
 import chevronIcon from '../assets/chevron-right.svg?url';
 interface Props { items: NavigationItem[]; expandLabel?: string; idPrefix?: string }
 const { items, expandLabel = 'Expand section', idPrefix = 'book-section' } = Astro.props;
 const expanded = (item: NavigationItem): boolean => item.expanded ?? Boolean(item.active || item.children?.some(expanded));
 ---
-<ul>
+<ul class:list={["m-0 list-none p-0", styles.tree]}>
   {items.map((item, index) => {
     const sectionId = `${idPrefix}-${index}`;
-    return <li class:list={{ 'book-section-flat': item.flat }}>
+    return <li class:list={['relative', item.flat && ['book-section-flat my-4', styles.flat]]}>
       {item.collapsible ? <>
-        <input type="checkbox" id={sectionId} class="toggle" checked={expanded(item)} />
-        <label for={sectionId} class="flex">
-          {item.href ? <a href={item.href} class:list={{ active: item.active }} aria-current={item.active ? 'page' : undefined} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined}>
+        <input type="checkbox" id={sectionId} class:list={["toggle", styles.toggle]} checked={expanded(item)} />
+        <label for={sectionId} class="flex break-words text-inherit">
+          {item.href ? <a href={item.href} class:list={['flex items-center gap-[.5em] py-[.5em] break-words transition-opacity duration-100 ease-in-out hover:opacity-50', item.active ? 'active text-[var(--color-link)]!' : 'text-inherit!']} aria-current={item.active ? 'page' : undefined} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined}>
             {item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}
-          </a> : <a role="button" class:list={{ active: item.active }}>{item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}</a>}
-          <img src={chevronIcon} class="book-icon" alt={expandLabel} />
+          </a> : <a role="button" class:list={['flex items-center gap-[.5em] py-[.5em] break-words transition-opacity duration-100 ease-in-out hover:opacity-50', item.active ? 'active text-[var(--color-link)]!' : 'text-inherit!']}>{item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}</a>}
+          <img src={chevronIcon} class="book-icon size-[1em] cursor-pointer self-center transition-transform duration-100 ease-in-out" alt={expandLabel} />
         </label>
-      </> : item.href ? <a href={item.href} class:list={{ active: item.active }} aria-current={item.active ? 'page' : undefined} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined}>
+      </> : item.href ? <a href={item.href} class:list={['flex items-center gap-[.5em] py-[.5em] break-words transition-opacity duration-100 ease-in-out hover:opacity-50', item.active ? 'active text-[var(--color-link)]!' : 'text-inherit!']} aria-current={item.active ? 'page' : undefined} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined}>
         {item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}
       </a> : <span>{item.icon && <img src={item.icon} class="book-icon" alt="" />}{item.label}</span>}
       {Boolean(item.children?.length) && <Astro.self items={item.children!} expandLabel={expandLabel} idPrefix={sectionId} />}

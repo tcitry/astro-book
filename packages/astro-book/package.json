@@ -54,7 +54,6 @@
     "@tailwindcss/oxide": "4.3.3",
     "postcss": "8.5.28",
     "postcss-selector-parser": "7.1.6",
-    "sass": "1.104.0",
     "tailwindcss": "4.3.3"
   },
   "engines": {

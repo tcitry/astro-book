@@ -38,7 +38,8 @@ for (const filename of files) {
     assert.ok(!forbidden.test(source), `Package contains site-specific or commercial material: ${filename}`);
   }
 }
-for (const filename of ['dist/styles.css', 'src/components/BookLayout.astro', 'src/markdown/index.ts', 'dist/code-styles.css', 'dist/code-copy.js', 'dist/code-copy-template.html', 'dist/EXPRESSIVE-CODE-LICENSE', 'LICENSE', 'THIRD_PARTY_NOTICES.md']) assert.ok(files.includes(filename), `Missing packed file: ${filename}`);
+for (const filename of ['dist/styles.css', 'src/components/BookLayout.astro', 'src/markdown/index.ts', 'dist/code-styles.css', 'dist/code-copy.js', 'dist/code-copy-template.html', 'dist/EXPRESSIVE-CODE-LICENSE', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'src/styles/Shell.module.css', 'src/styles/Reading.module.css', 'src/assets/HUGO-BOOK-LICENSE', 'src/assets/MODERN-NORMALIZE-LICENSE']) assert.ok(files.includes(filename), `Missing packed file: ${filename}`);
+assert.ok(!files.some((file) => /\.scss$|styles\/compat\//.test(file)), 'The retired Sass compatibility layer must not be published');
 assert.ok(files.some((file) => /\.woff2?$/.test(file)), 'Packed package must contain font assets');
 const packedCSS = await readFile(path.join(packageRoot, 'dist/styles.css'), 'utf8');
 assert.ok(!packedCSS.includes('\uFEFF'), 'Compiled CSS must not contain a BOM that can invalidate a later selector');

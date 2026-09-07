@@ -15,7 +15,7 @@ A customizable, static reading theme for Astro, inspired by [Hugo Book](https://
 - Search UI for Pagefind, image zoom, explicit SEO metadata and an optional Giscus component.
 - Reusable article metadata, lists, tags, hints and pagination components.
 - Typed inputs, named slots and component replacements for customization.
-- Complete, precompiled Tailwind CSS v4 styles and bundled fonts. Consumers do not need Tailwind to display the theme.
+- Tailwind CSS v4 component utilities, scoped CSS Modules and bundled fonts. Utilities ship precompiled and Astro handles the modules; consumers need neither Tailwind nor Sass. The old SCSS build layer is retired.
 - Static reading pages require no React renderer, backend, account or private registry. Add framework islands in your own site when needed.
 
 The theme focuses on Hugo Book reading features and framework-neutral customization. Your site controls content loading, URLs, tags/categories, sorting, search indexes, RSS/sitemaps, identity and deployment. Custom weekly, timeline, portfolio, links and demo pages belong to the consuming site, including their UI, data models and styles. No Starlight dependency or prescribed content directory is required.
@@ -83,6 +83,8 @@ import BookLayout from '@tcitry/astro-book/components/BookLayout';
 ```
 
 `BookLayout` loads the packaged CSS and browser features. Search is disabled in this starter until you generate a Pagefind index. Follow the [complete setup guide](docs/getting-started.md) for Markdown/MDX layouts, navigation and TOC, math and diagrams, search, SEO, Giscus, framework islands and customization.
+
+See the [styling contract](docs/architecture.md#styles-and-framework-islands) and [Hugo Book upstream record](docs/upstream.md) for customization and feature ports.
 
 ## Develop and verify
 
