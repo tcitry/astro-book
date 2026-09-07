@@ -71,7 +71,7 @@ function initializeBook() {
     const { body, documentElement } = document;
     const viewportHeight = window.innerHeight || documentElement.clientHeight;
     const documentHeight = Math.max(body.scrollHeight, documentElement.scrollHeight, body.offsetHeight, documentElement.offsetHeight, body.clientHeight, documentElement.clientHeight);
-    const atBottom = window.innerHeight + window.pageYOffset >= documentHeight;
+    const atBottom = Math.ceil(window.innerHeight + window.pageYOffset) >= documentHeight;
     const last = ordered.at(-1);
     // Gumshoe truncates fractional positions and prioritizes the final section at the page bottom.
     const active = atBottom && last && Math.trunc(last.heading!.getBoundingClientRect().bottom) < viewportHeight
