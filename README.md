@@ -4,9 +4,9 @@ A customizable, static reading theme for Astro, inspired by [Hugo Book](https://
 
 [Getting started](docs/getting-started.md) · [Public API](docs/architecture.md) · [Development and upgrades](docs/development.md)
 
-**Documentation demo:** [tcitry.github.io/astro-book](https://tcitry.github.io/astro-book/). The self-contained [example](examples/basic) covers navigation, Markdown/MDX, code, math, diagrams, components and working search. Pushes to `main` build and publish the example through GitHub Pages. The workflow checks the native origin before deploying; the documentation site has no custom domain.
+**Demo:** [yindongliang.com](https://yindongliang.com). This blog uses astro-book and is maintained separately from the theme documentation.
 
-**Consumer site example:** [yindongliang.com](https://yindongliang.com). This site is maintained separately from the theme documentation.
+**Documentation:** [tcitry.github.io/astro-book](https://tcitry.github.io/astro-book/). The self-contained [example](examples/basic) covers navigation, Markdown/MDX, code, math, diagrams, components and working search. Pushes to `main` build and publish the documentation through GitHub Pages. The workflow checks the native origin before deploying; the documentation site has no custom domain.
 
 ## Features
 

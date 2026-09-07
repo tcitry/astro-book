@@ -1,3 +1,5 @@
+.summary { overflow-wrap: anywhere; }
+
 /* Media variants have no extra specificity over a consuming Tailwind build. */
 @media screen and (max-width: 768px) {
   .summary { margin-left: 0; }

@@ -32,7 +32,7 @@
 .rawTOC :global(ul ul) { padding-inline-start: 1.5em; }
 .rawTOC :global(.book-section-flat > ul) { padding-inline-start: 0; }
 .rawTOC :global(li) { position: relative; }
-.rawTOC :global(a) { display: block; }
+.rawTOC :global(li > a) { display: block; }
 .rawTOC :global(nav ul a) { padding: .5em 0; transition: opacity .1s ease-in-out; }
 .rawTOC :global(nav ul a[href]:hover) { opacity: .5; }
 .rawTOC :global(a[aria-current="location"]) { color: #8250df; }
