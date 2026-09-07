@@ -23,8 +23,8 @@ export interface BookMarkdownOptions extends UnifiedProcessorOptions {
   math?: MathOptions | false;
   mermaid?: MermaidOptions | false;
   shikiConfig?: AstroMarkdownOptions['shikiConfig'];
-  /** Static Expressive Code frames, themes and styling. No React runtime is used. */
-  code?: BookCodeOptions;
+  /** Static Expressive Code frames. Set false to keep Astro code output for a consumer renderer. */
+  code?: BookCodeOptions | false;
 }
 
 type TreeNode = {
@@ -169,18 +169,28 @@ export function createBookProcessor(options: BookMarkdownOptions = {}) {
       ...(math === false ? [] : [[rehypeBookMath, math] as [typeof rehypeBookMath, MathOptions]]),
       [rehypeBookContent, { mermaid }],
       ...(extra.rehypePlugins ?? []).filter((plugin) => !isManagedMath(plugin) && ![rehypeBookContent, rehypeBookCode, rehypeBookRaw].includes(pluginKey(plugin) as typeof rehypeBookContent)),
-      [rehypeBookCode, code],
+      ...(code === false ? [] : [[rehypeBookCode, code] as [typeof rehypeBookCode, BookCodeOptions | undefined]]),
     ]),
   });
+  // Keep the original renderer factory before installing the configured wrappers.
+  const processorBase = unified(processor.options);
   function configured(shared: AstroMarkdownOptions) {
     const resolved = sharedOptions(options, shared);
+    if (code === false) return { current: processorBase, shared: resolved };
     // Existing custom Shiki options, language exclusions and Prism use Astro
     // highlighting. EC keeps its highlighter off so excluded fences stay plain,
     // while providing the same frame/clipboard for every selected block.
+    // Astro's normalized defaults already exclude math. These managed languages
+    // have been handled by Book before EC; treating them as custom exclusions
+    // would discard fence titles/markers in every normal Astro build.
+    const customExclusions = typeof shared.syntaxHighlight === 'object'
+      ? (shared.syntaxHighlight.excludeLangs ?? []).filter((language) =>
+        !(language === 'math' && math !== false) && !(language === 'mermaid' && mermaid !== false))
+      : [];
     const preserve = Boolean(resolved.shikiConfig?.transformers?.length)
       || resolved.shikiConfig?.wrap === true
       || resolved.shikiConfig?.defaultColor !== undefined
-      || (typeof shared.syntaxHighlight === 'object' && Boolean(shared.syntaxHighlight.excludeLangs?.length))
+      || customExclusions.length > 0
       || (typeof resolved.syntaxHighlight === 'string' ? resolved.syntaxHighlight : (resolved.syntaxHighlight && resolved.syntaxHighlight.type)) === 'prism';
     const codeOptions = codeOptionsFromShiki(code, resolved.shikiConfig, shared.syntaxHighlight !== false && !preserve);
     const current = unified({ ...processor.options, rehypePlugins: processor.options.rehypePlugins.map((entry) =>

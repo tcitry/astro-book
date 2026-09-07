@@ -1,0 +1,72 @@
+name: Deploy public demo to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      pages-origin: ${{ steps.pages.outputs.origin }}
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - name: Check out public source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v6
+      - name: Install public dependencies
+        run: npm ci
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org
+      - name: Build theme and public demo
+        run: npm run build
+        env:
+          ASTRO_BOOK_DEMO_SITE: https://tcitry.github.io
+          ASTRO_BOOK_DEMO_BASE: /astro-book/
+      - name: Upload demo artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: examples/basic/dist
+      - name: Explain native domain deployment status
+        if: steps.pages.outputs.origin != 'https://tcitry.github.io'
+        run: |
+          cat <<'MARKDOWN' >> "$GITHUB_STEP_SUMMARY"
+          ### Native GitHub Pages deployment skipped
+
+          The public demo built successfully. Download the `github-pages` artifact from this run to obtain the static site bundle built from `examples/basic/dist`.
+
+          GitHub Pages currently inherits the existing account site's custom domain. Native publication is blocked until that account-level domain binding is removed and Pages reports `https://tcitry.github.io` as its origin. This workflow leaves the existing production domain unchanged and skips deployment to the inherited domain.
+          MARKDOWN
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' && needs.build.outputs['pages-origin'] == 'https://tcitry.github.io' }}
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

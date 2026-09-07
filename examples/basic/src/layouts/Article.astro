@@ -1,39 +1,46 @@
 ---
 import BookLayout from '@tcitry/astro-book/components/BookLayout';
+import PageNavigation from '@tcitry/astro-book/components/PageNavigation';
 import type { Heading } from '@tcitry/astro-book/types';
+import { navigation, pages, sourceRoot, withBase } from '../data/site';
 interface Props {
   frontmatter?: { title?: string; description?: string };
   headings?: Heading[];
 }
 const { frontmatter = {}, headings = [] } = Astro.props;
 const title = frontmatter.title ?? 'Astro Book';
-const menu = [
-  { id: 'overview', label: 'Overview', href: '/' },
-  { id: 'markdown', label: 'Markdown', href: '/markdown/' },
-  { id: 'mdx', label: 'MDX', href: '/mdx/' },
-  { id: 'components', label: 'Components', href: '/components/' },
-];
+const current = pages.findIndex((page) => withBase(page.slug) === Astro.url.pathname);
+const pageLink = (index: number) => pages[index] ? { title: pages[index].title, url: withBase(pages[index].slug) } : undefined;
+const previous = pageLink(current - 1);
+const next = current >= 0 ? pageLink(current + 1) : undefined;
 ---
 <BookLayout
-  site={{ title: 'Astro Book', home: '/', lang: 'en', menu }}
+  site={{ title: 'Astro Book', home: withBase(), lang: 'en' }}
   page={{ title, url: Astro.url.pathname, headings, description: frontmatter.description }}
-  navigation={menu}
-  search={false}
+  navigation={navigation(Astro.url.pathname)}
+  search={{ basePath: withBase('pagefind'), placeholder: 'Search documentation', showImages: false }}
+  seo={{ title: `${title} · Astro Book`, canonical: new URL(Astro.url.pathname, Astro.site).href, type: 'website' }}
+  previous={previous}
+  next={next}
 >
-  <meta slot="head" name="example-custom-head" content="Public layout slot" />
   <Fragment slot="navigation-after">
-    <p>An independent, open source reading theme.</p>
-    <label for="example-theme">Theme</label>
-    <select id="example-theme" data-book-theme-select>
-      <option value="auto">System</option>
-      <option value="light">Light</option>
-      <option value="dark">Dark</option>
-    </select>
+    <hr />
+    <p><a href="https://github.com/tcitry/astro-book">GitHub ↗</a></p>
+    <p>
+      <label for="example-theme">Appearance </label>
+      <select id="example-theme" data-book-theme-select>
+        <option value="auto">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </p>
   </Fragment>
-  <p slot="content-before" class="book-hint info">This banner uses the public content-before slot.</p>
-  <article class="markdown">
-    <h1>{title}</h1>
+  <article class="markdown" data-pagefind-body>
+    <h1 data-pagefind-meta="title">{title}</h1>
     <slot />
   </article>
-  <p slot="footer">Example content · MIT licensed · <a href="https://github.com/tcitry/astro-book">Source</a></p>
+  <Fragment slot="footer">
+    <PageNavigation previous={previous} next={next} />
+    <p><a href={`${sourceRoot}/src/pages/${pages[current]?.file ?? 'index.astro'}`}>View this page on GitHub</a> · Theme and examples: MIT</p>
+  </Fragment>
 </BookLayout>

@@ -1,8 +1,18 @@
 ---
 layout: ../layouts/Article.astro
-title: Markdown rendering
+title: Markdown
 description: Formulas, Mermaid, code blocks and raw HTML share the theme pipeline.
 ---
+
+Markdown pages combine plain text with a small set of formatting conventions. This page exercises the shared renderer; dedicated guides explain [typography](../typography/), [code blocks](../code/), [mathematics](../math/) and [diagrams](../mermaid/) in more detail.
+
+## Everyday Markdown
+
+Use **strong**, *emphasis*, ~~deleted text~~ and `inline code` when they convey meaning. Links between these chapters are relative, so they remain beneath the site's configured base path.
+
+- [x] Write a short example.
+- [x] Check it in the built site.
+- [ ] Add the next chapter.
 
 ## Formulas
 
@@ -66,7 +76,7 @@ console.log(reader);
 
 Click this synthetic, locally bundled SVG to open the theme image viewer.
 
-![Three connected blocks used as a local image zoom example](/example-diagram.svg)
+![Three connected blocks used as a local image zoom example](../assets/example-diagram.svg)
 
 ## Independent diagram errors
 

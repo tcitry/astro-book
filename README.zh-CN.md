@@ -4,9 +4,9 @@
 
 [English](README.md) · [完整入门指南](docs/getting-started.md) · [公开 API 与架构](docs/architecture.md) · [开发与升级](docs/development.md)
 
-**Astro 在线预览：** [preview.yindongliang.com](https://preview.yindongliang.com) · [MDX 交互实验室](https://preview.yindongliang.com/lab/)。
+**独立文档与 Demo（待发布）：** [tcitry.github.io/astro-book](https://tcitry.github.io/astro-book/)。本仓库的 [examples/basic](examples/basic) 提供完整通用示例，覆盖导航、Markdown/MDX、代码、公式、图表、组件与搜索。GitHub Pages 工作流仅在站点原点与该地址一致时部署；若账号用户站的域名绑定导致继承，仍会生成可下载产物，并在运行摘要中说明阻塞。
 
-**Demo / 生产参考站：** [yindongliang.com](https://yindongliang.com)。这是本主题布局的来源站，目前仍使用 Hugo 实现；仓库中的 [basic 示例](examples/basic) 可直接运行并体验 Astro 主题。
+**使用案例：** [yindongliang.com](https://yindongliang.com) · [Astro 迁移预览](https://preview.yindongliang.com)。案例站与主题文档分别维护。
 
 ## 提供什么
 
@@ -31,7 +31,7 @@ npm ci
 npm run dev
 ```
 
-打开 [localhost:4322](http://127.0.0.1:4322/)。示例使用独立的公开测试内容，覆盖 Markdown、MDX、组件、插槽与主题切换。
+打开 [localhost:4322/astro-book/](http://127.0.0.1:4322/astro-book/)。示例使用独立的公开测试内容，覆盖 Markdown、MDX、组件、插槽与主题切换。
 
 ## 接入已有 Astro 项目
 

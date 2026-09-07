@@ -7,26 +7,43 @@ import TermList from '@tcitry/astro-book/components/TermList';
 import Tabs from '@tcitry/astro-book/components/Tabs';
 import Pagination from '@tcitry/astro-book/components/Pagination';
 import Notice from '@tcitry/astro-book/components/Notice';
+import Badge from '@tcitry/astro-book/components/Badge';
+import BadgeGroup from '@tcitry/astro-book/components/BadgeGroup';
 import type { ArticleItem } from '@tcitry/astro-book/presentation';
-const items: ArticleItem[] = [{
-  label: 'An independent article', href: '/markdown/',
-  date: { value: '2026-01-15', label: '2026-01-15' },
-  metadata: { date: { value: '2026-01-15', label: 'January 15, 2026' }, tags: [{ label: 'Examples', href: '/components/' }] },
-  summary: 'Prepared display data works without any content collection or legacy frontmatter.',
-  badges: [{ label: 'Example' }],
-}];
-const terms = [{ label: 'Markdown', href: '/markdown/', count: 2, size: 24 }, { label: 'Components', href: '/components/', count: 1, size: 16, active: true }];
+import { withBase } from '../data/site';
+const items: ArticleItem[] = [
+  { label: 'Writing a clear chapter', href: withBase('typography/'), date: { value: '2026-01-15', label: '2026-01-15' }, metadata: { date: { value: '2026-01-15', label: 'January 15, 2026' }, tags: [{ label: 'Writing', href: withBase('markdown/') }, { label: 'Reference', href: withBase('components/') }] }, summary: 'A sample article entry with a date, topics, summary and badges.', badges: [{ label: 'Guide' }, { label: 'Example' }] },
+  { label: 'Drawing an idea', href: withBase('mermaid/'), date: { value: '2026-02-20', label: '2026-02-20' }, summary: 'Another prepared item, pointing to a real page in this example.', badges: [{ label: 'Diagram' }] },
+];
+const terms = [{ label: 'Markdown', href: withBase('markdown/'), count: 3, size: 24 }, { label: 'Components', href: withBase('components/'), count: 2, size: 20, active: true }, { label: 'Mathematics', href: withBase('math/'), count: 1, size: 16 }];
+const headings = [
+  { depth: 2, slug: 'notices', text: 'Notices' }, { depth: 2, slug: 'lists', text: 'Article lists' },
+  { depth: 2, slug: 'terms', text: 'Terms and labels' }, { depth: 2, slug: 'navigation', text: 'Navigation components' },
+  { depth: 2, slug: 'native-html', text: 'Native HTML' },
+];
 ---
-<Article frontmatter={{ title: 'Reusable presentation components', description: 'Public theme components with independent fixture data.' }}>
-  <p>These components consume generic presentation data. This page requires no client framework.</p>
+<Article frontmatter={{ title: 'Components', description: 'Framework-neutral public components with generic fixture data and real links.' }} headings={headings}>
+  <p>These components accept prepared display data. Your site chooses the content, relationships and order; the theme renders them. This page uses Astro components without a client framework.</p>
+  <h2 id="notices">Notices</h2>
+  <Notice variant="info"><strong>Information.</strong> A detail that helps the reader continue.</Notice>
+  <Notice variant="warning"><strong>Check first.</strong> Confirm a configuration value before following the next step.</Notice>
+  <Notice variant="danger"><strong>Important constraint.</strong> A clearly labeled condition that affects the example.</Notice>
+  <p>Import <code>Notice</code> from <code>@tcitry/astro-book/components/Notice</code> and supply its <code>variant</code> and body. It also works inside <a href={withBase('mdx/')}>MDX</a>.</p>
   <h2 id="lists">Article lists</h2>
   <ArticleList items={items} />
-  <GroupedArticleList groups={[{ id: 'year-2026', label: '2026', items }]} />
-  <h2 id="terms">Terms and navigation</h2>
-  <Tabs items={[{ label: 'Overview', href: '/' }, { label: 'Components', href: '/components/', badge: { label: 'C' } }]} current="/components/" />
+  <p>A grouped list uses the same article items with a heading selected by the site:</p>
+  <GroupedArticleList groups={[{ id: 'example-2026', label: '2026', items }]} />
+  <h2 id="terms">Terms and labels</h2>
+  <p><BadgeGroup badges={[{ label: 'Guide' }, { label: 'Reference' }]} /> <Badge label="Linked topic" href={withBase('markdown/')} /></p>
+  <p>Tag clouds and term lists display counts or active states that your site supplies.</p>
   <TagCloud items={terms} />
-  <TermList items={terms} title="Topics" total={2} />
-  <h2 id="annotations">Annotations and pagination</h2>
-  <Notice variant="info">The site chooses these labels, URLs and content. The theme provides their presentation.</Notice>
-  <Pagination current={2} urls={['/', '/components/', '/markdown/', '/mdx/']} />
+  <TermList items={terms} title="Example topics" total={6} />
+  <h2 id="navigation">Navigation components</h2>
+  <p>Link tabs connect related pages. They are ordinary links, so each destination has a stable URL.</p>
+  <Tabs items={[{ label: 'Markdown', href: withBase('markdown/') }, { label: 'Components', href: withBase('components/'), badge: { label: 'Here' } }, { label: 'Configuration', href: withBase('configuration/') }]} current={withBase('components/')} />
+  <p>A pagination example with four real destinations:</p>
+  <Pagination current={2} urls={[withBase(), withBase('components/'), withBase('markdown/'), withBase('mdx/')]} />
+  <h2 id="native-html">Native HTML</h2>
+  <details><summary>An accessible disclosure</summary><p>Native HTML is often enough for a small interaction. This disclosure works without a client framework or custom JavaScript.</p></details>
+  <p>The <a href={withBase('customization/')}>customization guide</a> describes the layout slots and component replacements behind the surrounding shell.</p>
 </Article>

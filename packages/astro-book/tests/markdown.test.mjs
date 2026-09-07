@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createBookMarkdownRenderer, createBookProcessor } from '../src/markdown/index.ts';
 import astroBook from '../src/integration.ts';
-import { unified } from '@astrojs/markdown-remark';
+import { unified, markdownConfigDefaults } from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
@@ -211,4 +211,49 @@ test('Astro language exclusions also apply to MDX without disabling other langua
   const included = await mdx.process('```ts\nconst answer = 42;\n```', '/included.mdx', {});
   assert.match(included.code, /_components\.span/);
   assert.match(included.code, /color:|color"/);
+});
+
+test('code:false keeps Astro static highlighting and consumer plugins without Expressive Code', async () => {
+  const custom = await createBookMarkdownRenderer({ code: false });
+  const { html } = await custom('```ts\nconst x = 1;\n```\n\n$x^2$\n\n```mermaid\ngraph TD\n A-->B\n```');
+  assert.match(html, /astro-code/);
+  assert.match(html, /data-book-code/);
+  assert.match(html, /class="katex"/);
+  assert.match(html, /class="mermaid" data-book-mermaid/);
+  assert.doesNotMatch(html, /expressive-code|<button|data-code=/);
+});
+
+test('code:false respects syntaxHighlight:false in Markdown and MDX with exact source', async () => {
+  const processor = createBookProcessor({ code: false });
+  const input = '```bash\n\t# comment\n  echo hi  \n\n```';
+  const renderer = await processor.createRenderer({ syntaxHighlight: false });
+  const result = await renderer.render(input);
+  assert.match(result.code, /<code class="language-bash">\t# comment\n  echo hi  \n\n<\/code>/);
+  assert.doesNotMatch(result.code, /expressive-code|astro-code|<button/);
+  const mdx = await processor.createMdxRenderer({ syntaxHighlight: false }, { optimize: false });
+  const compiled = await mdx.process(input, '/synthetic.mdx', {});
+  assert.match(compiled.code, /data-book-code/);
+  assert.match(compiled.code, /language-bash/);
+  assert.doesNotMatch(compiled.code, /expressive-code|astro-code|Copy code/);
+});
+
+
+test('normalized Astro defaults retain official frame titles and line markers in Markdown and MDX', async () => {
+  const source = '```ts frame="code" title="greeting.ts" {2}\nexport function greet() {\n  return "Hello";\n}\n```\n\n```sh frame="terminal" title="Build the docs"\nnpm run build\n```';
+  const processor = createBookProcessor();
+  const renderer = await processor.createRenderer(markdownConfigDefaults);
+  const markdown = await renderer.render(source);
+  assert.match(markdown.code, /class="frame has-title"/);
+  assert.match(markdown.code, /class="title">greeting\.ts/);
+  assert.match(markdown.code, /ec-line[^"\n]*highlight/);
+  assert.match(markdown.code, /class="frame is-terminal has-title"/);
+  assert.match(markdown.code, /class="title">Build the docs/);
+  assert.doesNotMatch(markdown.code, /astro-code/);
+  const mdx = await processor.createMdxRenderer(markdownConfigDefaults, { optimize: false });
+  const compiled = await mdx.process(source, '/normalized-defaults.mdx', {});
+  assert.match(compiled.code, /class: "frame has-title"/);
+  assert.match(compiled.code, /children: "greeting\.ts"/);
+  assert.match(compiled.code, /ec-line[^"\n]*highlight/);
+  assert.match(compiled.code, /class: "frame is-terminal has-title"/);
+  assert.doesNotMatch(compiled.code, /astro-code/);
 });

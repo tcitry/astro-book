@@ -7,6 +7,8 @@ export function initializeCodeCopy(root = document) {
   if (!(template instanceof HTMLTemplateElement)) return;
   root.querySelectorAll('main pre').forEach((pre) => {
     if (pre.closest('.expressive-code, [data-book-island], [data-demo]')) return;
+    // A consumer may replace ordinary code while retaining the diagram's source action.
+    if (document.body.hasAttribute('data-book-code-disabled') && !pre.matches('pre.mermaid, pre[data-book-mermaid]')) return;
     const highlighted = pre.closest('.highlight');
     const code = pre.querySelector('code');
     if (highlighted) {

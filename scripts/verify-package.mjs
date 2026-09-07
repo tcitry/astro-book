@@ -1,7 +1,7 @@
 import { mkdtemp, readFile, writeFile, readdir, stat, cp, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawn } from 'node:child_process';
 import assert from 'node:assert/strict';
 
@@ -25,7 +25,8 @@ function run(command, args, cwd, capture = false) {
   });
 }
 
-const forbidden = /@heroui-pro\/|heroui-pro(?:@|\/|\")|\/Users\/|\.generated\/content\.json|tcitry\.github\.io/;
+const privateMaterial = /@heroui-pro\/|heroui-pro(?:@|\/|\")|\/Users\/|\.generated\/content\.json/;
+const forbidden = new RegExp(`${privateMaterial.source}|tcitry\\.github\\.io`);
 const packOutput = await run('npm', ['pack', '--json', '--pack-destination', temporary], packageRoot, true);
 const metadata = JSON.parse(packOutput.slice(packOutput.indexOf('[{') >= 0 ? packOutput.indexOf('[{') : packOutput.indexOf('[\n')))[0];
 assert.ok(metadata.filename, 'npm pack must produce a tarball');
@@ -62,6 +63,23 @@ await run('npm', ['run', 'check'], consumer);
 await run('npm', ['run', 'build'], consumer);
 
 const output = path.join(consumer, 'dist');
+const { default: exampleConfig } = await import(pathToFileURL(path.join(consumer, 'astro.config.mjs')).href);
+const origin = new URL(exampleConfig.site).origin;
+const base = `/${(exampleConfig.base ?? '/').replace(/^\/+|\/+$/g, '')}/`.replace(/^\/\//, '/');
+function outputURL(filename) {
+  return new URL(base + path.relative(output, filename).split(path.sep).join('/').replace(/index\.html$/, ''), origin);
+}
+function localAsset(value, filename) {
+  const url = new URL(value.replace(/&amp;/g, '&'), outputURL(filename));
+  if (url.origin !== origin) return;
+  assert.ok(url.pathname.startsWith(base), `Link escapes the example base ${base}: ${value}`);
+  let relative = decodeURIComponent(url.pathname.slice(base.length));
+  if (!relative || relative.endsWith('/')) relative += 'index.html';
+  const target = path.resolve(output, relative);
+  assert.ok(target.startsWith(output + path.sep), `Asset escapes the output directory: ${value}`);
+  return target;
+}
+
 const outputFiles = [];
 async function walk(directory) {
   for (const item of await readdir(directory, { withFileTypes: true })) {
@@ -84,14 +102,16 @@ assert.ok(documents.some(({ html }) => /data-book-code/.test(html)), 'Example mu
 for (const { filename, html } of documents) {
   assert.ok(!/<astro-island\b/.test(html), `Ordinary reading page must not hydrate a frontend framework: ${path.relative(output, filename)}`);
   assert.ok(!/react(?:-dom)?(?:\.client|[.\/-])/.test(html), 'Ordinary reading pages must not reference React');
-  assert.ok(!forbidden.test(html), 'Example output contains consumer-specific material');
+  assert.ok(!privateMaterial.test(html), 'Example output contains private or commercial material');
+  assert.equal(html.match(/<link\b[^>]+rel="canonical"[^>]+href="([^"]+)"/)?.[1], outputURL(filename).href, 'Every demo page needs its configured canonical origin and base');
   if (!hasDiagram(html)) assert.ok(!/<link\b[^>]+(?:preload|modulepreload)[^>]+mermaid/i.test(html), 'A diagram-free page must not preload Mermaid');
-  for (const match of html.matchAll(/(?:src|href)=["']([^"']+)["']/g)) {
+  // Ignore literal attributes inside code-copy payloads when checking real links.
+  const markup = html.replace(/data-code="[^"]*"/g, '');
+  for (const match of markup.matchAll(/(?:src|href)=["']([^"']+)["']/g)) {
     const url = match[1];
-    if (/^(?:https?:|data:|#|mailto:|tel:)/.test(url) || !/\.(?:css|m?js|woff2?|ttf)(?:[?#].*)?$/.test(url)) continue;
-    const local = decodeURIComponent(url.split(/[?#]/)[0]);
-    const asset = local.startsWith('/') ? path.join(output, local) : path.resolve(path.dirname(filename), local);
-    assert.ok((await stat(asset)).isFile(), `Missing linked asset: ${url}`);
+    if (/^(?:data:|#|mailto:|tel:|javascript:)/.test(url)) continue;
+    const asset = localAsset(url, filename);
+    if (asset) assert.ok((await stat(asset)).isFile(), `Missing linked page or asset: ${url}`);
   }
 }
 const cssFiles = outputFiles.filter((file) => file.endsWith('.css'));
@@ -104,15 +124,19 @@ for (const filename of cssFiles) {
     const url = match[1];
     if (!/\.(?:woff2?|ttf)(?:[?#].*)?$/.test(url)) continue;
     assert.ok(!/^https?:/.test(url), 'Theme fonts must be supplied by the package');
-    const local = decodeURIComponent(url.split(/[?#]/)[0]);
-    const asset = local.startsWith('/') ? path.join(output, local) : path.resolve(path.dirname(filename), local);
-    assert.ok((await stat(asset)).isFile(), `Missing font: ${url}`);
+    const asset = localAsset(url, filename);
+    assert.ok(asset && (await stat(asset)).isFile(), `Missing font: ${url}`);
     fontLinks++;
   }
 }
 assert.ok(fontLinks > 0, 'KaTeX fonts must remain linked after packing');
 assert.ok(outputFiles.some((file) => /\.m?js$/.test(file)), 'Theme client assets must be bundled');
-const summary = { package: metadata.filename, packedFiles: files.length, htmlPages: documents.length, mathPages: mathPages.length, diagramPages: diagramPages.length, fontLinks, consumer };
+for (const filename of ['pagefind/pagefind.js', 'pagefind/pagefind-ui.js', 'pagefind/pagefind-ui.css', 'pagefind/pagefind-entry.json']) {
+  assert.ok((await stat(path.join(output, filename))).isFile(), `Missing built search asset: ${filename}`);
+}
+const searchEntry = JSON.parse(await readFile(path.join(output, 'pagefind/pagefind-entry.json'), 'utf8'));
+assert.equal(searchEntry.languages.en.page_count, documents.length, 'Every demo article must be included in the static search index');
+const summary = { package: metadata.filename, packedFiles: files.length, htmlPages: documents.length, mathPages: mathPages.length, diagramPages: diagramPages.length, fontLinks, searchPages: searchEntry.languages.en.page_count, base, origin, consumer };
 await mkdir(path.join(root, '.artifacts'), { recursive: true });
 await writeFile(path.join(root, '.artifacts/packed-consumer.json'), JSON.stringify(summary, null, 2) + '\n');
 console.log('Packed-package verification passed. Temporary consumer retained for inspection.');

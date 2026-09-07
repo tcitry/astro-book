@@ -11,7 +11,7 @@ import '@tcitry/astro-book/styles.css';
 import '../../dist/code-styles.css';
 import codeFrame from '../../dist/code-copy-template.html?raw';
 interface Props extends BookLayoutProps {}
-const { site, page, navigation = [], search = {}, seo = {}, previous, next, theme = 'auto', mermaid = {}, labels: overrides = {}, components = {} } = Astro.props;
+const { site, page, navigation = [], search = {}, seo = {}, previous, next, theme = 'auto', mermaid = {}, code = true, labels: overrides = {}, components = {} } = Astro.props;
 const labels: BookLabels = {
   skipToContent: 'Skip to content', navigation: 'Main navigation', openNavigation: 'Open navigation', closeNavigation: 'Close navigation',
   tableOfContents: 'Table of contents', openTableOfContents: 'Open table of contents', expandSection: 'Expand section',
@@ -44,7 +44,7 @@ const showTOC = page.toc !== false;
   </script>
   <slot name="head" />
 </head>
-<body dir={site.dir ?? 'ltr'} class={page.bodyClass} data-book-mermaid-options={JSON.stringify(mermaid)}>
+<body dir={site.dir ?? 'ltr'} class={page.bodyClass} data-book-mermaid-options={JSON.stringify(mermaid)} data-book-code-disabled={!code || undefined}>
   <a href="#main-content" class="fixed top-2 left-2 z-[10000] -translate-y-[200%] bg-[var(--body-background)] p-3 focus:translate-y-0">{labels.skipToContent}</a>
   <input type="checkbox" class="hidden toggle" id="menu-control" aria-label={labels.openNavigation} />
   <input type="checkbox" class="hidden toggle" id="toc-control" aria-label={labels.openTableOfContents} />

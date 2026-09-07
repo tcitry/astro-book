@@ -1,14 +1,28 @@
 ---
 import Article from '../layouts/Article.astro';
+import Notice from '@tcitry/astro-book/components/Notice';
+import { withBase } from '../data/site';
+const headings = [
+  { depth: 2, slug: 'read-write-explore', text: 'Read, write, explore' },
+  { depth: 2, slug: 'a-book-shaped-interface', text: 'A book-shaped interface' },
+  { depth: 2, slug: 'your-site-your-choices', text: 'Your site, your choices' },
+];
 ---
-<Article frontmatter={{ title: 'A place to read and experiment', description: 'A small public Astro Book example with no private data or commercial dependencies.' }}>
-  <p>Astro Book provides a framework-neutral reading shell, reusable content components, and one Markdown pipeline. This example contains synthetic content and builds as static HTML.</p>
-  <h2>Start reading</h2>
+<Article frontmatter={{ title: 'Astro Book', description: 'A static documentation theme for Astro. Explore Markdown, MDX, code, mathematics, diagrams and a customizable reading layout.' }} headings={headings}>
+  <p>A quiet place for technical writing. Astro Book brings a familiar book layout to Astro: chapters on the left, your words in the middle, and an outline on the right.</p>
+  <p><a href={withBase('getting-started/')}>Get started →</a> · <a href={withBase('typography/')}>Explore the reading experience</a> · <a href="https://github.com/tcitry/astro-book">Browse the source</a></p>
+  <Notice>This documentation site is built with the theme it describes. Every example is public, self-contained and editable in this repository.</Notice>
+  <h2 id="read-write-explore">Read, write, explore</h2>
   <ul>
-    <li><a href="/markdown/">Markdown: formulas, diagrams, highlighted code, tables and raw HTML</a></li>
-    <li><a href="/mdx/">MDX: the same rendering features plus an Astro component</a></li>
+    <li><a href={withBase('markdown/')}>Markdown</a> for everyday notes; <a href={withBase('mdx/')}>MDX</a> when a page needs components.</li>
+    <li><a href={withBase('code/')}>Code blocks</a> with static syntax colors, titles, highlighted lines and copy buttons.</li>
+    <li><a href={withBase('math/')}>Mathematics</a> typeset during the build and <a href={withBase('mermaid/')}>Mermaid diagrams</a> loaded when needed.</li>
+    <li><a href={withBase('components/')}>Reusable components</a> for hints, article lists, tags and pagination.</li>
   </ul>
-  <h2>Make it yours</h2>
-  <p>The navigation, title, heading list, comments and metadata come from the site. The banner, navigation note, extra head element and footer on this page use layout slots. Switch between light and dark using the theme control.</p>
-  <p>Ordinary articles do not load React. Consumers can add their preferred island renderer for interactive demonstrations.</p>
+  <h2 id="a-book-shaped-interface">A book-shaped interface</h2>
+  <p>Fold chapters in the navigation, follow headings in the table of contents, or use the previous and next links below. On smaller screens, the menu and outline move behind their own controls.</p>
+  <p>Try the appearance selector in the sidebar. The same document works in light, dark and system modes. Search for <strong>mermaid</strong>, <strong>customization</strong> or <strong>quadratic</strong> to jump directly to a page.</p>
+  <h2 id="your-site-your-choices">Your site, your choices</h2>
+  <p>The reading shell uses Astro components and static HTML. This demo has no React renderer, commercial UI package or backend. You can choose your own content model and add framework islands in your own project.</p>
+  <p>Start with the <a href={withBase('structure/')}>project structure</a>, then adjust the <a href={withBase('configuration/')}>configuration</a> and <a href={withBase('customization/')}>layout slots</a>. The theme takes inspiration from <a href="https://book.alxs.dev/">Hugo Book</a>; this site documents the Astro implementation.</p>
 </Article>

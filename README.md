@@ -4,9 +4,9 @@ A customizable, static reading theme for Astro, inspired by [Hugo Book](https://
 
 [中文说明](README.zh-CN.md) · [Getting started](docs/getting-started.md) · [Public API](docs/architecture.md) · [Development and upgrades](docs/development.md)
 
-**Astro preview:** [preview.yindongliang.com](https://preview.yindongliang.com) · [Interactive MDX lab](https://preview.yindongliang.com/lab/).
+**Documentation demo — deployment pending:** [tcitry.github.io/astro-book](https://tcitry.github.io/astro-book/). The self-contained [example](examples/basic) covers navigation, Markdown/MDX, code, math, diagrams, components and working search. Its Pages workflow deploys only when GitHub reports this native origin; an inherited user-site domain leaves a downloadable build artifact and an explanation in the workflow summary.
 
-**Demo / production reference:** [yindongliang.com](https://yindongliang.com). This is the original site whose layout informs astro-book; it currently runs the Hugo implementation. The self-contained [basic example](examples/basic) demonstrates this Astro package directly.
+**Site examples:** [yindongliang.com](https://yindongliang.com) · [Astro migration preview](https://preview.yindongliang.com). These consumer sites are maintained separately from the theme documentation.
 
 ## Features
 
@@ -31,7 +31,7 @@ npm ci
 npm run dev
 ```
 
-Open [localhost:4322](http://127.0.0.1:4322/). The example covers Markdown, MDX, public components, layout slots and theme switching using synthetic content.
+Open [localhost:4322/astro-book/](http://127.0.0.1:4322/astro-book/). The example covers Markdown, MDX, public components, layout slots and theme switching using synthetic content.
 
 ## Use in your Astro site
 
