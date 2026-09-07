@@ -2,7 +2,7 @@
 
 A customizable, static reading theme for Astro, inspired by [Hugo Book](https://github.com/alex-shpak/hugo-book). Build a blog, knowledge base or technical notebook with a familiar three-column layout and room for interactive experiments.
 
-[中文说明](README.zh-CN.md) · [Getting started](docs/getting-started.md) · [Public API](docs/architecture.md) · [Development and upgrades](docs/development.md)
+[Getting started](docs/getting-started.md) · [Public API](docs/architecture.md) · [Development and upgrades](docs/development.md)
 
 **Documentation demo — deployment pending:** [tcitry.github.io/astro-book](https://tcitry.github.io/astro-book/). The self-contained [example](examples/basic) covers navigation, Markdown/MDX, code, math, diagrams, components and working search. Its Pages workflow deploys only when GitHub reports this native origin; an inherited user-site domain leaves a downloadable build artifact and an explanation in the workflow summary.
 

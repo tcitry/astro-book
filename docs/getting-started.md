@@ -2,7 +2,7 @@
 
 This guide targets `@tcitry/astro-book` 0.1.0 with Astro 7.3.1 or a compatible Astro 7 release. Use Node.js 22.12 or newer. All examples use public package imports; they need no account or private content.
 
-[README](../README.md) · [中文说明](../README.zh-CN.md) · [Public API](architecture.md) · [Development and upgrades](development.md)
+[README](../README.md) · [Public API](architecture.md) · [Development and upgrades](development.md)
 
 ## 1. Install the package
 
