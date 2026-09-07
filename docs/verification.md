@@ -47,3 +47,5 @@ The same parity review restored list-only TOC link padding, the first desktop TO
 TOC activation uses the viewport’s top edge, matching the original Gumshoe configuration’s zero offset rather than activating headings 100px early.
 
 Pagination also retains the original continuous five-page window, first/last controls, disabled end controls, inline links and inherited text styling.
+
+The TOC boundary check also truncates fractional heading coordinates, handles the final section at the document bottom, and leaves the initial region unselected until the first heading reaches the top. Active ancestor list items and heading classes follow the original nested Gumshoe behavior; `aria-current` identifies only links to the selected heading.

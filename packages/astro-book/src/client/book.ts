@@ -67,12 +67,30 @@ function initializeBook() {
   const headingLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.book-toc a[href^="#"], .book-header aside a[href^="#"]'));
   const observed = headingLinks.map((link) => { try { return { link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) }; } catch { return { link, heading: null }; } }).filter((item) => item.heading);
   const updateTOC = () => {
-    const active = [...observed].sort((a, b) => a.heading!.getBoundingClientRect().top - b.heading!.getBoundingClientRect().top).reverse().find(({ heading }) => heading!.getBoundingClientRect().top <= 0) ?? observed[0];
+    const ordered = [...observed].sort((a, b) => a.heading!.getBoundingClientRect().top - b.heading!.getBoundingClientRect().top);
+    const { body, documentElement } = document;
+    const viewportHeight = window.innerHeight || documentElement.clientHeight;
+    const documentHeight = Math.max(body.scrollHeight, documentElement.scrollHeight, body.offsetHeight, documentElement.offsetHeight, body.clientHeight, documentElement.clientHeight);
+    const atBottom = window.innerHeight + window.pageYOffset >= documentHeight;
+    const last = ordered.at(-1);
+    // Gumshoe truncates fractional positions and prioritizes the final section at the page bottom.
+    const active = atBottom && last && Math.trunc(last.heading!.getBoundingClientRect().bottom) < viewportHeight
+      ? last
+      : ordered.reverse().find(({ heading }) => Math.trunc(heading!.getBoundingClientRect().top) <= 0);
+    const items = new Set<HTMLLIElement>();
+    const activeItems = new Set<HTMLLIElement>();
     for (const { link, heading } of observed) {
       const selected = Boolean(active && heading === active.heading);
-      link.closest('li')?.classList.toggle('active', selected);
+      heading!.classList.toggle('active', selected);
       if (selected) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+      let item = link.closest('li');
+      while (item) {
+        items.add(item);
+        if (selected) activeItems.add(item);
+        item = item.parentElement?.closest('li') ?? null;
+      }
     }
+    for (const item of items) item.classList.toggle('active', activeItems.has(item));
   };
   let frame = 0;
   window.addEventListener('scroll', () => { if (frame) return; frame = requestAnimationFrame(() => { updateTOC(); frame = 0; }); }, { passive: true, signal });

@@ -37,6 +37,7 @@
 .rawTOC :global(nav ul a[href]:hover) { opacity: .5; }
 .rawTOC :global(a[aria-current="location"]) { color: #8250df; }
 .toc :global(nav > ul > li:first-child) { margin-top: 0; }
+.toc :global(li.active > a) { color: #8250df; }
 @media screen and (min-width: 110rem) {
   /* Keep responsive overrides above another consumer Tailwind build's p-4. */
   .menuContent, .tocContent, .container > :global(.book-page) { padding-block: 2rem; }
