@@ -36,3 +36,8 @@ Build and checks pass (27 theme source files and 6 example files, zero errors/wa
 Focused browser checks after the migration confirm the 1920px three-column example with a 1120px reading column, the preserved viewport-margin sidebar clamp, a 390px layout without whole-page horizontal overflow, working navigation/theme switching and Mermaid search results. Code copying returned the complete greeting source; all three diagrams rendered and their source copy worked, while the intentional invalid example kept its readable fallback. The mathematics page rendered its inline and display formulas without page overflow. The real blog consumer and deployment are validated in that project's own records.
 
 A second Tailwind build in the real consumer exposed equal-specificity media utilities being reset by later base utilities. Wide-screen shell padding and mobile summary alignment now use module-scoped media rules; the current TOC color uses an explicit Tailwind important variant to override the baseline link color.
+
+
+## Document scrollbar parity
+
+The inherited Hugo Book layout uses `scrollbar-gutter: stable` together with thin scrollbars and transparent tracks/thumbs while idle. Scrolling reveals the thumb for 650 ms after the last scroll event. The theme now explicitly includes `html` in the scrollbar defaults, active state, WebKit pseudo-elements, forced-colors reset and border-box normalization. Scoped universal selectors already covered descendants but omitted the document root, which owns the viewport scrollbar. The gutter remains `stable`; this correction does not introduce an overlay scrollbar or change sidebar positioning.

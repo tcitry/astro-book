@@ -1,6 +1,6 @@
 /* Scoped reading-shell baseline. No global Tailwind preflight.
    Browser normalization adapted from modern-normalize (MIT); see notices. */
-*, ::before, ::after { box-sizing:border-box; }
+html, html::before, html::after, *, ::before, ::after { box-sizing:border-box; }
 html { font-family:system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji'; font-size:var(--font-size); line-height:1.15; -webkit-text-size-adjust:100%; tab-size:4; scroll-behavior:smooth; touch-action:manipulation; scrollbar-gutter:stable; }
 body { margin:0; }
 h1,h2,h3,h4,h5,h6 { font-weight:inherit; }
@@ -24,13 +24,15 @@ summary { display:list-item; }
 input.toggle { height:0; width:0; overflow:hidden; opacity:0; position:absolute; }
 .book-icon { filter:var(--icon-filter); }
 a .book-icon { height:1em; width:1em; }
-* { scrollbar-width:thin; scrollbar-color:transparent transparent; }
-.is-scrolling { scrollbar-color:var(--scrollbar-thumb-active) transparent; }
-*::-webkit-scrollbar-track { background:transparent; }
-*::-webkit-scrollbar-thumb { background-color:transparent; background-clip:padding-box; border:2px solid transparent; border-radius:.5rem; }
-.is-scrolling::-webkit-scrollbar-thumb { background-color:var(--scrollbar-thumb-active); }
+/* The document root owns the viewport scrollbar. Name it explicitly because
+   scoped universal selectors cover descendants, not the root itself. */
+html, * { scrollbar-width:thin; scrollbar-color:transparent transparent; }
+html.is-scrolling, .is-scrolling { scrollbar-color:var(--scrollbar-thumb-active) transparent; }
+html::-webkit-scrollbar-track, *::-webkit-scrollbar-track { background:transparent; }
+html::-webkit-scrollbar-thumb, *::-webkit-scrollbar-thumb { background-color:transparent; background-clip:padding-box; border:2px solid transparent; border-radius:.5rem; }
+html.is-scrolling::-webkit-scrollbar-thumb, .is-scrolling::-webkit-scrollbar-thumb { background-color:var(--scrollbar-thumb-active); }
 @media (forced-colors:active) {
- *, .is-scrolling { scrollbar-width:auto; scrollbar-color:auto; }
- *::-webkit-scrollbar,*::-webkit-scrollbar-track,*::-webkit-scrollbar-thumb,.is-scrolling::-webkit-scrollbar-thumb { all:revert; }
+ html, *, html.is-scrolling, .is-scrolling { scrollbar-width:auto; scrollbar-color:auto; }
+ html::-webkit-scrollbar, html::-webkit-scrollbar-track, html::-webkit-scrollbar-thumb, html.is-scrolling::-webkit-scrollbar-thumb, *::-webkit-scrollbar,*::-webkit-scrollbar-track,*::-webkit-scrollbar-thumb,.is-scrolling::-webkit-scrollbar-thumb { all:revert; }
 }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
