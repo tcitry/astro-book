@@ -2,7 +2,7 @@
 
 This standalone documentation site demonstrates `@tcitry/astro-book` with generic, public content. It uses public npm packages and Astro components, without React, commercial components, a backend, or an external content directory.
 
-The intended native demo URL is [tcitry.github.io/astro-book/](https://tcitry.github.io/astro-book/). The standalone site configuration and artifact build are ready, but native publication is currently blocked: GitHub Pages inherits the existing account site's custom-domain binding, and that URL redirects to the production domain. The demo has not been published at the native URL.
+The documentation demo is published at [tcitry.github.io/astro-book/](https://tcitry.github.io/astro-book/). It has no custom domain and is deployed independently from sites that consume the theme.
 
 The example and Pages workflow use `site: 'https://tcitry.github.io'` and `base: '/astro-book/'`, so local navigation also includes `/astro-book/`. The workflow sets these explicitly through `ASTRO_BOOK_DEMO_SITE` and `ASTRO_BOOK_DEMO_BASE`.
 
@@ -32,7 +32,7 @@ In this repository's **Settings → Pages → Build and deployment**, set **Sour
 
 The [Pages workflow](../../.github/workflows/pages.yml) runs on pushes to `main` and can be started from **Actions → Deploy public demo to GitHub Pages → Run workflow**. Select `main` for manual deployment. It installs locked public dependencies, builds the theme and this example, and uploads only `examples/basic/dist`. The separate deploy job publishes through the `github-pages` environment only when `configure-pages` reports the exact origin `https://tcitry.github.io`; it uses GitHub's built-in token, so no custom deployment secret is required.
 
-When Pages reports an inherited custom domain, the build still succeeds and uploads the standard `github-pages` artifact. Download it under the workflow run's **Artifacts** section to obtain the static site bundle. The run summary explains why deployment was skipped. Native publishing can proceed after the account site's domain binding is removed and Pages reports the required origin. The workflow does not modify that existing production binding.
+When Pages reports an inherited custom domain, the build still succeeds and uploads the standard `github-pages` artifact. Download it under the workflow run's **Artifacts** section to obtain the static site bundle. The run summary explains why deployment was skipped. To restore native publishing in that situation, remove the inherited domain binding from the account site and rerun the workflow once Pages reports the required origin. The workflow does not modify that existing production binding.
 
 ## Rendering examples
 
