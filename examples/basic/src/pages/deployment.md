@@ -15,7 +15,7 @@ npm run check
 npm test
 ```
 
-The theme package is built first. Astro then builds the example, and Pagefind indexes its articles. The deployable directory is **`examples/basic/dist`**.
+The theme package is built first. Astro then builds the example, and the theme integration automatically runs Pagefind to index its articles before the build completes. The deployable directory is **`examples/basic/dist`**.
 
 ## GitHub Pages
 
@@ -45,7 +45,7 @@ export const withBase = (path = '') =>
   `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
 ```
 
-Markdown links between sibling pages are relative. The wrapper uses the same base for the homepage, chapter navigation and Pagefind assets. Avoid root-relative paths such as `/math/` when the site actually lives at `/astro-book/math/`.
+Markdown links between sibling pages are relative. The wrapper uses the same base for the homepage and chapter navigation; the theme automatically resolves Pagefind assets beneath Astro's base. Avoid root-relative paths such as `/math/` when the site actually lives at `/astro-book/math/`.
 
 ## Check the built site
 

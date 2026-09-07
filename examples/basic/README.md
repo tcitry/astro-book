@@ -24,7 +24,7 @@ npm run build
 npm run preview -w @astro-book/basic
 ```
 
-Open the same local URL. Search uses Pagefind's static index and is available after `build` when using `preview` or the deployed site. The development server does not generate that index.
+Open the same local URL. The theme integration automatically generates Pagefind's static index as part of `astro build`; this example neither installs Pagefind directly nor runs a separate indexing command. Search is available after `build` when using `preview` or the deployed site. The development server does not generate that index. The theme resolves search assets beneath Astro's configured base path.
 
 ## Deploy to GitHub Pages
 

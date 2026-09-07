@@ -2,6 +2,9 @@ import type { AstroIntegration } from 'astro';
 import mdx from '@astrojs/mdx';
 import { isUnifiedProcessor, type UnifiedProcessorOptions } from '@astrojs/markdown-remark';
 import { createBookProcessor, uniquePlugins, type BookMarkdownOptions, type MermaidOptions } from './markdown/index.ts';
+import { buildSearchIndex, type BookSearchOptions } from './search/index.ts';
+
+export type { BookSearchOptions } from './search/index.ts';
 
 export interface AstroBookOptions {
   /** KaTeX, Mermaid, Expressive Code and consumer remark/rehype/recma plugins share one pipeline. */
@@ -10,6 +13,8 @@ export interface AstroBookOptions {
   mermaid?: MermaidOptions | false;
   /** Adds @astrojs/mdx unless already configured. Set false for Markdown-only sites. */
   mdx?: boolean;
+  /** Builds a Pagefind index after Astro renders HTML. False disables indexing; the layout controls its search UI separately. */
+  search?: BookSearchOptions | false;
 }
 
 /** Static theme integration. No framework renderer, content loader, routes, or backend is installed. */
@@ -17,6 +22,11 @@ export default function astroBook(options: AstroBookOptions = {}): AstroIntegrat
   return {
     name: '@tcitry/astro-book',
     hooks: {
+      'astro:build:done': async ({ dir, logger }) => {
+        if (options.search === false) return;
+        const count = await buildSearchIndex(dir, options.search);
+        logger.info(`Pagefind indexed ${count} HTML ${count === 1 ? 'page' : 'pages'}.`);
+      },
       'astro:config:setup': ({ config, updateConfig }) => {
         if (config.integrations.filter((item) => item.name === '@tcitry/astro-book').length > 1) {
           throw new Error('Configure astroBook() once. Add Markdown plugins through its markdown option.');

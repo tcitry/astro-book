@@ -18,7 +18,7 @@ const next = current >= 0 ? pageLink(current + 1) : undefined;
   site={{ title: 'Astro Book', home: withBase(), lang: 'en' }}
   page={{ title, url: Astro.url.pathname, headings, description: frontmatter.description }}
   navigation={navigation(Astro.url.pathname)}
-  search={{ basePath: withBase('pagefind'), placeholder: 'Search documentation', showImages: false }}
+  search={{ placeholder: 'Search documentation', showImages: false }}
   seo={{ title: `${title} · Astro Book`, canonical: new URL(Astro.url.pathname, Astro.site).href, type: 'website' }}
   previous={previous}
   next={next}

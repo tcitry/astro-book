@@ -44,6 +44,7 @@
     "@astrojs/mdx": "8.0.0",
     "katex": "0.16.47",
     "mermaid": "11.17.2",
+    "pagefind": "1.5.2",
     "rehype-expressive-code": "0.44.2",
     "rehype-katex": "7.0.1",
     "rehype-raw": "7.0.0",

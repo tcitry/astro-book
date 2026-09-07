@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --host 127.0.0.1 --port 4322",
-    "build": "astro build && pagefind --site dist",
+    "build": "astro build",
     "check": "astro check",
     "preview": "astro preview --host 127.0.0.1 --port 4322"
   },
@@ -15,7 +15,6 @@
   "devDependencies": {
     "@astrojs/check": "0.9.10",
     "@types/node": "26.4.1",
-    "pagefind": "1.5.2",
     "typescript": "6.0.3"
   }
 }

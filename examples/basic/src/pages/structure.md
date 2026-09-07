@@ -35,7 +35,7 @@ This separation means you can use content collections, a local importer or anoth
 
 ## One article wrapper
 
-`Article.astro` supplies the site title, chapter navigation, theme selector, search path and SEO data. It also renders the Markdown headings as a table of contents and prepares previous/next links from the chapter order.
+`Article.astro` supplies the site title, chapter navigation, theme selector, search labels and SEO data. It also renders the Markdown headings as a table of contents and prepares previous/next links from the chapter order.
 
 Every Markdown page selects the wrapper in frontmatter:
 
@@ -53,8 +53,8 @@ MDX uses the same wrapper and Markdown processor. See the [MDX example](../mdx/)
 
 - Content loading, publication dates and draft policy.
 - URLs, aliases, tags, categories and article ordering.
-- Search indexing, feeds, sitemaps and deployment.
+- Search scope, feeds, sitemaps and deployment.
 - Domain identity, analytics and comment configuration.
 - Custom applications and framework demos.
 
-The theme supplies presentation components and reading behavior. See [components](../components/) for the generic inputs and [customization](../customization/) for layout extension points.
+The theme supplies presentation components, reading behavior and automatic search indexing of the site's generated HTML. See [components](../components/) for the generic inputs and [customization](../customization/) for layout extension points.

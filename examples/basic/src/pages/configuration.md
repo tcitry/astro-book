@@ -46,16 +46,14 @@ A normal document supplies its heading list to `page.headings`. Use `page.toc: f
 
 ## Working static search
 
-This demo runs Pagefind after building the HTML. It uses the theme's search dialog and does not contact a search server.
+The theme owns the Pagefind dependency, search dialog and index generation. `astroBook()` automatically indexes the generated HTML before `astro build` finishes. This demo does not install Pagefind separately, run an additional CLI command or contact a search server.
 
-```sh frame="terminal"
-npm install --save-dev pagefind
-```
+Keep the ordinary build script:
 
 ```json title="package.json"
 {
   "scripts": {
-    "build": "astro build && pagefind --site dist"
+    "build": "astro build"
   }
 }
 ```
@@ -63,7 +61,7 @@ npm install --save-dev pagefind
 In the wrapper, include only article content in the index:
 
 ```astro
-<BookLayout search={{ basePath: `${import.meta.env.BASE_URL}pagefind` }} {...layoutProps}>
+<BookLayout search={{ placeholder: 'Search documentation', showImages: false }} {...layoutProps}>
   <article class="markdown" data-pagefind-body>
     <h1 data-pagefind-meta="title">{title}</h1>
     <slot />
@@ -71,7 +69,21 @@ In the wrapper, include only article content in the index:
 </BookLayout>
 ```
 
-`layoutProps` and `title` above represent the values your wrapper prepares. The navigation and footer are excluded by `BookLayout`. Deploy the entire generated `pagefind` directory with the site. Search is available after **build + preview**, not from a fresh development server.
+`layoutProps` and `title` above represent the values your wrapper prepares. The navigation and footer are excluded by `BookLayout`. Search assets follow Astro's `base` automatically, including this site's `/astro-book/` path.
+
+All generated HTML is indexed by default. Limit the scope with an output-relative glob when needed:
+
+```js title="astro.config.mjs"
+integrations: [astroBook({
+  search: { glob: '{guides,notes}/**/*.html' },
+})],
+```
+
+The optional `search.rootSelector` limits parsing to a matching HTML root, such as `main`; the default is `html`. Keep integration settings in `astro.config.mjs`: the theme does not read Pagefind CLI configuration files such as `pagefind.yml`.
+
+Each site builds an index of its own content using the same theme implementation. Deploy the entire generated `pagefind` directory with the site. Search is available after **build + preview**, not from a fresh development server.
+
+To turn search off entirely, set `astroBook({ search: false })` to skip index generation and `search={false}` on `BookLayout` to hide the interface. These options are independent: a site can supply an externally generated index or hide the interface on selected pages. A custom index location can be supplied with the layout's `search.basePath`; translations and result presentation also belong to the layout settings.
 
 ## Canonical URLs and metadata
 

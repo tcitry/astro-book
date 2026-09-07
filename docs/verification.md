@@ -49,3 +49,8 @@ TOC activation uses the viewport’s top edge, matching the original Gumshoe con
 Pagination also retains the original continuous five-page window, first/last controls, disabled end controls, inline links and inherited text styling.
 
 The TOC boundary check also truncates fractional heading coordinates, handles the final section at the document bottom, and leaves the initial region unselected until the first heading reaches the top. Active ancestor list items and heading classes follow the original nested Gumshoe behavior; `aria-current` identifies only links to the selected heading.
+
+
+## Theme-owned search verification
+
+The packed-consumer check requires an ordinary `astro build` script and rejects a direct Pagefind dependency in the consumer. It checks the automatically emitted search bundle and article count, confirms that every default search dialog follows Astro's base without a `basePath` override, and runs the generated Pagefind client against a temporary static server. The query `quadratic` must return the mathematics article with its title, highlighted excerpt and an existing URL beneath the configured base. No hosted search service is involved.

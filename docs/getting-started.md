@@ -90,7 +90,6 @@ const navigation: NavigationItem[] = [
   page={{ title, url: Astro.url.pathname, description: frontmatter.description, headings }}
   navigation={navigation}
   seo={{ canonical: new URL(Astro.url.pathname, Astro.site).href }}
-  search={false}
   theme="auto"
 >
   <Fragment slot="navigation-after">
@@ -203,25 +202,31 @@ A group containing an active descendant opens by default. Set `expanded` to choo
 
 ## Search with Pagefind
 
-The theme supplies the search interface. Your build generates and deploys the index:
+`astroBook()` owns the Pagefind dependency, search interface and index generation. A normal `astro build` automatically indexes the generated HTML and writes the search assets to the build output's `pagefind` directory. Do not install Pagefind separately or append a Pagefind CLI command to the site's build script.
 
-```sh
-npm install --save-dev pagefind
+Search is enabled by default. Keep `data-pagefind-body` on the article to index its content; the default shell excludes navigation and footer text. A website builds an index of its own content, even when several websites use the same theme package.
+
+The integration indexes all generated HTML by default. To limit the scope, use a glob relative to the build output directory:
+
+```js
+integrations: [astroBook({
+  search: { glob: '{guides,notes}/**/*.html' },
+})],
 ```
 
-Change your site's build script to:
+Set `search.rootSelector: 'main'` when the index should parse only a matching HTML root. The default is `html`, with `data-pagefind-body` selecting the article content. The integration uses these explicit Astro options, not `pagefind.yml` or other Pagefind CLI configuration files. When migrating from a manual CLI command, move its `glob` and `root_selector` settings to `search.glob` and `search.rootSelector`, then remove the old command and direct Pagefind dependency.
 
-```json
-{ "build": "astro build && pagefind --site dist" }
-```
-
-Replace `search={false}` on the layout with:
+Customize the interface through the layout:
 
 ```astro
-search={{ basePath: '/pagefind', placeholder: 'Search notes' }}
+search={{ placeholder: 'Search notes', showImages: false }}
 ```
 
-Keep `data-pagefind-body` on the article to index its content. The default shell excludes navigation/footer from indexing. Run `npm run build` followed by `npm run preview`: a fresh development server does not generate the search index. Deploy the generated `dist/pagefind` directory along with the HTML. For a site hosted under a path prefix, adjust `basePath` and all site links to that prefix. Search translations and optional image/sub-result display are described by `SearchConfig` in the public types.
+The search asset URL follows Astro's `base` automatically: a site with `base: '/notes'` loads `/notes/pagefind/`. Set `SearchConfig.basePath` only when deliberately using a different index location. Translations and optional image/sub-result display also belong to `SearchConfig`.
+
+To disable search completely, set `astroBook({ search: false })` in the Astro configuration **and** `search={false}` on `BookLayout`. The integration option stops index generation; the layout prop hides the interface. They are independent so a site can use an externally generated index or hide search on selected pages.
+
+Run `npm run build` followed by `npm run preview`: a fresh development server does not generate an index. Deploy the generated `pagefind` directory with the HTML. Search queries run in the browser without a search backend.
 
 ## SEO and comments are explicit
 

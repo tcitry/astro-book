@@ -3,11 +3,12 @@ import type { SearchConfig } from '../types';
 import styles from '../styles/Search.module.css';
 interface Props { config?: SearchConfig; part?: 'trigger' | 'dialog'; label?: string; closeLabel?: string }
 const { config = {}, part = 'trigger', label = 'Search', closeLabel = 'Close Esc' } = Astro.props;
+const searchConfig = { ...config, basePath: config.basePath ?? `${import.meta.env.BASE_URL.replace(/\/$/, '')}/pagefind` };
 ---
 {part === 'trigger' ? <div class:list={["book-search relative my-2", styles.trigger]}><div class="relative w-full">
   <input class="w-full rounded-[var(--border-radius)] border border-solid border-[var(--gray-200)] bg-[var(--gray-100)] p-2 text-[var(--body-font-color)]" type="search" id="book-search-input" placeholder={config.placeholder ?? label} aria-label={label} maxlength="128" autocomplete="off" data-open-search />
   <button type="button" class="book-search-shortcut absolute right-[10px] top-1/2 -translate-y-1/2 cursor-pointer rounded border-0 bg-[var(--book-search-shortcut-background)] hover:bg-[#d0d0d0] px-[5px] py-[2px] font-sans text-xs font-bold text-[var(--book-search-shortcut-color)]" data-open-search aria-label={`${label} (Command or Control K)`}>⌘+K</button>
-</div></div> : <div class="fixed inset-0 z-[9999] hidden items-start justify-center bg-black/70 pt-[10vh]" id="search-container" data-pagefind-ignore data-book-search-config={JSON.stringify(config)}>
+</div></div> : <div class="fixed inset-0 z-[9999] hidden items-start justify-center bg-black/70 pt-[10vh]" id="search-container" data-pagefind-ignore data-book-search-config={JSON.stringify(searchConfig)}>
   <div class="max-h-[80vh] w-[90%] max-w-[800px] overflow-auto rounded-lg bg-[var(--book-search-background)] p-5 text-[var(--book-search-color)] shadow-[0_4px_20px_rgba(0,0,0,.2)]" id="search-dialog" role="dialog" aria-modal="true" aria-label={label} tabindex="-1">
     <div class="mb-2 flex justify-end"><button class="cursor-pointer border-0 bg-transparent px-2 py-1 font-[inherit] text-inherit" type="button" data-close-search aria-label={closeLabel}>{closeLabel}</button></div>
     <div id="search" class:list={["size-full", styles.search]}><p role="status" class="text-[var(--body-font-color)]">{config.loadingMessage ?? 'Enter a keyword to search'}</p></div>

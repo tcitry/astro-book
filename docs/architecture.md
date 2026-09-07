@@ -7,20 +7,30 @@
 | Theme | Consuming site |
 | --- | --- |
 | Layout, navigation, TOC, responsive reading styles | Content scanning, frontmatter interpretation and legacy conversions |
-| Search UI, code copying, image zoom, comments display | Search index generation, comments parameters and eligibility |
+| Search UI and build-time index generation, code copying, image zoom, comments display | Search scope and presentation settings, comments parameters and eligibility |
 | Generic article lists, metadata, term lists, tag clouds and pagination | Category/tag relationships, sorting, pagination URLs and custom-page components/data/styles |
 | Generic SEO output from explicit data | Canonical URLs, site identity, RSS/sitemap/indexing policy |
 | Markdown/MDX math, diagrams, code and packaged assets | Framework integrations and interactive islands |
 
 Weekly, timeline, portfolio, links and demo pages belong entirely to the consuming site. Their reusable appearance alone does not make them theme features: keep their components, display types and dedicated styles beside the site routes. This allows the theme to follow Hugo Book reading features while each site evolves its own React, HeroUI or other implementations.
 
-The theme never reads a site's generated content manifest, private content directory, deployment configuration or filesystem conventions. Public models describe display values: labels, links, dates, headings and optional authored HTML. Trust HTML inputs as author-supplied content; these are not an HTML sanitization boundary.
+The theme never reads a site's generated content manifest, private content directory or deployment configuration. Search reads Astro's generated HTML output, without prescribing the source content layout. Public models describe display values: labels, links, dates, headings and optional authored HTML. Trust HTML inputs as author-supplied content; these are not an HTML sanitization boundary.
 
 ## Integration
 
 `astroBook()` configures a shared processor and adds the MDX integration when it is not already present. Configure it once. Add custom `remarkPlugins`, `rehypePlugins` or `recmaPlugins` under its `markdown` option. The preset deduplicates plugin identities and owns the math/diagram plugins, so Markdown and MDX do not register separate implementations.
 
 `@tcitry/astro-book/markdown` also exports `createBookProcessor()` and `createBookMarkdownRenderer()`. A site with its own importer can first apply source compatibility transformations, then render with the same theme options. The theme does not interpret Hugo shortcodes or legacy URLs.
+
+### Static search
+
+The integration owns the Pagefind dependency and runs it after Astro emits HTML. Search is enabled by default and indexes `**/*.html` in the build output. Each consuming site publishes its own generated `pagefind` directory; the search implementation is shared, while indexed content remains site-specific. No search service or framework renderer is required.
+
+Keep a site's build command as `astro build`. To limit the generated HTML files that enter the index, configure `astroBook({ search: { glob: '{guides,notes}/**/*.html' } })`. The glob is relative to the generated output directory, not the source content directory. Mark the article with `data-pagefind-body` to select its content; the default shell excludes navigation and footer text. `search.rootSelector` optionally limits parsing to a CSS selector, such as `main`; its default is Pagefind's `html` root. Configure these options in `astroBook()`; the integration does not read `pagefind.yml` or other Pagefind CLI configuration files.
+
+`astroBook({ search: false })` disables index generation. `BookLayout`'s separate `search={false}` prop hides the default search interface on a page. Set both when turning search off entirely; disabling generation alone also allows a site to supply an externally generated Pagefind index. `SearchConfig` controls the interface's labels, translations, images and sub-results. Its default asset path is Astro's `base` followed by `pagefind`; only provide `basePath` when deliberately loading an index from a different location.
+
+A fresh development server has no index. Test search with a complete build followed by `astro preview`, and publish the generated search files with the rest of the site.
 
 ### Mathematics
 

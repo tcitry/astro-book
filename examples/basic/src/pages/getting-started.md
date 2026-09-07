@@ -19,7 +19,7 @@ Open **http://127.0.0.1:4322/astro-book/**. Edit a page under `examples/basic/sr
 
 ## Preview the complete build
 
-Search needs the generated Pagefind index. From the repository root:
+The theme generates a Pagefind index automatically during the Astro build. From the repository root:
 
 ```sh frame="terminal"
 npm run build
@@ -66,13 +66,12 @@ import BookLayout from '@tcitry/astro-book/components/BookLayout';
   site={{ title: 'Field notes', home: '/', lang: 'en' }}
   page={{ title: 'Welcome', url: '/', toc: false }}
   navigation={[{ id: 'home', label: 'Welcome', href: '/', active: true }]}
-  search={false}
 >
-  <article class="markdown">
-    <h1>Welcome</h1>
+  <article class="markdown" data-pagefind-body>
+    <h1 data-pagefind-meta="title">Welcome</h1>
     <p>A place for careful notes.</p>
   </article>
 </BookLayout>
 ```
 
-Keep the search setting disabled until your project generates its own index. Read [configuration](../configuration/) for the complete search recipe, and [project structure](../structure/) to understand where each responsibility belongs.
+Run `astro build` to generate the pages and their search index, then `astro preview` to test search. No separate Pagefind installation or indexing command is needed. Read [configuration](../configuration/) to customize search scope and presentation, and [project structure](../structure/) to understand where each responsibility belongs.

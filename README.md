@@ -12,13 +12,13 @@ A customizable, static reading theme for Astro, inspired by [Hugo Book](https://
 
 - Responsive navigation, table of contents, previous/next links and light/dark/system themes.
 - One Markdown and MDX pipeline: build-time KaTeX, lazy Mermaid diagrams with source fallback, Shiki highlighting, code copying and wide-content scrolling.
-- Search UI for Pagefind, image zoom, explicit SEO metadata and an optional Giscus component.
+- Built-in static search: automatic Pagefind indexing after Astro builds, a lazy search dialog and configurable search scope. Image zoom, explicit SEO metadata and an optional Giscus component.
 - Reusable article metadata, lists, tags, hints and pagination components.
 - Typed inputs, named slots and component replacements for customization.
 - Tailwind CSS v4 component utilities, scoped CSS Modules and bundled fonts. Utilities ship precompiled and Astro handles the modules; consumers need neither Tailwind nor Sass. The old SCSS build layer is retired.
 - Static reading pages require no React renderer, backend, account or private registry. Add framework islands in your own site when needed.
 
-The theme focuses on Hugo Book reading features and framework-neutral customization. Your site controls content loading, URLs, tags/categories, sorting, search indexes, RSS/sitemaps, identity and deployment. Custom weekly, timeline, portfolio, links and demo pages belong to the consuming site, including their UI, data models and styles. No Starlight dependency or prescribed content directory is required.
+The theme focuses on Hugo Book reading features and framework-neutral customization. Your site controls content loading, URLs, tags/categories, sorting, search scope, RSS/sitemaps, identity and deployment. Custom weekly, timeline, portfolio, links and demo pages belong to the consuming site, including their UI, data models and styles. No Starlight dependency or prescribed content directory is required.
 
 ## Try the example
 
@@ -73,7 +73,6 @@ import BookLayout from '@tcitry/astro-book/components/BookLayout';
   page={{ title: 'Welcome', url: '/', toc: false }}
   navigation={[{ id: 'home', label: 'Home', href: '/', active: true }]}
   seo={{ canonical: new URL('/', Astro.site).href }}
-  search={false}
 >
   <article class="markdown" data-pagefind-body>
     <h1>Welcome</h1>
@@ -82,7 +81,7 @@ import BookLayout from '@tcitry/astro-book/components/BookLayout';
 </BookLayout>
 ```
 
-`BookLayout` loads the packaged CSS and browser features. Search is disabled in this starter until you generate a Pagefind index. Follow the [complete setup guide](docs/getting-started.md) for Markdown/MDX layouts, navigation and TOC, math and diagrams, search, SEO, Giscus, framework islands and customization.
+`BookLayout` loads the packaged CSS and browser features. `astroBook()` automatically generates this site's Pagefind index during `astro build`; no separate Pagefind installation or CLI command is needed. Use `astro preview` to test the generated search index. The search asset URL follows Astro's `base` automatically. Follow the [complete setup guide](docs/getting-started.md) for Markdown/MDX layouts, navigation and TOC, math and diagrams, search, SEO, Giscus, framework islands and customization.
 
 See the [styling contract](docs/architecture.md#styles-and-framework-islands) and [Hugo Book upstream record](docs/upstream.md) for customization and feature ports.
 
@@ -95,7 +94,7 @@ npm test
 npm run verify:package
 ```
 
-`verify:package` installs a packed artifact into an independent temporary Astro project, then checks its types, build, HTML, CSS, scripts and fonts. That consumer has no Tailwind compiler and cannot scan this repository to complete its styles.
+`verify:package` installs a packed artifact into an independent temporary Astro project, then checks its types, build, HTML, CSS, scripts, fonts and working search queries beneath the configured base path. That consumer has no Tailwind compiler and cannot scan this repository to complete its styles.
 
 See [architecture and public contracts](docs/architecture.md), [verification notes](docs/verification.md) and [versioning, upgrades and rollback](docs/development.md). Publishing and deployment are separate maintainer actions.
 
