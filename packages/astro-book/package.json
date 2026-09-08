@@ -1,6 +1,6 @@
 {
   "name": "@tcitry/astro-book",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A customizable static reading theme for Astro, inspired by Hugo Book.",
   "type": "module",
   "license": "MIT",

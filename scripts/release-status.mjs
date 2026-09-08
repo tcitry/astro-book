@@ -6,9 +6,10 @@ export async function needsPublication(pkg, requestedVersion = '', request = fet
   assert.equal(pkg.name, '@tcitry/astro-book');
   assert.match(pkg.version, /^\d+\.\d+\.\d+$/, 'Main publishes stable versions only');
   if (requestedVersion) assert.equal(pkg.version, requestedVersion, 'Requested version must match package.json');
-  const response = await request(`https://registry.npmjs.org/${encodeURIComponent(pkg.name)}`, {
+  // Avoid a cached 404 while a freshly published version propagates through npm's CDN.
+  const response = await request(`https://registry.npmjs.org/${encodeURIComponent(pkg.name)}?release-check=${Date.now()}`, {
     signal: AbortSignal.timeout(30_000),
-    headers: { accept: 'application/json' },
+    headers: { accept: 'application/json', 'cache-control': 'no-cache' },
   });
   if (response.status === 404) return true;
   if (!response.ok) throw new Error(`npm registry returned HTTP ${response.status}`);
