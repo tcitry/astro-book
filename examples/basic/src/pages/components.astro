@@ -1,15 +1,15 @@
 ---
 import Article from '../layouts/Article.astro';
-import ArticleList from 'astro-book/components/ArticleList';
-import GroupedArticleList from 'astro-book/components/GroupedArticleList';
-import TagCloud from 'astro-book/components/TagCloud';
-import TermList from 'astro-book/components/TermList';
-import Tabs from 'astro-book/components/Tabs';
-import Pagination from 'astro-book/components/Pagination';
-import Notice from 'astro-book/components/Notice';
-import Badge from 'astro-book/components/Badge';
-import BadgeGroup from 'astro-book/components/BadgeGroup';
-import type { ArticleItem } from 'astro-book/presentation';
+import ArticleList from '@tcitry/astro-book/components/ArticleList';
+import GroupedArticleList from '@tcitry/astro-book/components/GroupedArticleList';
+import TagCloud from '@tcitry/astro-book/components/TagCloud';
+import TermList from '@tcitry/astro-book/components/TermList';
+import Tabs from '@tcitry/astro-book/components/Tabs';
+import Pagination from '@tcitry/astro-book/components/Pagination';
+import Notice from '@tcitry/astro-book/components/Notice';
+import Badge from '@tcitry/astro-book/components/Badge';
+import BadgeGroup from '@tcitry/astro-book/components/BadgeGroup';
+import type { ArticleItem } from '@tcitry/astro-book/presentation';
 import { withBase } from '../data/site';
 const items: ArticleItem[] = [
   { label: 'Writing a clear chapter', href: withBase('typography/'), date: { value: '2026-01-15', label: '2026-01-15' }, metadata: { date: { value: '2026-01-15', label: 'January 15, 2026' }, tags: [{ label: 'Writing', href: withBase('markdown/') }, { label: 'Reference', href: withBase('components/') }] }, summary: 'A sample article entry with a date, topics, summary and badges.', badges: [{ label: 'Guide' }, { label: 'Example' }] },
@@ -28,7 +28,7 @@ const headings = [
   <Notice variant="info"><strong>Information.</strong> A detail that helps the reader continue.</Notice>
   <Notice variant="warning"><strong>Check first.</strong> Confirm a configuration value before following the next step.</Notice>
   <Notice variant="danger"><strong>Important constraint.</strong> A clearly labeled condition that affects the example.</Notice>
-  <p>Import <code>Notice</code> from <code>astro-book/components/Notice</code> and supply its <code>variant</code> and body. It also works inside <a href={withBase('mdx/')}>MDX</a>.</p>
+  <p>Import <code>Notice</code> from <code>@tcitry/astro-book/components/Notice</code> and supply its <code>variant</code> and body. It also works inside <a href={withBase('mdx/')}>MDX</a>.</p>
   <h2 id="lists">Article lists</h2>
   <ArticleList items={items} />
   <p>A grouped list uses the same article items with a heading selected by the site:</p>

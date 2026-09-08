@@ -27,15 +27,15 @@ Use Changesets to record public API and behavior changes:
 npx changeset
 ```
 
-For releases after 0.1.0, review the changeset, use `npx changeset version` to update the package version/changelog, update the lockfile, then commit the resulting changes. Publication is an explicit maintainer action: pushes and pull requests do not automatically publish npm packages.
+For releases after 0.1.0, review the changeset, use `npx changeset version` to update the package version/changelog, update the lockfile, then commit the resulting changes. Pushing the version change to `main` automatically verifies and publishes that version. Pushes with an already published version skip npm publication; pull requests never publish. npm versions are immutable, so package changes need a version bump before they can reach consumers.
 
 Prefer a minor version for additive components/options and a major version for breaking props, styling contracts or supported Astro versions. Fixes that preserve the public API use patch versions. Public component subpaths, exported types, slot names, assets and documented design variables are part of the compatibility surface.
 
 ## Publish to npm
 
-The public package is `astro-book`. Its manifest fixes `publishConfig.access` to `public` and the registry to `https://registry.npmjs.org/`. The repository root and example are private workspaces and are not published.
+The public package is `@tcitry/astro-book`. Its manifest fixes `publishConfig.access` to `public` and the registry to `https://registry.npmjs.org/`. The repository root and example are private workspaces and are not published.
 
-For the first release, log in with the npm account that will own the unscoped `astro-book` package:
+For the first release, use an npm account authorized to publish under the `@tcitry` scope:
 
 ```sh
 npm login --registry=https://registry.npmjs.org/
@@ -44,7 +44,7 @@ npm run release:publish -- --dry-run
 npm run release:publish
 ```
 
-`release:check` builds the theme and documentation, runs type checks and tests, and installs a real packed artifact in an independent consumer. Only after that consumer passes does it write `.artifacts/astro-book.tgz`. `release:publish` uploads that exact tarball without rebuilding it. Do not edit source between verification and publication; repeat verification after any change. The packed-consumer report records the version and SHA-512 integrity, and neither report nor tarball is committed.
+`release:check` builds the theme and documentation, runs type checks and tests, and installs a real packed artifact in an independent consumer. Only after that consumer passes does it write `.artifacts/tcitry-astro-book.tgz`. `release:publish` uploads that exact tarball without rebuilding it. Do not edit source between verification and publication; repeat verification after any change. The packed-consumer report records the version and SHA-512 integrity, and neither report nor tarball is committed.
 
 Once the package exists, configure [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) in its npm settings:
 
@@ -55,13 +55,13 @@ Once the package exists, configure [npm trusted publishing](https://docs.npmjs.c
 - Environment name: leave empty; this workflow does not select a GitHub environment.
 - Allow direct `npm publish` for this publisher.
 
-The workflow uses GitHub-hosted runners and OIDC, with no stored npm publish token. Its Node.js 24 and npm 11.12.1 satisfy npm's trusted-publishing requirements. To release, run **Publish npm package** from the repository's Actions page, select `main`, and enter the exact version from `packages/astro-book/package.json`. The workflow verifies that version, runs the complete release checks, and publishes the tested tarball with provenance. It must first be present in the repository and authorized in npm settings.
+The workflow uses GitHub-hosted runners and OIDC, with no stored npm publish token. Its Node.js 24 and npm 11.12.1 satisfy npm's trusted-publishing requirements. Every push to `main` runs **Publish npm package**. It checks the public registry and, if the package version is unpublished, runs the complete release checks and publishes the tested tarball with provenance. Existing versions are skipped; registry failures stop the workflow instead of being treated as missing versions. Publication runs are serialized. A manual run on `main` is available for retries, with an optional exact-version assertion. The workflow must first be present in the repository and authorized in npm settings. First publication still uses the local bootstrap above, because the package must exist before its trusted publisher can be configured.
 
 After publication, verify the registry version and install it in a fresh Astro project without authentication:
 
 ```sh
-npm view astro-book version dist.integrity
-npm install --save-exact astro-book@0.1.0
+npm view @tcitry/astro-book version dist.integrity
+npm install --save-exact @tcitry/astro-book@0.1.0
 ```
 
 Use the released version when publishing later updates. Follow the [setup guide](getting-started.md), run the consumer's check/build, and inspect search through its built preview. `npm run pack:theme` remains available for testing unpublished local changes.

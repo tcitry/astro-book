@@ -1,6 +1,6 @@
 # Public documentation demo
 
-This standalone documentation site demonstrates `astro-book` with generic, public content. It uses public npm packages and Astro components, without React, commercial components, a backend, or an external content directory.
+This standalone documentation site demonstrates `@tcitry/astro-book` with generic, public content. It uses public npm packages and Astro components, without React, commercial components, a backend, or an external content directory.
 
 The documentation demo is published at [tcitry.github.io/astro-book/](https://tcitry.github.io/astro-book/). It has no custom domain and is deployed independently from sites that consume the theme.
 

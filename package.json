@@ -7,14 +7,14 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "npm run build -w astro-book && npm run build -w @astro-book/basic",
+    "build": "npm run build -w @tcitry/astro-book && npm run build -w @astro-book/basic",
     "check": "astro check --root packages/astro-book --tsconfig tsconfig.check.json && npm run check -w @astro-book/basic",
-    "test": "npm test -w astro-book",
-    "dev": "npm run build -w astro-book && npm run dev -w @astro-book/basic",
-    "pack:theme": "npm pack --workspace astro-book",
+    "test": "npm test -w @tcitry/astro-book",
+    "dev": "npm run build -w @tcitry/astro-book && npm run dev -w @astro-book/basic",
+    "pack:theme": "npm pack --workspace @tcitry/astro-book",
     "verify:package": "node scripts/verify-package.mjs",
     "release:check": "npm run build && npm run check && npm test && npm run verify:package",
-    "release:publish": "npm publish .artifacts/astro-book.tgz --access public --registry=https://registry.npmjs.org/"
+    "release:publish": "npm publish .artifacts/tcitry-astro-book.tgz --access public --registry=https://registry.npmjs.org/"
   },
   "devDependencies": {
     "@changesets/cli": "2.29.8"

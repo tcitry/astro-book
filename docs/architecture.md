@@ -20,7 +20,7 @@ The theme never reads a site's generated content manifest, private content direc
 
 `astroBook()` configures a shared processor and adds the MDX integration when it is not already present. Configure it once. Add custom `remarkPlugins`, `rehypePlugins` or `recmaPlugins` under its `markdown` option. The preset deduplicates plugin identities and owns the math/diagram plugins, so Markdown and MDX do not register separate implementations.
 
-`astro-book/markdown` also exports `createBookProcessor()` and `createBookMarkdownRenderer()`. A site with its own importer can first apply source compatibility transformations, then render with the same theme options. The theme does not interpret Hugo shortcodes or legacy URLs.
+`@tcitry/astro-book/markdown` also exports `createBookProcessor()` and `createBookMarkdownRenderer()`. A site with its own importer can first apply source compatibility transformations, then render with the same theme options. The theme does not interpret Hugo shortcodes or legacy URLs.
 
 ### Static search
 
@@ -50,7 +50,7 @@ Copying reads the static `<pre>/<code>` text, preserving visible comments, inden
 
 ## Components and customization
 
-Public imports use documented subpaths such as `astro-book/components/BookLayout` and `astro-book/components/Notice`; do not import internal package file paths. Shell types are exported by `astro-book/types`; presentation data is exported by `astro-book/presentation`.
+Public imports use documented subpaths such as `@tcitry/astro-book/components/BookLayout` and `@tcitry/astro-book/components/Notice`; do not import internal package file paths. Shell types are exported by `@tcitry/astro-book/types`; presentation data is exported by `@tcitry/astro-book/presentation`.
 
 The layout accepts explicit `site`, `page`, `navigation`, `seo`, `search`, `previous` and `next` props. `BookPage` contains a title, URL, optional headings/description/TOC setting and an optional body class. `NavigationItem` uses `id`, `label`, optional `href`, active/expanded state and children. No source filename or content-loader object is required.
 
@@ -68,7 +68,7 @@ Example of a framework-neutral reading hint:
 
 ```astro
 ---
-import Notice from 'astro-book/components/Notice';
+import Notice from '@tcitry/astro-book/components/Notice';
 ---
 <Notice variant="info">This content is part of the static article.</Notice>
 ```

@@ -33,7 +33,7 @@ The preview uses the same `/astro-book/` path as GitHub Pages. Open search and t
 In your Astro 7 project, install the public package:
 
 ```sh
-npm install astro-book
+npm install @tcitry/astro-book
 ```
 
 Enable the public integration:
@@ -42,7 +42,7 @@ Enable the public integration:
 
 ```js
 import { defineConfig } from 'astro/config';
-import astroBook from 'astro-book';
+import astroBook from '@tcitry/astro-book';
 
 export default defineConfig({
   site: 'https://example.org',
@@ -58,7 +58,7 @@ export default defineConfig({
 
 ```astro
 ---
-import BookLayout from 'astro-book/components/BookLayout';
+import BookLayout from '@tcitry/astro-book/components/BookLayout';
 ---
 <BookLayout
   site={{ title: 'Field notes', home: '/', lang: 'en' }}

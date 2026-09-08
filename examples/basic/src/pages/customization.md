@@ -40,7 +40,7 @@ A custom `toc` is rendered in both desktop and mobile regions. Keep it static an
 
 ## Replace a component
 
-`components.Navigation`, `components.TOC`, `components.Search` and `components.Footer` accept alternatives with the same props as their exported defaults. Use the types exported by `astro-book/types` to keep the boundary explicit.
+`components.Navigation`, `components.TOC`, `components.Search` and `components.Footer` accept alternatives with the same props as their exported defaults. Use the types exported by `@tcitry/astro-book/types` to keep the boundary explicit.
 
 A slot works well when you own the markup directly. A component replacement is useful when several layouts share the same alternative implementation.
 

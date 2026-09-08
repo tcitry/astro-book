@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import astroBook from 'astro-book';
+import astroBook from '@tcitry/astro-book';
 
 export default defineConfig({
   site: process.env.ASTRO_BOOK_DEMO_SITE ?? 'https://tcitry.github.io',

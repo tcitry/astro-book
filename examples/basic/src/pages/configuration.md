@@ -12,7 +12,7 @@ The integration installs one Markdown processor for ordinary Markdown and MDX. I
 
 ```js
 import { defineConfig } from 'astro/config';
-import astroBook from 'astro-book';
+import astroBook from '@tcitry/astro-book';
 
 export default defineConfig({
   site: 'https://example.org',

@@ -1,11 +1,13 @@
 name: Publish npm package
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       version:
-        description: Exact package version to publish
-        required: true
+        description: Optional version assertion (defaults to package.json)
+        required: false
         type: string
 
 permissions:
@@ -31,18 +33,15 @@ jobs:
           package-manager-cache: false
       - name: Use a supported npm CLI for trusted publishing
         run: npm install --global npm@11.12.1
-      - name: Check the selected release version
+      - name: Check whether this version needs publishing
+        id: release
         env:
           RELEASE_VERSION: ${{ inputs.version }}
-        run: |
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import { readFileSync } from 'node:fs';
-          const pkg = JSON.parse(readFileSync('packages/astro-book/package.json', 'utf8'));
-          assert.equal(pkg.name, 'astro-book');
-          assert.equal(pkg.version, process.env.RELEASE_VERSION, 'Selected version must match the checked-out package');
-          JS
+        run: node scripts/release-status.mjs
       - run: npm ci
+        if: steps.release.outputs.publish == 'true'
       - run: npm run release:check
+        if: steps.release.outputs.publish == 'true'
       - name: Publish the verified package using OIDC
+        if: steps.release.outputs.publish == 'true'
         run: npm run release:publish -- --provenance
