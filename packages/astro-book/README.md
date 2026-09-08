@@ -1,4 +1,4 @@
-# @tcitry/astro-book
+# astro-book
 
 A static reading theme for Astro, inspired by [Hugo Book](https://github.com/alex-shpak/hugo-book). Build a blog, knowledge base or technical notebook with navigation, a table of contents, Markdown/MDX, math, diagrams and static search.
 
@@ -9,7 +9,7 @@ A static reading theme for Astro, inspired by [Hugo Book](https://github.com/ale
 Requires Node.js 22.12+ and Astro 7.3.1 or a compatible Astro 7 release. In your Astro project:
 
 ```sh
-npm install @tcitry/astro-book
+npm install astro-book
 ```
 
 The package includes its styles, icons, fonts, Markdown support and Pagefind. Reading pages need no React renderer, Tailwind compiler, backend or commercial account.
@@ -20,7 +20,7 @@ Add the integration to `astro.config.mjs`:
 
 ```js
 import { defineConfig } from 'astro/config';
-import astroBook from '@tcitry/astro-book';
+import astroBook from 'astro-book';
 
 export default defineConfig({
   site: 'https://example.org',
@@ -34,7 +34,7 @@ Use your own production origin for `site`. Create `src/pages/index.astro`:
 
 ```astro
 ---
-import BookLayout from '@tcitry/astro-book/components/BookLayout';
+import BookLayout from 'astro-book/components/BookLayout';
 ---
 <BookLayout
   site={{ title: 'My notebook', lang: 'en' }}

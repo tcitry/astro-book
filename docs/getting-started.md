@@ -1,6 +1,6 @@
 # Getting started
 
-This guide targets `@tcitry/astro-book` 0.1.0 with Astro 7.3.1 or a compatible Astro 7 release. Use Node.js 22.12 or newer. All examples use public package imports; they need no account or private content.
+This guide targets `astro-book` 0.1.0 with Astro 7.3.1 or a compatible Astro 7 release. Use Node.js 22.12 or newer. All examples use public package imports; they need no account or private content.
 
 [README](../README.md) · [Public API](architecture.md) · [Development and upgrades](development.md)
 
@@ -9,7 +9,7 @@ This guide targets `@tcitry/astro-book` 0.1.0 with Astro 7.3.1 or a compatible A
 In an existing Astro 7 project, install the public package:
 
 ```sh
-npm install @tcitry/astro-book
+npm install astro-book
 ```
 
 For a new site, create a directory with this `package.json`, then run `npm install`:
@@ -27,7 +27,7 @@ For a new site, create a directory with this `package.json`, then run `npm insta
   },
   "dependencies": {
     "astro": "7.3.1",
-    "@tcitry/astro-book": "0.1.0"
+    "astro-book": "0.1.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
@@ -52,7 +52,7 @@ Create `astro.config.mjs`:
 
 ```js
 import { defineConfig } from 'astro/config';
-import astroBook from '@tcitry/astro-book';
+import astroBook from 'astro-book';
 
 export default defineConfig({
   site: 'https://example.org',
@@ -74,8 +74,8 @@ Create `src/layouts/Article.astro`:
 
 ```astro
 ---
-import BookLayout from '@tcitry/astro-book/components/BookLayout';
-import type { BookHeading, NavigationItem } from '@tcitry/astro-book/types';
+import BookLayout from 'astro-book/components/BookLayout';
+import type { BookHeading, NavigationItem } from 'astro-book/types';
 
 interface Props {
   frontmatter?: { title?: string; description?: string };
@@ -156,7 +156,7 @@ layout: ../layouts/Article.astro
 title: An MDX experiment
 ---
 
-import Notice from '@tcitry/astro-book/components/Notice';
+import Notice from 'astro-book/components/Notice';
 
 ## Components in an article
 
@@ -191,7 +191,7 @@ For a site-owned ordinary code UI, set `markdown: { code: false }` in `astroBook
 `site.menu` holds an optional top-level menu. `navigation` holds the main tree. The site supplies the ordering and active state; the theme does not infer your content hierarchy or URL policy.
 
 ```ts
-import type { NavigationItem } from '@tcitry/astro-book/types';
+import type { NavigationItem } from 'astro-book/types';
 
 const navigation: NavigationItem[] = [{
   id: 'guides',
@@ -257,7 +257,7 @@ This example keeps previews out of search results unless the production build ex
 To add Giscus, import its component in your layout:
 
 ```astro
-import Giscus from '@tcitry/astro-book/components/Giscus';
+import Giscus from 'astro-book/components/Giscus';
 ```
 
 Place it inside `BookLayout`, after supplying the values from your own [Giscus configuration](https://giscus.app/):
@@ -298,15 +298,15 @@ For reusable prop-compatible replacements, use `components`. This wrapper limits
 ```astro
 ---
 // src/components/CompactTOC.astro
-import HeadingTree from '@tcitry/astro-book/components/HeadingTree';
-import type { BookHeading } from '@tcitry/astro-book/types';
+import HeadingTree from 'astro-book/components/HeadingTree';
+import type { BookHeading } from 'astro-book/types';
 interface Props { headings?: BookHeading[] }
 const { headings = [] } = Astro.props;
 ---
 <HeadingTree headings={headings} maxDepth={2} />
 ```
 
-Import the wrapper in your layout and pass `components={{ TOC: CompactTOC }}`. Other replacements are `Navigation`, `Search` and `Footer`; preserve each default component's props and runtime DOM hooks. Use `labels` to translate interface text. All contracts are exported from `@tcitry/astro-book/types`; display component data is in `@tcitry/astro-book/presentation`.
+Import the wrapper in your layout and pass `components={{ TOC: CompactTOC }}`. Other replacements are `Navigation`, `Search` and `Footer`; preserve each default component's props and runtime DOM hooks. Use `labels` to translate interface text. All contracts are exported from `astro-book/types`; display component data is in `astro-book/presentation`.
 
 ## Styling and optional framework islands
 

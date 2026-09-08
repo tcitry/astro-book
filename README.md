@@ -38,14 +38,14 @@ Open [localhost:4322/astro-book/](http://127.0.0.1:4322/astro-book/). The exampl
 Install the public theme package in an Astro 7.3.1+ project:
 
 ```sh
-npm install @tcitry/astro-book
+npm install astro-book
 ```
 
 Enable the integration in `astro.config.mjs`:
 
 ```js
 import { defineConfig } from 'astro/config';
-import astroBook from '@tcitry/astro-book';
+import astroBook from 'astro-book';
 
 export default defineConfig({
   site: 'https://example.org',
@@ -59,7 +59,7 @@ Create `src/pages/index.astro`:
 
 ```astro
 ---
-import BookLayout from '@tcitry/astro-book/components/BookLayout';
+import BookLayout from 'astro-book/components/BookLayout';
 ---
 <BookLayout
   site={{ title: 'My notebook', lang: 'en' }}

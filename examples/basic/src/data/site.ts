@@ -1,4 +1,4 @@
-import type { NavigationItem } from '@tcitry/astro-book/types';
+import type { NavigationItem } from 'astro-book/types';
 
 /** Site URLs belong to this example, rather than the theme package. */
 export const withBase = (path = '') => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;

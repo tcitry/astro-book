@@ -20,7 +20,7 @@ export interface AstroBookOptions {
 /** Static theme integration. No framework renderer, content loader, routes, or backend is installed. */
 export default function astroBook(options: AstroBookOptions = {}): AstroIntegration {
   return {
-    name: '@tcitry/astro-book',
+    name: 'astro-book',
     hooks: {
       'astro:build:done': async ({ dir, logger }) => {
         if (options.search === false) return;
@@ -28,7 +28,7 @@ export default function astroBook(options: AstroBookOptions = {}): AstroIntegrat
         logger.info(`Pagefind indexed ${count} HTML ${count === 1 ? 'page' : 'pages'}.`);
       },
       'astro:config:setup': ({ command, config, updateConfig }) => {
-        if (config.integrations.filter((item) => item.name === '@tcitry/astro-book').length > 1) {
+        if (config.integrations.filter((item) => item.name === 'astro-book').length > 1) {
           throw new Error('Configure astroBook() once. Add Markdown plugins through its markdown option.');
         }
         const previous = config.markdown.processor;
@@ -40,7 +40,7 @@ export default function astroBook(options: AstroBookOptions = {}): AstroIntegrat
         // The packaged client lazily imports Mermaid from node_modules, beyond
         // Vite's source scan. Prebundle its CommonJS dependencies for dev, resolving
         // from this package so consumers do not need a hoisted Mermaid install.
-        const mermaidDependency = '@tcitry/astro-book > mermaid';
+        const mermaidDependency = 'astro-book > mermaid';
         if (command === 'dev' && (options.mermaid ?? extra.mermaid) !== false
           && !config.vite?.optimizeDeps?.include?.includes(mermaidDependency)) {
           updateConfig({ vite: { optimizeDeps: { include: [mermaidDependency] } } });

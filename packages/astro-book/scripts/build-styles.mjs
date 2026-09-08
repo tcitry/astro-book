@@ -58,7 +58,7 @@ const katex = await readFile(path.join(katexRoot, 'dist/katex.min.css'), 'utf8')
 await cp(path.join(katexRoot, 'dist/fonts'), path.join(destination, 'fonts'), { recursive: true });
 await cp(path.join(katexRoot, 'LICENSE'), path.join(destination, 'KATEX-LICENSE'));
 await writeFile(path.join(destination, 'styles.css'), [
-  '/*! @tcitry/astro-book | MIT | Hugo Book attribution: THIRD_PARTY_NOTICES.md */',
+  '/*! astro-book | MIT | Hugo Book attribution: THIRD_PARTY_NOTICES.md */',
   scope(utilities, false), expandColorSchemes(scope(tokens, false)), scope(baseline), scope(katex, false),
 ].join('\n'));
 console.log('Built scoped tokens/baseline, package-owned Tailwind utilities, and KaTeX fonts.');

@@ -9,7 +9,7 @@
     "preview": "astro preview --host 127.0.0.1 --port 4322"
   },
   "dependencies": {
-    "@tcitry/astro-book": "0.1.0",
+    "astro-book": "0.1.0",
     "astro": "7.3.1"
   },
   "devDependencies": {

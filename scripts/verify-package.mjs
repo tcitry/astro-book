@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const packageRoot = path.join(root, 'packages/astro-book');
-const releaseArtifact = path.join(root, '.artifacts/tcitry-astro-book.tgz');
+const releaseArtifact = path.join(root, '.artifacts/astro-book.tgz');
 // A failed verification must not leave an older package ready for publication.
 await rm(releaseArtifact, { force: true });
 const temporary = await mkdtemp(path.join(tmpdir(), 'astro-book-packed-'));
@@ -36,7 +36,7 @@ const packOutput = await run('npm', ['pack', '--json', '--pack-destination', tem
 const metadata = JSON.parse(packOutput.slice(packOutput.indexOf('[{') >= 0 ? packOutput.indexOf('[{') : packOutput.indexOf('[\n')))[0];
 assert.ok(metadata.filename, 'npm pack must produce a tarball');
 const files = metadata.files.map((file) => file.path);
-assert.equal(metadata.name, '@tcitry/astro-book', 'Only the public theme may be published');
+assert.equal(metadata.name, 'astro-book', 'Only the public theme may be published');
 assert.ok(files.includes('README.md'), 'npm consumers need the packaged setup guide');
 const packageManifest = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'));
 assert.equal(packageManifest.publishConfig?.access, 'public');
@@ -67,7 +67,7 @@ await cp(path.join(root, 'examples/basic'), consumer, {
 });
 const manifest = JSON.parse(await readFile(path.join(consumer, 'package.json'), 'utf8'));
 manifest.name = 'astro-book-packed-consumer';
-manifest.dependencies['@tcitry/astro-book'] = `file:${path.join(temporary, metadata.filename)}`;
+manifest.dependencies['astro-book'] = `file:${path.join(temporary, metadata.filename)}`;
 assert.ok(!Object.hasOwn(manifest.dependencies ?? {}, 'pagefind') && !Object.hasOwn(manifest.devDependencies ?? {}, 'pagefind'), 'Consumers must not install Pagefind directly');
 assert.equal(manifest.scripts.build, 'astro build', 'An ordinary Astro build must generate the search index automatically');
 assert.ok(!Object.keys({ ...manifest.dependencies, ...manifest.devDependencies }).some((name) => name.includes('tailwind') || /heroui-pro/i.test(name)), 'Packed consumer may not provide a Tailwind compiler or commercial dependencies');

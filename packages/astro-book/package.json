@@ -1,5 +1,5 @@
 {
-  "name": "@tcitry/astro-book",
+  "name": "astro-book",
   "version": "0.1.0",
   "description": "A customizable static reading theme for Astro, inspired by Hugo Book.",
   "type": "module",

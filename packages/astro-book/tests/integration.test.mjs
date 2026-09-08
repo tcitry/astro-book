@@ -25,15 +25,15 @@ test('dev prebundles the theme Mermaid dependency while preserving consumer opti
   };
   const { config } = configure({ vite: { optimizeDeps } });
   const expected = {
-    ...optimizeDeps, include: ['consumer-cjs', '@tcitry/astro-book > mermaid'],
+    ...optimizeDeps, include: ['consumer-cjs', 'astro-book > mermaid'],
   };
   for (const [key, value] of Object.entries(expected)) assert.deepEqual(config.vite.optimizeDeps[key], value);
   assert.deepEqual(optimizeDeps.include, ['consumer-cjs']);
 });
 
 test('an existing Mermaid prebundle entry is not duplicated', () => {
-  const { config, updates } = configure({ vite: { optimizeDeps: { include: ['@tcitry/astro-book > mermaid'] } } });
-  assert.deepEqual(config.vite.optimizeDeps.include, ['@tcitry/astro-book > mermaid']);
+  const { config, updates } = configure({ vite: { optimizeDeps: { include: ['astro-book > mermaid'] } } });
+  assert.deepEqual(config.vite.optimizeDeps.include, ['astro-book > mermaid']);
   assert.equal(updates.length, 0);
 });
 
@@ -44,5 +44,5 @@ test('builds and disabled Mermaid do not add an optional dev dependency', () => 
     assert.equal(updates.length, 0);
   }
   const { config } = configure({ options: { mermaid: {}, markdown: { mermaid: false } } });
-  assert.deepEqual(config.vite.optimizeDeps.include, ['@tcitry/astro-book > mermaid']);
+  assert.deepEqual(config.vite.optimizeDeps.include, ['astro-book > mermaid']);
 });

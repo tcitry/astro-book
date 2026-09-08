@@ -39,7 +39,7 @@ jobs:
           import assert from 'node:assert/strict';
           import { readFileSync } from 'node:fs';
           const pkg = JSON.parse(readFileSync('packages/astro-book/package.json', 'utf8'));
-          assert.equal(pkg.name, '@tcitry/astro-book');
+          assert.equal(pkg.name, 'astro-book');
           assert.equal(pkg.version, process.env.RELEASE_VERSION, 'Selected version must match the checked-out package');
           JS
       - run: npm ci

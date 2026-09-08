@@ -33,9 +33,9 @@ Prefer a minor version for additive components/options and a major version for b
 
 ## Publish to npm
 
-The public package is `@tcitry/astro-book`. Its manifest fixes `publishConfig.access` to `public` and the registry to `https://registry.npmjs.org/`. The repository root and example are private workspaces and are not published.
+The public package is `astro-book`. Its manifest fixes `publishConfig.access` to `public` and the registry to `https://registry.npmjs.org/`. The repository root and example are private workspaces and are not published.
 
-For the first release, use an npm account authorized to publish under the `@tcitry` scope:
+For the first release, log in with the npm account that will own the unscoped `astro-book` package:
 
 ```sh
 npm login --registry=https://registry.npmjs.org/
@@ -44,7 +44,7 @@ npm run release:publish -- --dry-run
 npm run release:publish
 ```
 
-`release:check` builds the theme and documentation, runs type checks and tests, and installs a real packed artifact in an independent consumer. Only after that consumer passes does it write `.artifacts/tcitry-astro-book.tgz`. `release:publish` uploads that exact tarball without rebuilding it. Do not edit source between verification and publication; repeat verification after any change. The packed-consumer report records the version and SHA-512 integrity, and neither report nor tarball is committed.
+`release:check` builds the theme and documentation, runs type checks and tests, and installs a real packed artifact in an independent consumer. Only after that consumer passes does it write `.artifacts/astro-book.tgz`. `release:publish` uploads that exact tarball without rebuilding it. Do not edit source between verification and publication; repeat verification after any change. The packed-consumer report records the version and SHA-512 integrity, and neither report nor tarball is committed.
 
 Once the package exists, configure [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) in its npm settings:
 
@@ -60,8 +60,8 @@ The workflow uses GitHub-hosted runners and OIDC, with no stored npm publish tok
 After publication, verify the registry version and install it in a fresh Astro project without authentication:
 
 ```sh
-npm view @tcitry/astro-book version dist.integrity
-npm install --save-exact @tcitry/astro-book@0.1.0
+npm view astro-book version dist.integrity
+npm install --save-exact astro-book@0.1.0
 ```
 
 Use the released version when publishing later updates. Follow the [setup guide](getting-started.md), run the consumer's check/build, and inspect search through its built preview. `npm run pack:theme` remains available for testing unpublished local changes.
