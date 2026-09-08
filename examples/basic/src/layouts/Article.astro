@@ -3,6 +3,7 @@ import BookLayout from '@tcitry/astro-book/components/BookLayout';
 import PageNavigation from '@tcitry/astro-book/components/PageNavigation';
 import type { Heading } from '@tcitry/astro-book/types';
 import { navigation, pages, sourceRoot, withBase } from '../data/site';
+import styles from './Article.module.css';
 interface Props {
   frontmatter?: { title?: string; description?: string };
   headings?: Heading[];
@@ -26,8 +27,8 @@ const next = current >= 0 ? pageLink(current + 1) : undefined;
   <Fragment slot="navigation-after">
     <hr />
     <p><a href="https://github.com/tcitry/astro-book">GitHub ↗</a></p>
-    <p>
-      <label for="example-theme">Appearance </label>
+    <p class={styles.appearance}>
+      <label for="example-theme">Appearance</label>
       <select id="example-theme" data-book-theme-select>
         <option value="auto">System</option>
         <option value="light">Light</option>
