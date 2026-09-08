@@ -1,4 +1,5 @@
-import { mkdtemp, readFile, writeFile, readdir, stat, cp, mkdir } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, readdir, stat, cp, mkdir, rm } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -8,6 +9,9 @@ import assert from 'node:assert/strict';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const packageRoot = path.join(root, 'packages/astro-book');
+const releaseArtifact = path.join(root, '.artifacts/tcitry-astro-book.tgz');
+// A failed verification must not leave an older package ready for publication.
+await rm(releaseArtifact, { force: true });
 const temporary = await mkdtemp(path.join(tmpdir(), 'astro-book-packed-'));
 const consumer = path.join(temporary, 'consumer');
 const cleanEnvironment = { ...process.env, NPM_CONFIG_USERCONFIG: path.join(temporary, 'public.npmrc') };
@@ -32,11 +36,18 @@ const packOutput = await run('npm', ['pack', '--json', '--pack-destination', tem
 const metadata = JSON.parse(packOutput.slice(packOutput.indexOf('[{') >= 0 ? packOutput.indexOf('[{') : packOutput.indexOf('[\n')))[0];
 assert.ok(metadata.filename, 'npm pack must produce a tarball');
 const files = metadata.files.map((file) => file.path);
+assert.equal(metadata.name, '@tcitry/astro-book', 'Only the public theme may be published');
+assert.ok(files.includes('README.md'), 'npm consumers need the packaged setup guide');
+const packageManifest = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'));
+assert.equal(packageManifest.publishConfig?.access, 'public');
+assert.equal(packageManifest.publishConfig?.registry, 'https://registry.npmjs.org/');
 for (const filename of files) {
   assert.ok(!/(^|\/)(?:node_modules|\.env[^/]*|\.generated|\.git|\.npmrc|\.dev\.vars)(\/|$)/.test(filename), `Unpublishable path: ${filename}`);
   if (/\.(?:ts|js|mjs|astro|json|css|scss|md)$/.test(filename)) {
     const source = await readFile(path.join(packageRoot, filename), 'utf8');
-    assert.ok(!forbidden.test(source), `Package contains site-specific or commercial material: ${filename}`);
+    // Metadata may link to the public docs; runtime code must not embed a site identity.
+    const blocked = ['README.md', 'package.json'].includes(filename) ? privateMaterial : forbidden;
+    assert.ok(!blocked.test(source), `Package contains site-specific or commercial material: ${filename}`);
   }
 }
 for (const filename of ['dist/styles.css', 'src/components/BookLayout.astro', 'src/markdown/index.ts', 'src/client/code-copy.js', 'src/styles/Code.css', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'src/styles/Shell.module.css', 'src/styles/Reading.module.css', 'src/assets/HUGO-BOOK-LICENSE', 'src/assets/MODERN-NORMALIZE-LICENSE']) assert.ok(files.includes(filename), `Missing packed file: ${filename}`);
@@ -194,8 +205,12 @@ try {
   server.closeAllConnections();
   await new Promise((resolve) => server.close(resolve));
 }
-const summary = { package: metadata.filename, packedFiles: files.length, htmlPages: documents.length, mathPages: mathPages.length, diagramPages: diagramPages.length, fontLinks, searchPages: searchEntry.languages.en.page_count, searchQuery: 'quadratic', searchResults: searchResults.map((result) => result.url), base, origin, consumer };
+const tarball = path.join(temporary, metadata.filename);
+const integrity = 'sha512-' + createHash('sha512').update(await readFile(tarball)).digest('base64');
+assert.equal(integrity, metadata.integrity, 'Publish the exact bytes installed in the test consumer');
+const summary = { package: metadata.filename, version: metadata.version, integrity, packedFiles: files.length, htmlPages: documents.length, mathPages: mathPages.length, diagramPages: diagramPages.length, fontLinks, searchPages: searchEntry.languages.en.page_count, searchQuery: 'quadratic', searchResults: searchResults.map((result) => result.url), base, origin, consumer };
 await mkdir(path.join(root, '.artifacts'), { recursive: true });
 await writeFile(path.join(root, '.artifacts/packed-consumer.json'), JSON.stringify(summary, null, 2) + '\n');
+await cp(tarball, releaseArtifact);
 console.log('Packed-package verification passed. Temporary consumer retained for inspection.');
 console.log(JSON.stringify(summary, null, 2));

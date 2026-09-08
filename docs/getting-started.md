@@ -6,13 +6,13 @@ This guide targets `@tcitry/astro-book` 0.1.0 with Astro 7.3.1 or a compatible A
 
 ## 1. Install the package
 
-There is no published npm release yet. Clone this repository, run `npm ci`, then `npm run pack:theme`. Copy the generated `tcitry-astro-book-0.1.0.tgz` into your Astro site's root and install it there:
+In an existing Astro 7 project, install the public package:
 
 ```sh
-npm install ./tcitry-astro-book-0.1.0.tgz
+npm install @tcitry/astro-book
 ```
 
-For a new site, create a directory with this `package.json`, copy the tarball into it, then run the install command above:
+For a new site, create a directory with this `package.json`, then run `npm install`:
 
 ```json
 {
@@ -25,7 +25,10 @@ For a new site, create a directory with this `package.json`, copy the tarball in
     "preview": "astro preview",
     "check": "astro check"
   },
-  "dependencies": { "astro": "7.3.1" },
+  "dependencies": {
+    "astro": "7.3.1",
+    "@tcitry/astro-book": "0.1.0"
+  },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
     "typescript": "6.0.3"

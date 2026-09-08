@@ -12,7 +12,9 @@
     "test": "npm test -w @tcitry/astro-book",
     "dev": "npm run build -w @tcitry/astro-book && npm run dev -w @astro-book/basic",
     "pack:theme": "npm pack --workspace @tcitry/astro-book",
-    "verify:package": "node scripts/verify-package.mjs"
+    "verify:package": "node scripts/verify-package.mjs",
+    "release:check": "npm run build && npm run check && npm test && npm run verify:package",
+    "release:publish": "npm publish .artifacts/tcitry-astro-book.tgz --access public --registry=https://registry.npmjs.org/"
   },
   "devDependencies": {
     "@changesets/cli": "2.29.8"

@@ -35,17 +35,10 @@ Open [localhost:4322/astro-book/](http://127.0.0.1:4322/astro-book/). The exampl
 
 ## Use in your Astro site
 
-The package is currently verified as a local tarball; an npm release has not been published. From the theme repository:
+Install the public theme package in an Astro 7.3.1+ project:
 
 ```sh
-npm ci
-npm run pack:theme
-```
-
-Copy the generated `tcitry-astro-book-0.1.0.tgz` into your Astro project's root and install it:
-
-```sh
-npm install ./tcitry-astro-book-0.1.0.tgz
+npm install @tcitry/astro-book
 ```
 
 Enable the integration in `astro.config.mjs`:

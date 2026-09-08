@@ -30,16 +30,10 @@ The preview uses the same `/astro-book/` path as GitHub Pages. Open search and t
 
 ## Install the theme in your own project
 
-The theme has not yet been published to npm. Create an installable artifact from this repository:
+In your Astro 7 project, install the public package:
 
 ```sh
-npm run pack:theme
-```
-
-Copy `tcitry-astro-book-0.1.0.tgz` into your Astro project, then install it:
-
-```sh
-npm install ./tcitry-astro-book-0.1.0.tgz
+npm install @tcitry/astro-book
 ```
 
 Enable the public integration:
