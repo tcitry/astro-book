@@ -20,8 +20,13 @@ legend { padding:0; } progress { vertical-align:baseline; }
 ::-webkit-search-decoration { -webkit-appearance:none; }
 ::-webkit-file-upload-button { -webkit-appearance:button; font:inherit; }
 summary { display:list-item; }
-:focus-visible,input.toggle:focus-visible + label { outline-style:auto; outline-color:var(--color-link); }
-input.toggle { height:0; width:0; overflow:hidden; opacity:0; position:absolute; }
+:focus-visible { outline-style:auto; outline-color:var(--color-link); }
+/* Hidden disclosure checkboxes are still focusable. Their own ring would sit on a
+   0×0 box and look like a leftover hover after a pointer click; put the ring on
+   the visible label instead. Chromium also treats mouse activation as
+   :focus-visible on checkboxes, so book.ts blurs pointer-activated toggles. */
+input.toggle { height:0; width:0; overflow:hidden; opacity:0; position:absolute; outline:none; }
+input.toggle:focus-visible + label { outline-style:auto; outline-color:var(--color-link); outline-offset:2px; }
 .book-icon { filter:var(--icon-filter); }
 a .book-icon { height:1em; width:1em; }
 /* The document root owns the viewport scrollbar. Name it explicitly because
