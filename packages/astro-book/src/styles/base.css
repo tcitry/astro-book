@@ -24,9 +24,15 @@ summary { display:list-item; }
 /* Hidden disclosure checkboxes are still focusable. Their own ring would sit on a
    0×0 box and look like a leftover hover after a pointer click; put the ring on
    the visible label instead. Chromium also treats mouse activation as
-   :focus-visible on checkboxes, so book.ts blurs pointer-activated toggles. */
+   :focus-visible on checkboxes, so book.ts blurs pointer-activated nav folds.
+   Menu/TOC checkboxes live at the start of the shell; their labels are in the
+   mobile header, not adjacent siblings. */
 input.toggle { height:0; width:0; overflow:hidden; opacity:0; position:absolute; outline:none; }
-input.toggle:focus-visible + label { outline-style:auto; outline-color:var(--color-link); outline-offset:2px; }
+input.toggle:focus-visible + label,
+#menu-control:focus-visible ~ main .book-header label[for="menu-control"],
+#toc-control:focus-visible ~ main .book-header label[for="toc-control"] {
+  outline-style:auto; outline-color:var(--color-link); outline-offset:2px;
+}
 .book-icon { filter:var(--icon-filter); }
 a .book-icon { height:1em; width:1em; }
 /* The document root owns the viewport scrollbar. Name it explicitly because
