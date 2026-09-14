@@ -56,6 +56,23 @@ function initializeBook() {
   const menu = document.querySelector<HTMLElement>('.book-menu-content');
   try { if (menu) menu.scrollTop = Number(sessionStorage.getItem('book-menu-scroll') || 0); } catch {}
   window.addEventListener('pagehide', () => { try { if (menu) sessionStorage.setItem('book-menu-scroll', String(menu.scrollTop)); } catch {} }, { signal });
+  // Nav fold checkboxes are followed by their label. Chromium treats a mouse
+  // click as :focus-visible, so the label ring looks like a stuck hover after
+  // the pointer leaves. Keyboard-generated clicks have detail 0 and keep the
+  // ring. Menu/TOC checkboxes are not adjacent to their header labels; leave
+  // those focused so the header icons can show a keyboard ring.
+  document.addEventListener('click', (event) => {
+    if (event.detail === 0) return;
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const labeled = target.closest('label')?.htmlFor;
+    const input = (labeled && document.getElementById(labeled))
+      || (target instanceof HTMLInputElement ? target : null);
+    if (!(input instanceof HTMLInputElement) || !input.classList.contains('toggle')) return;
+    const next = input.nextElementSibling;
+    if (!(next instanceof HTMLLabelElement) || next.htmlFor !== input.id) return;
+    queueMicrotask(() => { if (document.activeElement === input) input.blur(); });
+  }, { capture: true, signal });
   const scrollTimers = new Map<Element, number>();
   document.addEventListener('scroll', (event) => {
     const area = event.target === document ? document.scrollingElement : event.target;
