@@ -11,7 +11,7 @@ test('hidden sidebar toggles keep their own outline off and ring the visible lab
 
 test('pointer activation of a disclosure checkbox blurs so :focus-visible cannot stick', async () => {
   const script = await readFile(new URL('../src/client/book.ts', import.meta.url), 'utf8');
-  assert.match(script, /pointerup/);
+  assert.match(script, /event\.detail === 0/);
   assert.match(script, /classList\.contains\('toggle'\)/);
   assert.match(script, /\.blur\(\)/);
 });

@@ -56,13 +56,18 @@ function initializeBook() {
   const menu = document.querySelector<HTMLElement>('.book-menu-content');
   try { if (menu) menu.scrollTop = Number(sessionStorage.getItem('book-menu-scroll') || 0); } catch {}
   window.addEventListener('pagehide', () => { try { if (menu) sessionStorage.setItem('book-menu-scroll', String(menu.scrollTop)); } catch {} }, { signal });
-  // Section fold controls are CSS checkboxes. A pointer click leaves them
-  // :focus-visible in Chromium, so the label ring looks like a stuck hover
-  // after the pointer leaves. Keyboard Tab / Space keep the ring.
-  document.addEventListener('pointerup', (event) => {
-    if (!event.isPrimary || event.pointerType === '') return;
-    const active = document.activeElement;
-    if (active instanceof HTMLInputElement && active.classList.contains('toggle')) active.blur();
+  // Section fold controls are CSS checkboxes. Chromium treats a mouse click as
+  // :focus-visible, so the label ring looks like a stuck hover after the
+  // pointer leaves. Keyboard-generated clicks have detail 0 and keep the ring.
+  document.addEventListener('click', (event) => {
+    if (event.detail === 0) return;
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const labeled = target.closest('label')?.htmlFor;
+    const input = (labeled && document.getElementById(labeled))
+      || (target instanceof HTMLInputElement ? target : null);
+    if (!(input instanceof HTMLInputElement) || !input.classList.contains('toggle')) return;
+    queueMicrotask(() => { if (document.activeElement === input) input.blur(); });
   }, { capture: true, signal });
   const scrollTimers = new Map<Element, number>();
   document.addEventListener('scroll', (event) => {
