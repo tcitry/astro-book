@@ -1,5 +1,11 @@
 # @tcitry/astro-book
 
+## 0.1.3
+
+### Patch Changes
+
+- Upgrade KaTeX from 0.16.47 to 0.18.10 for [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7). KaTeX 0.18 prefixes its internal CSS classes, so consumers must add `"overrides": { "katex": "0.18.10" }` to keep `rehype-katex` markup in step with the packaged stylesheet.
+
 ## 0.1.2
 
 ### Patch Changes

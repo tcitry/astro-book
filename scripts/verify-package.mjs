@@ -68,6 +68,7 @@ await cp(path.join(root, 'examples/basic'), consumer, {
 const manifest = JSON.parse(await readFile(path.join(consumer, 'package.json'), 'utf8'));
 manifest.name = 'astro-book-packed-consumer';
 manifest.dependencies['@tcitry/astro-book'] = `file:${path.join(temporary, metadata.filename)}`;
+manifest.overrides = { ...manifest.overrides, katex: packageManifest.dependencies.katex };
 assert.ok(!Object.hasOwn(manifest.dependencies ?? {}, 'pagefind') && !Object.hasOwn(manifest.devDependencies ?? {}, 'pagefind'), 'Consumers must not install Pagefind directly');
 assert.equal(manifest.scripts.build, 'astro build', 'An ordinary Astro build must generate the search index automatically');
 assert.ok(!Object.keys({ ...manifest.dependencies, ...manifest.devDependencies }).some((name) => name.includes('tailwind') || /heroui-pro/i.test(name)), 'Packed consumer may not provide a Tailwind compiler or commercial dependencies');
@@ -117,6 +118,7 @@ const searchConfigFromHTML = (html) => {
 const hasDiagram = (html) => /<pre\b[^>]*\bdata-book-mermaid(?:=|\s|>)/.test(html);
 const diagramPages = documents.filter(({ html }) => hasDiagram(html));
 assert.ok(mathPages.length >= 2, 'Markdown and MDX both need build-time math');
+assert.ok(mathPages.every(({ html }) => /class="katex-base"/.test(html)), 'Build-time math must use the packaged KaTeX version, whose CSS expects prefixed classes');
 assert.ok(diagramPages.length >= 2, 'Markdown and MDX both need the shared Mermaid contract');
 assert.ok(documents.some(({ html }) => !hasDiagram(html)), 'Include a page without diagrams to check conditional runtime loading');
 assert.ok(documents.some(({ html }) => /data-book-code/.test(html)), 'Example must contain highlighted code');

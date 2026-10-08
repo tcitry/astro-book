@@ -1,6 +1,6 @@
 # Getting started
 
-This guide targets `@tcitry/astro-book` 0.1.0 with Astro 7.3.1 or a compatible Astro 7 release. Use Node.js 22.12 or newer. All examples use public package imports; they need no account or private content.
+This guide targets `@tcitry/astro-book` 0.1.3 with Astro 7.3.1 or a compatible Astro 7 release. Use Node.js 22.12 or newer. All examples use public package imports; they need no account or private content.
 
 [README](../README.md) · [Public API](architecture.md) · [Development and upgrades](development.md)
 
@@ -10,6 +10,12 @@ In an existing Astro 7 project, install the public package:
 
 ```sh
 npm install @tcitry/astro-book
+```
+
+The theme ships KaTeX 0.18 CSS and fonts, while `rehype-katex` and `remark-math` still declare KaTeX 0.16. Pin the theme's KaTeX version for the whole tree in the site's `package.json`, so math markup matches the packaged CSS:
+
+```json
+"overrides": { "katex": "0.18.10" }
 ```
 
 For a new site, create a directory with this `package.json`, then run `npm install`:
@@ -27,11 +33,14 @@ For a new site, create a directory with this `package.json`, then run `npm insta
   },
   "dependencies": {
     "astro": "7.3.1",
-    "@tcitry/astro-book": "0.1.0"
+    "@tcitry/astro-book": "0.1.3"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
     "typescript": "6.0.3"
+  },
+  "overrides": {
+    "katex": "0.18.10"
   }
 }
 ```

@@ -41,6 +41,12 @@ Install the public theme package in an Astro 7.3.1+ project:
 npm install @tcitry/astro-book
 ```
 
+The theme ships KaTeX 0.18 CSS and fonts, while `rehype-katex` and `remark-math` still declare KaTeX 0.16. Pin the theme's KaTeX version for the whole tree in the site's `package.json`, so math markup matches the packaged CSS:
+
+```json
+"overrides": { "katex": "0.18.10" }
+```
+
 Enable the integration in `astro.config.mjs`:
 
 ```js
