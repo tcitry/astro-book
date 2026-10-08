@@ -68,6 +68,8 @@ await cp(path.join(root, 'examples/basic'), consumer, {
 const manifest = JSON.parse(await readFile(path.join(consumer, 'package.json'), 'utf8'));
 manifest.name = 'astro-book-packed-consumer';
 manifest.dependencies['@tcitry/astro-book'] = `file:${path.join(temporary, metadata.filename)}`;
+// rehype-katex, remark-math and Mermaid still declare KaTeX ^0.16; consumers pin the theme's KaTeX as documented.
+manifest.overrides = { katex: packageManifest.dependencies.katex };
 assert.ok(!Object.hasOwn(manifest.dependencies ?? {}, 'pagefind') && !Object.hasOwn(manifest.devDependencies ?? {}, 'pagefind'), 'Consumers must not install Pagefind directly');
 assert.equal(manifest.scripts.build, 'astro build', 'An ordinary Astro build must generate the search index automatically');
 assert.ok(!Object.keys({ ...manifest.dependencies, ...manifest.devDependencies }).some((name) => name.includes('tailwind') || /heroui-pro/i.test(name)), 'Packed consumer may not provide a Tailwind compiler or commercial dependencies');
@@ -75,6 +77,15 @@ await writeFile(path.join(consumer, 'package.json'), JSON.stringify(manifest, nu
 await run('npm', ['install', '--no-audit', '--no-fund'], consumer);
 const lock = await readFile(path.join(consumer, 'package-lock.json'), 'utf8');
 assert.ok(!/@heroui-pro|node_modules\/heroui-pro/.test(lock), 'Isolated install must have no commercial component package');
+const katexTree = JSON.parse(await run('npm', ['ls', 'katex', '--all', '--json'], consumer, true));
+const katexVersions = new Set();
+(function collect(node) {
+  for (const [name, child] of Object.entries(node.dependencies ?? {})) {
+    if (name === 'katex') katexVersions.add(child.version);
+    collect(child);
+  }
+})(katexTree);
+assert.deepEqual([...katexVersions], [packageManifest.dependencies.katex], 'Consumers must render with the KaTeX version whose CSS is packaged');
 await run('npm', ['run', 'check'], consumer);
 await run('npm', ['run', 'build'], consumer);
 

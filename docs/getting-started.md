@@ -172,7 +172,15 @@ sequenceDiagram
 
 Run `npm run dev` and open the local URL printed by Astro. Use `npm run check` and `npm run build` to validate the starter, then `npm run preview` to inspect the static output.
 
-KaTeX renders during the build and uses packaged fonts. Invalid math keeps readable error source by default; `markdown.math.throwOnError: true` makes it a build failure. Use `math: false` to disable math or `math: { singleDollarTextMath: false }` to disable inline dollar notation. Escape literal currency dollars as `\$`. KaTeX handles mathematics syntax, not complete LaTeX documents.
+KaTeX renders during the build and uses packaged fonts. The packaged KaTeX stylesheet must match the KaTeX version that renders formulas. `rehype-katex`, `remark-math` and Mermaid still declare KaTeX `^0.16`, so pin the theme's KaTeX in the site's `package.json` and reinstall; the build stops with this instruction when the versions differ:
+
+```json
+{
+  "overrides": { "katex": "0.18.10" }
+}
+```
+
+ Invalid math keeps readable error source by default; `markdown.math.throwOnError: true` makes it a build failure. Use `math: false` to disable math or `math: { singleDollarTextMath: false }` to disable inline dollar notation. Escape literal currency dollars as `\$`. KaTeX handles mathematics syntax, not complete LaTeX documents.
 
 Mermaid loads on pages containing diagrams. Wide diagrams scroll locally, and errors preserve the diagram source. Set integration options such as `mermaid: { flowchart: { useMaxWidth: false } }`; a layout's `mermaid` prop can override runtime options. `mermaid: false` disables diagrams at the relevant integration/layout level. Do not add a second Mermaid initializer or KaTeX stylesheet.
 
