@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "@changesets/cli": "2.29.8"
+  },
+  "overrides": {
+    "katex": "0.18.10"
   }
 }

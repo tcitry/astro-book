@@ -5,6 +5,7 @@ import {
   type RehypePlugin,
   type UnifiedProcessorOptions,
 } from '@astrojs/markdown-remark';
+import { createRequire } from 'node:module';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
@@ -92,7 +93,19 @@ const rehypeBookRaw: RehypePlugin = () => {
   };
 };
 
+// The packaged stylesheet comes from the theme's KaTeX, while rehype-katex renders with
+// the copy it resolves. KaTeX 0.18 renamed internal classes, so the two must match.
+function assertMatchingKatex() {
+  const require = createRequire(import.meta.url);
+  const theme = require('katex/package.json').version as string;
+  const renderer = createRequire(require.resolve('rehype-katex'))('katex/package.json').version as string;
+  if (renderer !== theme) {
+    throw new Error(`astro-book styles KaTeX ${theme}, but rehype-katex resolves KaTeX ${renderer}. Add "overrides": { "katex": "${theme}" } to your package.json and reinstall.`);
+  }
+}
+
 const rehypeBookMath: RehypePlugin<[MathOptions?]> = (options = {}) => {
+  assertMatchingKatex();
   const { throwOnError = false, singleDollarTextMath: _single, ...katexOptions } = options;
   const render = rehypeKatex({ strict: 'ignore', ...katexOptions });
   return (tree, file) => {

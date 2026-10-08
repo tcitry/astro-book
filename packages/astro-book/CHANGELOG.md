@@ -1,5 +1,12 @@
 # @tcitry/astro-book
 
+## 0.1.3
+
+### Patch Changes
+
+- Upgrade KaTeX to 0.18.10 (GHSA fix in 0.18.2: prototype pollution in settings); the packaged stylesheet and fonts now come from KaTeX 0.18.
+- `rehype-katex`, `remark-math` and Mermaid still declare KaTeX `^0.16`. Sites must add `"overrides": { "katex": "0.18.10" }` to `package.json`; math rendering now fails the build with that instruction when the rendering KaTeX differs from the packaged stylesheet's version.
+
 ## 0.1.2
 
 ### Patch Changes

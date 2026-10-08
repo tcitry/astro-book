@@ -12,6 +12,7 @@ test('build-time math supports macros, inline/display mode, and readable error f
   const { html } = await render('Inline $x \\in \\RR$.\n\n$$\n\\int_0^1 x^2\\,dx=\\frac{1}{3}\n$$\n\n$\\unknowncommand{x}$');
   assert.match(html, /class="katex"/);
   assert.match(html, /class="katex-display"/);
+  assert.match(html, /class="katex-base"/, 'Rendered markup must use the KaTeX 0.18 class names styled by the packaged CSS');
   assert.match(html, /mathvariant="double-struck">R/);
   assert.match(html, /unknowncommand/);
   assert.doesNotMatch(html, /<script/);
