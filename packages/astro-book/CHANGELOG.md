@@ -1,5 +1,11 @@
 # @tcitry/astro-book
 
+## 0.1.4
+
+### Patch Changes
+
+- Replace `Array.prototype.at` in the TOC scroll highlight so older browsers without it (e.g. Chrome < 92) no longer throw `e.at is not a function`.
+
 ## 0.1.3
 
 ### Patch Changes
